@@ -2447,10 +2447,10 @@ export class TableService {
       syntheticItem.frequency =  occCount !== undefined ? this.getFrequencyBySyntheticCoef(minCoef) : occurrencesCount === 0 ?  0 : (occurrencesCount * 100) / occurrences.length;
       if (occCount !== undefined && occCount > 5) {
         // Synthetic Sye column
-        syntheticItem.coef = this.syntheticColumnService.getRomanCoef(syntheticItem.frequency);
+        syntheticItem.coef = this.syntheticColumnService.getRomanCoef(syntheticItem.frequency, occurrences.length, syntheticItem.occurrencesCount);
       } else if (occCount !== undefined && occCount <= 5) {
         // Synthetic Sye column
-        syntheticItem.coef = minCoef;
+        syntheticItem.coef = this.syntheticColumnService.getSyntheticCoef(syntheticItem.frequency, occurrences.length, syntheticItem.occurrencesCount);
       } else {
         syntheticItem.coef = this.syntheticColumnService.getSyntheticCoef(syntheticItem.frequency, occurrences.length, syntheticItem.occurrencesCount);
       }
