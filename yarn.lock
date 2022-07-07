@@ -1699,10 +1699,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-13.13.4.tgz#1581d6c16e3d4803eb079c87d4ac893ee7501c2c"
   integrity sha512-x26ur3dSXgv5AwKS0lNfbjpCakGIduWU1DU91Zz58ONRWrIKGunmZBNv4P7N+e27sJkiGDsw/3fT4AtsqQBrBA==
 
-"@types/node@^12.7.10":
-  version "12.12.37"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.37.tgz#cb4782d847f801fa58316da5b4801ca3a59ae790"
-  integrity sha512-4mXKoDptrXAwZErQHrLzpe0FN/0Wmf5JRniSVIdwUrtDf9wnmEV1teCNLBo/TwuXhkK/bVegoEn/wmb+x0AuPg==
+"@types/node@^14.0.4":
+  version "14.18.21"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.18.21.tgz#0155ee46f6be28b2ff0342ca1a9b9fd4468bef41"
+  integrity sha512-x5W9s+8P4XteaxT/jKF0PSb7XEvo5VmqEWgsMlyeY4ZlLK8I6aH6g5TPPyDlLAep+GYf4kefb7HFyc7PAO3m+Q==
 
 "@types/papaparse@^5.0.1":
   version "5.0.3"
@@ -6321,10 +6321,10 @@ moment-timezone@^0.5.27:
   dependencies:
     moment ">= 2.9.0"
 
-moment@*, "moment@>= 2.9.0", moment@>=2.14.0:
-  version "2.25.0"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.25.0.tgz#e961ab9a5848a1cf2c52b1af4e6c82a8401e7fe9"
-  integrity sha512-vbrf6kJGpevOxmDRvCCvGuCSXvRj93264WcFzjm3Z3pV4lfjrXll8rvSP+EbmCte64udj1LkJMILxQnjXAQBzg==
+moment@*, moment@2.29.4, "moment@>= 2.9.0", moment@>=2.14.0:
+  version "2.29.4"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"
+  integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
 
 moment@2.24.0:
   version "2.24.0"
@@ -8672,9 +8672,10 @@ tar@^4.4.8:
   dependencies:
     tslib "^1.9.0"
 
-"tb-tsb-lib@https://github.com/steph-del/tb-tsb-lib/releases/download/v0.5.8-vl.1/tb-tsb-lib-0.5.8-vl.1.tgz":
-  version "0.5.8-vl.1"
-  resolved "https://github.com/steph-del/tb-tsb-lib/releases/download/v0.5.8-vl.1/tb-tsb-lib-0.5.8-vl.1.tgz#f59b58229ecd31cddf1246cde0e90ca019c4bd88"
+"tb-tsb-lib@https://github.com/steph-del/tb-tsb-lib/releases/download/0.5.8-vl.2/tb-tsb-lib-0.5.8-vl.2.tgz":
+  version "0.5.8-vl.2"
+  uid "0f701915c95135ea57bef361858d0234d7833906"
+  resolved "https://github.com/steph-del/tb-tsb-lib/releases/download/0.5.8-vl.2/tb-tsb-lib-0.5.8-vl.2.tgz#0f701915c95135ea57bef361858d0234d7833906"
   dependencies:
     tslib "^1.9.0"
 
