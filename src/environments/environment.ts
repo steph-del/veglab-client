@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   baseUrl: 'https://${CLIENT_DEV_HOST}',
-  apiBaseUrl: 'https://${API_HOST}/api',
+  apiBaseUrl: 'https://${API_HOST}',
   esAuthorizationPassword: '${ELASTIC_PASSWORD}',
   esBaseUrl: 'https://${ES_HOST}',
   esRepoAuthorizationPassword: '${ES_REPO_PASSWORD}',
