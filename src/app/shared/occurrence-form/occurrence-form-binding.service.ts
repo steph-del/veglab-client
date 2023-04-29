@@ -50,7 +50,7 @@ export class OccurrenceFormBindingService {
         this.xOccurrence.validations = [{
           validatedBy: user.id,
           validatedAt: new Date(),
-          user: currentVlUser,
+          owner: currentVlUser,
           repository: citedSyntaxon.repository,
           repositoryIdNomen: +citedSyntaxon.idNomen,
           repositoryIdTaxo: xIdTaxo,
@@ -76,7 +76,7 @@ export class OccurrenceFormBindingService {
         yOcc.validations = [{
           validatedBy: user.id,
           validatedAt: new Date(),
-          user: currentVlUser,
+          owner: currentVlUser,
           repository: occ.taxa.repository,
           repositoryIdNomen: +occ.taxa.idNomen,
           repositoryIdTaxo: yIdTaxo,
@@ -111,7 +111,7 @@ export class OccurrenceFormBindingService {
         this.xOccurrence.validations = [{
           validatedBy: user.id,
           validatedAt: new Date(),
-          user: currentVlUser,
+          owner: currentVlUser,
           repository: citedSyntaxon.repository,
           repositoryIdNomen: +citedSyntaxon.idNomen,
           repositoryIdTaxo: xIdTaxo,
@@ -151,7 +151,7 @@ export class OccurrenceFormBindingService {
           zOcc.validations = [{
             validatedBy: user.id,
             validatedAt: new Date(),
-            user: currentVlUser,
+            owner: currentVlUser,
             repository: z.taxa.repository,
             repositoryIdNomen: +z.taxa.idNomen,
             repositoryIdTaxo: zIdTaxo,
@@ -193,7 +193,7 @@ export class OccurrenceFormBindingService {
     occ.userEmail = user.email;
     occ.userPseudo = user ? this.userService.getUserFullName() : null;
     occ.userProfile = [];
-    occ.user = cu;
+    occ.owner = cu;
 
     occ.observer = formData.controls.observer.value;
     occ.observerInstitution = formData.controls.observerInstitution.value;

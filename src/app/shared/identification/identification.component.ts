@@ -205,7 +205,7 @@ export class IdentificationComponent implements OnInit, OnDestroy {
       // id?:               number;
       validatedBy:       this.currentUser.id,
       validatedAt:       new Date(),
-      user:              this.currentVlUser,
+      owner:              this.currentVlUser,
       // updatedBy?:        string;     // user id
       // updatedAt?:        Date;
       repository:        data.repository,

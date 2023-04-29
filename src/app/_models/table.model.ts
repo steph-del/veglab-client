@@ -12,7 +12,7 @@ export interface Table {
   userId:          string;  // not mandatory in backend but we force mandatory in front
   userEmail:       string;  // mandatory in backend
   userPseudo:      string;  // not mandatory in backend but we force mandatory in front
-  user:            VlUser;
+  owner:            VlUser;
   ownedByCurrentUser: boolean;  // not included in the database ; this field is populated at GET Table (table service)
 
   isDiagnosis?:    boolean;

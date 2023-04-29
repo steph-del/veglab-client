@@ -441,7 +441,7 @@ export class TableService {
       validName: name,
       validatedAt: new Date(),
       validatedBy: table.createdBy,
-      user: table.user,
+      owner: table.owner,
       validatedName: name
     };
     return tableValidation;
@@ -510,7 +510,7 @@ export class TableService {
       userId: currentUser ? currentUser.id : null,
       userEmail: currentUser ? currentUser.email : null,
       userPseudo: currentUser ? this.userService.getUserFullName() : null,
-      user: currentVlUser ? currentVlUser : null,
+      owner: currentVlUser ? currentVlUser : null,
       ownedByCurrentUser: currentUser !== null,     // a new table is owned by its creator
 
       isDiagnosis: false,
@@ -624,12 +624,12 @@ export class TableService {
     let tableToDuplicate = _.cloneDeep(table);
 
     // 1. set current user  as table.user & remove table ID
-    tableToDuplicate.user = vlCu;
+    tableToDuplicate.owner = vlCu;
     tableToDuplicate = this.removeTableIds(tableToDuplicate);
 
     // 2. set current user as table.user & remove sye IDs
     for (let sye of tableToDuplicate.sye) {
-      sye.user = vlCu;
+      sye.owner = vlCu;
       sye = this.syeService.removeIds(sye);
     }
 
@@ -639,12 +639,12 @@ export class TableService {
 
     // 3. set current user as syntheticColumn.user & remove synthetic columns ids & Synthetic items ids
     if (tableToDuplicate.syntheticColumn !== null && tableToDuplicate.syntheticColumn !== undefined) {
-      tableToDuplicate.syntheticColumn.user = vlCu;
+      tableToDuplicate.syntheticColumn.owner = vlCu;
       tableToDuplicate.syntheticColumn = this.syntheticColumnService.removeIds(tableToDuplicate.syntheticColumn);
     }
     for (let j = 0; j < tableToDuplicate.sye.length; j++) {
       if (tableToDuplicate.sye[j].syntheticColumn !== null && tableToDuplicate.sye[j].syntheticColumn !== undefined) {
-        tableToDuplicate.sye[j].syntheticColumn.user = vlCu;
+        tableToDuplicate.sye[j].syntheticColumn.owner = vlCu;
         tableToDuplicate.sye[j].syntheticColumn = this.syntheticColumnService.removeIds(tableToDuplicate.sye[j].syntheticColumn);
       }
     }
@@ -2382,7 +2382,7 @@ export class TableService {
       // sye: (sye && sye.id) ? sye : null,                                          // so the table PATCH operations will also patch sye & synthetic column
       userId: currentUser.id,
       userEmail: currentUser.email,
-      user: vlUser,
+      owner: vlUser,
       userPseudo: currentUser ? this.userService.getUserFullName() : null,
       sye: null,
       validations: [],

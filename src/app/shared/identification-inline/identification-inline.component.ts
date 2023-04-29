@@ -41,7 +41,7 @@ export class IdentificationInlineComponent implements OnInit {
     this.currentUser = this.userService.currentUser.getValue();
 
     // Set validations lists
-    this.myValidations = this.currentUser && this.currentUser.id ? _.filter(this.validations, v => v.user.ssoId === this.currentUser.id) : [];
+    this.myValidations = this.currentUser && this.currentUser.id ? _.filter(this.validations, v => v.owner.ssoId === this.currentUser.id) : [];
     this.otherValidations = _.difference(this.validations, this.myValidations);
   }
 

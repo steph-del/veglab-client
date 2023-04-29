@@ -5,7 +5,7 @@ export interface OccurrenceValidationModel {
   id?:               number;
   validatedBy:       string;    // user id
   validatedAt:       Date;
-  user:              VlUser;
+  owner:              VlUser;
   updatedBy?:        string;     // user id
   updatedAt?:        Date;
   repository:        string;

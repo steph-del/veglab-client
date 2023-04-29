@@ -194,12 +194,12 @@ export class TableFormComponent implements OnInit, OnDestroy {
       this.notificationService.error('Une erreur est survenue : nous ne parvenons pas à vous identifier correctement');
       return;
     }
-    if (prePostedTable.user == null) {
-      prePostedTable.user = this.currentVlUser;
-      if (prePostedTable.syntheticColumn && prePostedTable.syntheticColumn.user == null) { prePostedTable.syntheticColumn.user = this.currentVlUser; }
+    if (prePostedTable.owner == null) {
+      prePostedTable.owner = this.currentVlUser;
+      if (prePostedTable.syntheticColumn && prePostedTable.syntheticColumn.owner == null) { prePostedTable.syntheticColumn.owner = this.currentVlUser; }
       for (const sye of prePostedTable.sye) {
-        if (sye.user == null) { sye.user = this.currentVlUser; }
-        if (sye.syntheticColumn && sye.syntheticColumn.user == null) { sye.syntheticColumn.user = this.currentVlUser; }
+        if (sye.owner == null) { sye.owner = this.currentVlUser; }
+        if (sye.syntheticColumn && sye.syntheticColumn.owner == null) { sye.syntheticColumn.owner = this.currentVlUser; }
       }
     }
 
@@ -368,7 +368,7 @@ export class TableFormComponent implements OnInit, OnDestroy {
       validatedName: name,
       validatedAt: new Date(),
       validatedBy: this.currentUser.id,
-      user: this.currentVlUser
+      owner: this.currentVlUser
     };
     return ovm;
   }

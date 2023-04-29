@@ -43,7 +43,7 @@ export class OccurrenceService {
       userEmail: null,
       userPseudo: null,
       userProfile: null,
-      user: null,
+      owner: null,
 
       validations: [],
 

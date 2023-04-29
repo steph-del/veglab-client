@@ -10,7 +10,7 @@ export interface Sye {
   userId:             string;  // not mandatory in backend but we force mandatory in front
   userEmail:          string;  // mandatory in backend
   userPseudo:         string;  // not mandatory in backend but we force mandatory in front
-  user:               VlUser;
+  owner:               VlUser;
 
   originalReference?: string; // needed for table import
   syeId:              number;

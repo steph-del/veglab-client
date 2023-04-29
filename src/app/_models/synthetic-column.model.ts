@@ -12,7 +12,7 @@ export interface SyntheticColumn {
   userId:          string;  // not mandatory in backend but we force mandatory in front
   userEmail:       string;  // mandatory in backend
   userPseudo:      string;  // not mandatory in backend but we force mandatory in front
-  user:            VlUser;
+  owner:            VlUser;
 
   sye:             Sye;
   validations:     Array<OccurrenceValidationModel>;
