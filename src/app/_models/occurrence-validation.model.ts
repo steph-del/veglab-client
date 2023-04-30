@@ -14,7 +14,6 @@ export interface OccurrenceValidationModel {
   inputName:         string;
   validatedName:     string;
   validName:         string;
-  userIdValidation?: string;
-  userValidation?:    VlUser;
+  userIdValidation?: string;    // Not in DB
   // isDiagnosis?:      boolean;
 }

@@ -214,8 +214,7 @@ export class IdentificationComponent implements OnInit, OnDestroy {
       inputName:         data.name + (data.author ? (' ' + data.author) : ''),
       validatedName:     data.name + (data.author ? (' ' + data.author) : ''),
       validName:         data.name + (data.author ? (' ' + data.author) : ''),
-      userIdValidation:  this.currentUser.id,
-      userValidation:    this.currentVlUser
+      userIdValidation:  this.currentUser.id
     };
 
     // Push changes to pendingIdentifications
