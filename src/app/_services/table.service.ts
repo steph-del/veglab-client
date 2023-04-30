@@ -972,13 +972,13 @@ export class TableService {
         // For every sye...
         for (const sye of table.sye) {
           // GET COLUMN POSITIONS
-          const columnPositions = this.getColumnPositionsForSyeById(sye.syeId);
+          const columnPositions = this.getColumnPositionsForSyePosition(sye.syePosition);
           if (columnPositions.onlyShowSyntheticColumn) {
             // Push synthetic column
             // row item push synthetic column value
             const syeItem = {type: null, syeId: null, occurrenceId: null, value: null, syntheticSye: null};                                                                               // DUPLICATE CODE --A-- SEE BELOW
             syeItem.type = 'cellSynColValue';
-            syeItem.syeId = sye.syeId;
+            syeItem.syeId = sye.syePosition;
             syeItem.occurrenceId = null;
             syeItem.syntheticSye = table.sye[columnPositions.id].syntheticSye;
 
@@ -1010,7 +1010,7 @@ export class TableService {
               // Create occurrence row item
               const item = {type: null, syeId: null, occurrenceId: null, value: null, syntheticSye: null};
               item.type = 'cellOccValue';
-              item.syeId = sye.syeId;
+              item.syeId = sye.syePosition;
               item.occurrenceId = occ.id;
               item.syntheticSye = table.sye[columnPositions.id].syntheticSye;
 
@@ -1035,7 +1035,7 @@ export class TableService {
             // Create the sye synthetic column row item
             const syeItem = {type: null, syeId: null, occurrenceId: null, value: null, syntheticSye: null};                                                                                 // DUPLICATE CODE --A-- SEE ABOVE
             syeItem.type = 'cellSynColValue';
-            syeItem.syeId = sye.syeId;
+            syeItem.syeId = sye.syePosition;
             syeItem.occurrenceId = null;
             syeItem.syntheticSye = table.sye[columnPositions.id].syntheticSye;
 
@@ -1825,11 +1825,11 @@ export class TableService {
     if (startColPosition === sourceSyeColumnsDef.startColumnPosition && endColPosition === sourceSyeColumnsDef.syntheticColumnPosition) {
       let splicedSye: Array<Sye> = null;
       // get source sye props
-      const syeSource: Sye = _.find(this.currentTable.sye, sye => sye.syeId === sourceSyeColumnsDef.id) as Sye;
+      const syeSource: Sye = _.find(this.currentTable.sye, sye => sye.syePosition === sourceSyeColumnsDef.id) as Sye;
       let syeSourcePositionInTable: number = null;
       let i = 0;
       for (const sye of this.currentTable.sye) {
-        if (sye.syeId === syeSource.syeId) { syeSourcePositionInTable = i; break; }
+        if (sye.syePosition === syeSource.syePosition) { syeSourcePositionInTable = i; break; }
         i++;
       }
 
@@ -1840,11 +1840,11 @@ export class TableService {
         this.currentTable.sye.splice(this.currentTable.sye.length, 0, ...splicedSye);
       } else {
         // get target sye props
-        const syeTarget: Sye = _.find(this.currentTable.sye, sye => sye.syeId === destinationSyeColumnsDef.id) as Sye;
+        const syeTarget: Sye = _.find(this.currentTable.sye, sye => sye.syePosition === destinationSyeColumnsDef.id) as Sye;
         let syeTargetPositionInTable: number = null;
         let j = 0;
         for (const sye of this.currentTable.sye) {
-          if (sye.syeId === syeTarget.syeId) { syeTargetPositionInTable = j; break; }
+          if (sye.syePosition === syeTarget.syePosition) { syeTargetPositionInTable = j; break; }
           j++;
         }
         // move sye
@@ -1866,7 +1866,7 @@ export class TableService {
       this.tableDataView.next(this.createDataView(this.currentTable));
 
       // moved sye columns positions
-      const movedSyeColumnsPosision = this.getSyePositionsById(this.currentTable, splicedSye[0].syeId);
+      const movedSyeColumnsPosision = this.getSyePositionsById(this.currentTable, splicedSye[0].syePosition);
 
       // table component afterColumnMove hook is in charge to manually select moved columns because
       return {movedColumnsStart: movedSyeColumnsPosision.startColumnPosition, movedColumnsEnd:  movedSyeColumnsPosision.syntheticColumnPosition};
@@ -1900,8 +1900,8 @@ export class TableService {
 
     // 3. Columns are moved between sye
     if (sourceSyeColumnsDef !== destinationSyeColumnsDef && destinationSyeColumnsDef !== null) {
-      const syeSource = _.find(this.currentTable.sye, sye => sye.syeId === sourceSyeColumnsDef.id);
-      const syeTarget = _.find(this.currentTable.sye, sye => sye.syeId === destinationSyeColumnsDef.id);
+      const syeSource = _.find(this.currentTable.sye, sye => sye.syePosition === sourceSyeColumnsDef.id);
+      const syeTarget = _.find(this.currentTable.sye, sye => sye.syePosition === destinationSyeColumnsDef.id);
 
       if (syeTarget.syntheticSye === true) {
         this.notificationService.warn('Vous ne pouvez pas déplacer un ou des relevés dans une colonne synthétique');
@@ -1957,7 +1957,7 @@ export class TableService {
     return { success: true };
   }
 
-  public moveRangeColumnsToNewSye(startColPosition: number, endColPosition: number, currentUser: UserModel): {success: boolean, newSyeId: number} {
+  public moveRangeColumnsToNewSye(startColPosition: number, endColPosition: number, currentUser: UserModel): {success: boolean, newSyePosition: number} {
     if (this.columnsPositions.length === 0) { this.updateColumnsPositions(this.currentTable); }
 
     // get source sye, source index and source columns whithin this sye
@@ -1991,11 +1991,11 @@ export class TableService {
       // emit new dataView
       this.tableDataView.next(this.createDataView(this.currentTable));
 
-      return {success: true, newSyeId: newSye.syeId};
+      return {success: true, newSyePosition: newSye.syePosition};
     }
 
     // @Todo notify user;
-    return {success: false, newSyeId: null};
+    return {success: false, newSyePosition: null};
   }
 
   public moveSyeToRight(currentCol: number): boolean | {positions: ColumnPositions} {
@@ -2007,7 +2007,7 @@ export class TableService {
       let syeSourcePositionInTable: number = null;
       let i = 0;
       for (const sye of this.currentTable.sye) {
-        if (sye.syeId === sourceSye.syeId) { syeSourcePositionInTable = i; break; }
+        if (sye.syePosition === sourceSye.syePosition) { syeSourcePositionInTable = i; break; }
         i++;
       }
 
@@ -2022,7 +2022,7 @@ export class TableService {
       // Emit new dataView
       this.tableDataView.next(this.createDataView(this.currentTable));
 
-      return { positions: this.getSyePositionsById(this.currentTable, sourceSye.syeId) };
+      return { positions: this.getSyePositionsById(this.currentTable, sourceSye.syePosition) };
     }
     return false;
   }
@@ -2036,7 +2036,7 @@ export class TableService {
       let syeSourcePositionInTable: number = null;
       let i = 0;
       for (const sye of this.currentTable.sye) {
-        if (sye.syeId === sourceSye.syeId) { syeSourcePositionInTable = i; break; }
+        if (sye.syePosition === sourceSye.syePosition) { syeSourcePositionInTable = i; break; }
         i++;
       }
 
@@ -2051,7 +2051,7 @@ export class TableService {
       // Emit new dataView
       this.tableDataView.next(this.createDataView(this.currentTable));
 
-      return { positions: this.getSyePositionsById(this.currentTable, sourceSye.syeId) };
+      return { positions: this.getSyePositionsById(this.currentTable, sourceSye.syePosition) };
     }
     return false;
   }
@@ -2142,7 +2142,7 @@ export class TableService {
         id: null, label: null, startColumnPosition: null, endColumnPosition: null, syntheticColumnPosition: null, onlyShowSyntheticColumn: sye.onlyShowSyntheticColumn
       };
 
-      columnPositions.id = sye.syeId;
+      columnPositions.id = sye.syePosition;
       columnPositions.label = 'sye';  // @Todo bind sye validation[x] name
 
       if (columnPositions.onlyShowSyntheticColumn) {
@@ -2174,12 +2174,11 @@ export class TableService {
   }
 
   /**
-   * Returns ColumnPositions for a given syeId
-   * Be careful, columnPositions.id = sye.syeId;
+   * Returns ColumnPositions for a given syePosition
    */
-  getColumnPositionsForSyeById(syeId: number): ColumnPositions {
+  getColumnPositionsForSyePosition(syePosition: number): ColumnPositions {
     for (const columnPositions of this.columnsPositions) {
-      if (columnPositions.id === syeId) { return columnPositions; }
+      if (columnPositions.id === syePosition) { return columnPositions; }
     }
     return null;
   }
@@ -2193,7 +2192,7 @@ export class TableService {
     if (!this.columnsPositions || this.columnsPositions.length === 0) { this.updateColumnsPositions(this.currentTable); }
 
     let columnPositions: ColumnPositions = null;
-    let syeId: number = null;
+    let syePosition: number = null;
     let sye: Sye = null;
     let syeIndexInTable: number = null;
 
@@ -2201,16 +2200,16 @@ export class TableService {
     for (const colPositions of this.columnsPositions) {
       if (visulaColumnPosition >= colPositions.startColumnPosition && visulaColumnPosition <= colPositions.syntheticColumnPosition) {
         columnPositions = colPositions;
-        syeId = colPositions.id;
+        syePosition = colPositions.id;
         break;
       }
     }
-    if (syeId === null) { console.log(`STOP syeId: ${syeId}`); return undefined; }
+    if (syePosition === null) { console.log(`STOP syeId: ${syePosition}`); return undefined; }
 
     // Get sye
     let i = 0;
     for (const syeItem of table.sye) {
-      if (syeItem.syeId === syeId) { sye = syeItem; syeIndexInTable = i; }
+      if (syeItem.syePosition === syePosition) { sye = syeItem; syeIndexInTable = i; }
       i++;
     }
     if (sye === null) { console.log(`STOP sye: ${sye}`); return undefined; }
@@ -2218,7 +2217,7 @@ export class TableService {
     // Get the index fo visual column index whithin sye
     let index = visulaColumnPosition - 1; // -1 for the first table column (names groups)
     for (const colPositions of this.columnsPositions) {
-      if (sye.syeId === colPositions.id) { break; }
+      if (sye.syePosition === colPositions.id) { break; }
       index -= (colPositions.syntheticColumnPosition - colPositions.startColumnPosition + 1);
     }
 
@@ -2283,16 +2282,17 @@ export class TableService {
   getSyeForColId(table: Table, colPosition: number): Sye {
     const syePositions = this.getSyePositionsForColId(table, colPosition);
     if (syePositions) {
-      const sye = _.find(table.sye, s => s.syeId === syePositions.id);
+      const sye = _.find(table.sye, s => s.syePosition === syePositions.id);
       return sye;
     }
     return undefined;
   }
 
+  // @Todo rename getSyeByPosition
   getSyeById(table: Table, id: number) {
     if (this.columnsPositions.length === 0) { this.updateColumnsPositions(table); }
     for (const sye of table.sye) {
-      if (sye.syeId === id) { return sye; }
+      if (sye.syePosition === id) { return sye; }
     }
     return undefined;
   }
@@ -3005,7 +3005,7 @@ export class TableService {
     let i = 0;
     if (table !== null && table.sye !== null && table.sye.length > 0) {
       for (const sye of table.sye) {
-        sye.syeId = i;
+        sye.syePosition = i;
         i++;
       }
     }

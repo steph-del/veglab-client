@@ -1112,8 +1112,8 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
     if (createNewSye.success) {
       // sye successfully created
       // Manually select moved range columns
-      if (createNewSye.newSyeId !== null) {
-        const newTableSyePositions = _.find(this.tableService.columnsPositions, columnPositions => columnPositions.id === createNewSye.newSyeId);
+      if (createNewSye.newSyePosition !== null) {
+        const newTableSyePositions = _.find(this.tableService.columnsPositions, columnPositions => columnPositions.id === createNewSye.newSyePosition);
         this.tableInstance.selectColumns(newTableSyePositions.startColumnPosition, newTableSyePositions.endColumnPosition);
       }
     } else {
@@ -1159,7 +1159,8 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.tableService.updateDataView(this._currentTable);
 
     // update selection (select synthetic column)
-    const columnPositions = this.tableService.getColumnPositionsForSyeById(currentSye.syeId);
+    // @Todo rename function getColumnPositionBySyePosition (?)
+    const columnPositions = this.tableService.getColumnPositionsForSyePosition(currentSye.syePosition);
     if (columnPositions) {
       this.tableInstance.selectColumns(columnPositions.syntheticColumnPosition, columnPositions.syntheticColumnPosition);
     }

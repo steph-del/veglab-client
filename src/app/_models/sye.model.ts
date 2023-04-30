@@ -13,7 +13,7 @@ export interface Sye {
   owner:               VlUser;
 
   originalReference?: string; // needed for table import
-  syeId:              number;
+  syePosition:        number;
   occurrencesCount:   number;
   occurrences:        Array<OccurrenceModel>;
   occurrencesOrder?:  string;

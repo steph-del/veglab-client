@@ -2336,7 +2336,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
         userPseudo,
         owner: this.currentVlUser,
         originalReference: sye.id,
-        syeId: syeCount,
+        syePosition: syeCount,
         occurrencesCount: sye.releves.length,
         occurrences: [],
         syntheticColumn: null, // get synthetic column
