@@ -147,7 +147,7 @@ export class UserService {
           "query": {
             "bool": {
               "must": [
-                { "match": { "ssoId": "${ssoId}" } }
+                { "match": { "id": "${ssoId}" } }
               ]
             }
           }
@@ -170,7 +170,7 @@ export class UserService {
 
   getVlUserBySsoId(ssoId: string): Observable<VlUser> {
     const headers = {'Content-Type': 'application/ld+json'};
-    return this.http.get(`${environment.apiBaseUrl}/users?ssoId=${ssoId}`, {headers}).pipe(
+    return this.http.get(`${environment.apiBaseUrl}/users?id=${ssoId}`, {headers}).pipe(
       map(metadataResponse => metadataResponse['hydra:member'][0]) // For a filtered query, API Platform returns a response with metadata values nesting the core response ('hydra:member')
     );
   }

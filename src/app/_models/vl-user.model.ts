@@ -7,7 +7,6 @@ export interface VlUser {
   '@id'?:        string;
   '@type'?:      string;
   id:            number;
-  ssoId:         string;
   enabled:       boolean;
   emailVerified: boolean;
   firstName:     string;

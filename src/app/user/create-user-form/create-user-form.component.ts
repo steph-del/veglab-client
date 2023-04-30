@@ -78,7 +78,6 @@ export class CreateUserFormComponent implements OnInit, OnDestroy {
       this.creatingUser = true;
       const newUser: VlUser = {
         id: null,
-        ssoId: '',  // must be provided, filled in backend
         enabled: this.form.controls.enabled.value,
         emailVerified: this.form.controls.emailVerified.value,
         firstName: this.form.controls.firstName.value,
