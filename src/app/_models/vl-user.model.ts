@@ -6,7 +6,7 @@ export interface VlUser {
   '@context'?:   string;
   '@id'?:        string;
   '@type'?:      string;
-  id:            number;
+  id:            string;
   enabled:       boolean;
   emailVerified: boolean;
   firstName:     string;
