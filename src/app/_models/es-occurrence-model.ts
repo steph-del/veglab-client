@@ -19,7 +19,7 @@ export interface EsOccurrenceModel {
 
   userEmail: string;
   userPseudo?: string;
-  user: VlUser;
+  owner: VlUser;
 
   observer: string;
   observerInstitution?: string;
