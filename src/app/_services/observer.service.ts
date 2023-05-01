@@ -65,8 +65,8 @@ export class ObserverService {
         map(result => _.map(result['hits']['hits'], hit => hit['_source'])),
         map(results => {
           results.forEach(result => {
-            result['@id'] = `/api/observers/${result.id.toString()}`;  // Mimic ld+json @id property (API Platform would duplicate an existing observer that has no @id property)
-            result['@context'] = '/api/contexts/Observer';
+            result['@id'] = `/observers/${result.id.toString()}`;  // Mimic ld+json @id property (API Platform would duplicate an existing observer that has no @id property)
+            result['@context'] = '/contexts/Observer';
             result['@type'] = 'Observer';
             console.log(result);
           });
