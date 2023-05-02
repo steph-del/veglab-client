@@ -213,8 +213,7 @@ export class IdentificationComponent implements OnInit, OnDestroy {
       repositoryIdTaxo:  data.idTaxo ? data.idTaxo.toString() : null,
       citationName:         data.name + (data.author ? (' ' + data.author) : ''),
       taxonomicalName:     data.name + (data.author ? (' ' + data.author) : ''),
-      nomenclaturalName:         data.name + (data.author ? (' ' + data.author) : ''),
-      userIdValidation:  this.currentUser.id
+      nomenclaturalName:         data.name + (data.author ? (' ' + data.author) : '')
     };
 
     // Push changes to pendingIdentifications
@@ -224,7 +223,7 @@ export class IdentificationComponent implements OnInit, OnDestroy {
       // Is there duplicates ?
       let duplicatePendingIdentification: Array<IdentificationModel> = [];
       if (this.selectedEditAs.value === 'user') {
-        duplicatePendingIdentification = _.filter(this.pendingIdentifications, pi => pi.repository === newIdentification.repository && pi.userIdValidation && pi.userIdValidation === this.currentUser.id);
+        duplicatePendingIdentification = _.filter(this.pendingIdentifications, pi => pi.repository === newIdentification.repository && pi.owner.id && pi.owner.id === this.currentUser.id);
       } else {
         // @Todo implements other cases (group identification, organization identification, etc.)
       }
@@ -233,7 +232,7 @@ export class IdentificationComponent implements OnInit, OnDestroy {
         if (duplicatePendingIdentification.length === 1) {
           // Replace to avoid duplicates
           // duplicatePendingIdentification[0] = newIdentification;
-          const duplicateIndex = _.findIndex(this.pendingIdentifications, pi => pi.repository === newIdentification.repository && pi.userIdValidation && pi.userIdValidation === this.currentUser.id);
+          const duplicateIndex = _.findIndex(this.pendingIdentifications, pi => pi.repository === newIdentification.repository && pi.owner.id && pi.owner.id === this.currentUser.id);
           this.pendingIdentifications[duplicateIndex] = newIdentification;
         } else {
           // No way
@@ -288,7 +287,7 @@ export class IdentificationComponent implements OnInit, OnDestroy {
         // Is there an identification that should be overwritten ?
         let overwriteAtIndex: number;
         if (this.selectedEditAs.value === 'user') {
-          overwriteAtIndex = _.findIndex(element.identifications as Array<IdentificationModel>, e => e.repository === newIdentification.repository && e.userIdValidation && e.userIdValidation === this.currentUser.id);
+          overwriteAtIndex = _.findIndex(element.identifications as Array<IdentificationModel>, e => e.repository === newIdentification.repository && e.owner.id && e.owner.id === this.currentUser.id);
         } else {
           // @Todo implements other cases (group identification, organization identification, etc.)
         }

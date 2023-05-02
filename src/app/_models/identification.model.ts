@@ -5,15 +5,14 @@ export interface IdentificationModel {
   id?:               number;
   validatedBy:       string;    // user id
   validatedAt:       Date;
-  owner:              VlUser;
-  updatedBy?:        string;     // user id
+  owner:             VlUser;
+  updatedBy?:        string;    // user id
   updatedAt?:        Date;
   repository:        string;
   repositoryIdNomen: number;
   repositoryIdTaxo?: string;
-  citationName:         string;
-  nomenclaturalName:         string;
-  taxonomicalName:     string;
-  userIdValidation?: string;    // Not in DB
+  citationName:      string;
+  nomenclaturalName: string;
+  taxonomicalName:   string;
   // isDiagnosis?:      boolean;
 }
