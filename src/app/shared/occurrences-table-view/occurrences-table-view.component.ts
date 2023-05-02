@@ -90,7 +90,7 @@ export class OccurrencesTableViewComponent implements OnInit, OnDestroy {
   getIdentification(occurrence: EsOccurrenceModel): string {
     if (occurrence && occurrence.identifications && occurrence.identifications.length > 0) {
       const favoriteIdentification = this.identificationService.getFavoriteIdentification(occurrence);
-      return favoriteIdentification ? favoriteIdentification.validatedName : '?';
+      return favoriteIdentification ? favoriteIdentification.taxonomicalName : '?';
     } else {
       return '?';
     }

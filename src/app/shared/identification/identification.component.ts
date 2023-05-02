@@ -211,9 +211,9 @@ export class IdentificationComponent implements OnInit, OnDestroy {
       repository:        data.repository,
       repositoryIdNomen: Number(data.idNomen),
       repositoryIdTaxo:  data.idTaxo ? data.idTaxo.toString() : null,
-      inputName:         data.name + (data.author ? (' ' + data.author) : ''),
-      validatedName:     data.name + (data.author ? (' ' + data.author) : ''),
-      validName:         data.name + (data.author ? (' ' + data.author) : ''),
+      citationName:         data.name + (data.author ? (' ' + data.author) : ''),
+      taxonomicalName:     data.name + (data.author ? (' ' + data.author) : ''),
+      nomenclaturalName:         data.name + (data.author ? (' ' + data.author) : ''),
       userIdValidation:  this.currentUser.id
     };
 

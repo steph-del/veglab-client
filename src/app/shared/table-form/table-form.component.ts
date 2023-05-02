@@ -360,12 +360,12 @@ export class TableFormComponent implements OnInit, OnDestroy {
   private getIdentificationModelFromRepositoryItemModel(rim: RepositoryItemModel): IdentificationModel {
     const name = rim.name + (rim.author && rim.author !== '' ? ' ' + rim.author : '');
     const ovm: IdentificationModel = {
-      inputName: name,
+      citationName: name,
       repository: rim.repository,
       repositoryIdNomen: +rim.idNomen,
       repositoryIdTaxo: rim.idTaxo.toString(),
-      validName: name,
-      validatedName: name,
+      nomenclaturalName: name,
+      taxonomicalName: name,
       validatedAt: new Date(),
       validatedBy: this.currentUser.id,
       owner: this.currentVlUser
@@ -393,7 +393,7 @@ export class TableFormComponent implements OnInit, OnDestroy {
         repository: table.identifications[0].repository,
         idNomen: table.identifications[0].repositoryIdNomen,
         idTaxo: table.identifications[0].repositoryIdTaxo,
-        name: table.identifications[0].inputName,
+        name: table.identifications[0].citationName,
         author: ''
       }];
     } else {

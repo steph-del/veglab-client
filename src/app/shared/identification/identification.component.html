@@ -33,7 +33,7 @@
               <mat-icon>edit</mat-icon>
             </button>
           </div>
-          
+
           <div *ngFor="let occ of sye.occurrences">
             <div class="element occurrence" [class.selected]="isSelectedReleve(occ)">
               <div class="title"><span>Rel. </span><span class="id">n° {{ occ.id }}</span></div>
@@ -99,7 +99,7 @@
               *ngFor="let pendingId of pendingIdentifications"
               removable="true"
               (removed)="removePendingIdentification(pendingId)">
-              [{{ pendingId.repository }}] {{ pendingId.inputName }}
+              [{{ pendingId.repository }}] {{ pendingId.citationName }}
               <mat-icon matChipRemove>cancel</mat-icon>
             </mat-chip>
           </mat-chip-list>
@@ -112,7 +112,7 @@
               *ngFor="let elementToRemove of pendingIdentificationsToRemove"
               removable="true"
               (removed)="removePendingIdentificationToRemove(elementToRemove)">
-              [{{ elementToRemove.repository }}] {{ elementToRemove.validatedName }}
+              [{{ elementToRemove.repository }}] {{ elementToRemove.taxonomicalName }}
               <mat-icon matChipRemove>cancel</mat-icon>
             </mat-chip>
           </mat-chip-list>
@@ -154,7 +154,7 @@
               *ngFor="let pendingId of pendingIdentifications"
               removable="true"
               (removed)="removePendingIdentification(pendingId)">
-              [{{ pendingId.repository }}] {{ pendingId.inputName }}
+              [{{ pendingId.repository }}] {{ pendingId.citationName }}
               <mat-icon matChipRemove>cancel</mat-icon>
             </mat-chip>
           </mat-chip-list>
@@ -167,7 +167,7 @@
               *ngFor="let elementToRemove of pendingIdentificationsToRemove"
               removable="true"
               (removed)="removePendingIdentificationToRemove(elementToRemove)">
-              [{{ elementToRemove.repository }}] {{ elementToRemove.validatedName }}
+              [{{ elementToRemove.repository }}] {{ elementToRemove.taxonomicalName }}
               <mat-icon matChipRemove>cancel</mat-icon>
             </mat-chip>
           </mat-chip-list>
@@ -208,7 +208,7 @@
               *ngFor="let pendingId of pendingIdentifications"
               removable="true"
               (removed)="removePendingIdentification(pendingId)">
-              [{{ pendingId.repository }}] {{ pendingId.inputName }}
+              [{{ pendingId.repository }}] {{ pendingId.citationName }}
               <mat-icon matChipRemove>cancel</mat-icon>
             </mat-chip>
           </mat-chip-list>
@@ -221,7 +221,7 @@
               *ngFor="let elementToRemove of pendingIdentificationsToRemove"
               removable="true"
               (removed)="removePendingIdentificationToRemove(elementToRemove)">
-              [{{ elementToRemove.repository }}] {{ elementToRemove.validatedName }}
+              [{{ elementToRemove.repository }}] {{ elementToRemove.taxonomicalName }}
               <mat-icon matChipRemove>cancel</mat-icon>
             </mat-chip>
           </mat-chip-list>
@@ -247,7 +247,7 @@
       </div>
       -->
     </div>
-    
+
   </div>
-  
+
 </div>

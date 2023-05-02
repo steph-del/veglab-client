@@ -50,9 +50,9 @@ export class OccurrenceIdentificationsPreviewComponent implements OnInit {
             && identification.repository == null
             && identification.repositoryIdNomen == null
             && identification.repositoryIdTaxo == null
-            && identification.inputName == null
-            && identification.validatedName == null
-            && identification.validName == null) {
+            && identification.citationName == null
+            && identification.taxonomicalName == null
+            && identification.nomenclaturalName == null) {
               result = true;
             } else {
               result = false;
@@ -67,9 +67,9 @@ export class OccurrenceIdentificationsPreviewComponent implements OnInit {
   getIdentificationName(identification: IdentificationModel): string {
     if (identification !== null) {
       if (identification.repository === 'otherunknonw') {
-        return identification.inputName;
+        return identification.citationName;
       } else if (identification.repository !== 'otherunknonwn') {
-        return identification.validatedName;
+        return identification.taxonomicalName;
       } else {
         return '?';
       }

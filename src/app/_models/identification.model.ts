@@ -11,9 +11,9 @@ export interface IdentificationModel {
   repository:        string;
   repositoryIdNomen: number;
   repositoryIdTaxo?: string;
-  inputName:         string;
-  validatedName:     string;
-  validName:         string;
+  citationName:         string;
+  nomenclaturalName:         string;
+  taxonomicalName:     string;
   userIdValidation?: string;    // Not in DB
   // isDiagnosis?:      boolean;
 }

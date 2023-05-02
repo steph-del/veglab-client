@@ -31,7 +31,7 @@
     <div *ngFor="let result of results.source">
       <!-- result.score & result.source : result.source.identifications & result.sources.items -->
       <div *ngIf="result.source.identifications.length > 0">
-        [{{ result.score }}] {{ result.source.identifications[0].repository }} : {{ result.source.identifications[0].validatedName }}
+        [{{ result.score }}] {{ result.source.identifications[0].repository }} : {{ result.source.identifications[0].taxonomicalName }}
       </div>
 
       <!--<div *ngIf="result.source.identifications.length === 0">

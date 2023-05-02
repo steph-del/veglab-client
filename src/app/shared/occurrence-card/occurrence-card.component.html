@@ -13,11 +13,11 @@
       <div class="text-identification no-identification">Ce relevé n'est pas été nommé</div>
     </div>
     <div *ngIf="occurrence.identifications.length == 1" style="width: 100%;">
-      <div class="text-identification" title="{{ occurrence.identifications[0].validatedName }}">{{ occurrence.identifications[0].validatedName }}</div>
+      <div class="text-identification" title="{{ occurrence.identifications[0].taxonomicalName }}">{{ occurrence.identifications[0].taxonomicalName }}</div>
     </div>
     <div *ngIf="occurrence.identifications.length > 1" style="width: 100%;">
       <div *ngFor="let identification of occurrence.identifications">
-        <div class="text-identification" title="{{ identification.validatedName }}">{{ identification.validatedName }}</div>
+        <div class="text-identification" title="{{ identification.taxonomicalName }}">{{ identification.taxonomicalName }}</div>
       </div>
     </div>
   </div>
@@ -74,7 +74,7 @@
       <div class="preview item"><mat-icon (click)="togglePreview()" inline="true" matTooltip="Afficher plus de détails">search</mat-icon></div>
       <div class="level item">{{ occurrence.level | shortLevel }}</div>
       <div class="layer item">{{ occurrence.layer }}</div>
-      <div class="identification item">{{ occurrence.identifications && occurrence.identifications[0] ? occurrence.identifications[0].validatedName : '-' }}</div>
+      <div class="identification item">{{ occurrence.identifications && occurrence.identifications[0] ? occurrence.identifications[0].taxonomicalName : '-' }}</div>
       <div class="authors item"><mat-icon inline="true" class="grey">person</mat-icon> {{ getObserversPreview() }}</div>
       <div class="date item" *ngIf="!occurrence.dateObservedPrecision">
         <mat-icon inline="true" class="grey">calendar_today</mat-icon> {{ occurrence.dateObserved | momentLocalDate }}
@@ -91,7 +91,7 @@
     </div>
     <div class="preview" [style.display]="preview ? 'block' : 'none'">
       <div class="occurrence-preview">
-        <div class="title">{{ occurrence.identifications && occurrence.identifications[0] ? occurrence.identifications[0].validatedName : 'Ce relevé n\'est pas nommé' }}</div>
+        <div class="title">{{ occurrence.identifications && occurrence.identifications[0] ? occurrence.identifications[0].taxonomicalName : 'Ce relevé n\'est pas nommé' }}</div>
         <div class="content">
           <table class="table-preview">
             <thead>

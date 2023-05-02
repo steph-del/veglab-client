@@ -434,15 +434,15 @@ export class TableService {
   public getTableIdentificationFromRelatedSyntaxonFormData(table: Table, relatedSyntaxon: TableRelatedSyntaxon): IdentificationModel {
     const name: string = relatedSyntaxon.identification.name + (relatedSyntaxon.identification.author ? ' ' + relatedSyntaxon.identification.author : '');
     const tableIdentification: IdentificationModel = {
-      inputName: name,
+      citationName: name,
       repository: relatedSyntaxon.identification.repository,
       repositoryIdNomen: +relatedSyntaxon.identification.idNomen,
       repositoryIdTaxo: relatedSyntaxon.identification.idTaxo.toString(),
-      validName: name,
+      nomenclaturalName: name,
       validatedAt: new Date(),
       validatedBy: table.createdBy,
       owner: table.owner,
-      validatedName: name
+      taxonomicalName: name
     };
     return tableIdentification;
   }
@@ -815,7 +815,7 @@ export class TableService {
             // @Todo it should never append because an 'idiotaxon' level occurrence must have at less one identification !
           } else if (childOcc.identifications.length === 1) {
             let name: string;
-            name = childOcc.identifications[0].repository === 'otherunknown' ? childOcc.identifications[0].inputName : childOcc.identifications[0].validatedName;
+            name = childOcc.identifications[0].repository === 'otherunknown' ? childOcc.identifications[0].citationName : childOcc.identifications[0].taxonomicalName;
             const newName = {
               group: {id: 0, label: 'default'}, // Add a default group
               // group: {id: group.id, label: group.label}, // TEST
@@ -835,7 +835,7 @@ export class TableService {
               repository: favoriteIdentification.repository,
               repositoryIdNomen: favoriteIdentification.repositoryIdNomen,
               repositoryIdTaxo: favoriteIdentification.repositoryIdTaxo,
-              name: favoriteIdentification.repository === 'otherunknown' ? favoriteIdentification.inputName : favoriteIdentification.validatedName
+              name: favoriteIdentification.repository === 'otherunknown' ? favoriteIdentification.citationName : favoriteIdentification.taxonomicalName
             };
             names.push(newName);
           }
@@ -848,7 +848,7 @@ export class TableService {
               // @Todo it should never append because an 'idiotaxon' level occurrence must have at less one identification !
             } else if (grandChild.identifications.length === 1) {
               let name: string;
-              name = grandChild.identifications[0].repository === 'otherunknown' ? grandChild.identifications[0].inputName : grandChild.identifications[0].validatedName;
+              name = grandChild.identifications[0].repository === 'otherunknown' ? grandChild.identifications[0].citationName : grandChild.identifications[0].taxonomicalName;
               const newName = {
                 group: {id: 0, label: 'default'}, // Add a default group
                 layer: occLayer,
@@ -867,7 +867,7 @@ export class TableService {
                 repository: preferedfavoriteIdentification.repository,
                 repositoryIdNomen: preferedfavoriteIdentification.repositoryIdNomen,
                 repositoryIdTaxo: preferedfavoriteIdentification.repositoryIdTaxo,
-                name: preferedfavoriteIdentification.repository === 'otherunknown' ? preferedfavoriteIdentification.inputName : preferedfavoriteIdentification.validatedName
+                name: preferedfavoriteIdentification.repository === 'otherunknown' ? preferedfavoriteIdentification.citationName : preferedfavoriteIdentification.taxonomicalName
               };
               names.push(newName);
             }

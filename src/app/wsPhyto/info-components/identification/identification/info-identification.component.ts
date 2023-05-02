@@ -74,17 +74,17 @@ export class InfoIdentificationComponent implements OnInit, OnDestroy {
 
   getTableIdentification(): string {
     const favoriteIdentification = this.identificationService.getFavoriteIdentification(this.table);
-    return favoriteIdentification && favoriteIdentification.validName ? favoriteIdentification.validatedName : 'non identifié';
+    return favoriteIdentification && favoriteIdentification.nomenclaturalName ? favoriteIdentification.taxonomicalName : 'non identifié';
   }
 
   getSyeIdentification(sye: Sye): string {
     const favoriteIdentification = this.identificationService.getFavoriteIdentification(sye);
-    return favoriteIdentification && favoriteIdentification.validName ? favoriteIdentification.validatedName : 'non identifié';
+    return favoriteIdentification && favoriteIdentification.nomenclaturalName ? favoriteIdentification.taxonomicalName : 'non identifié';
   }
 
   getReleveIdentification(releve: OccurrenceModel): string {
     const favoriteIdentification = this.identificationService.getFavoriteIdentification(releve);
-    return favoriteIdentification && favoriteIdentification.validName ? favoriteIdentification.validatedName : 'non identifié';
+    return favoriteIdentification && favoriteIdentification.nomenclaturalName ? favoriteIdentification.taxonomicalName : 'non identifié';
   }
 
 }

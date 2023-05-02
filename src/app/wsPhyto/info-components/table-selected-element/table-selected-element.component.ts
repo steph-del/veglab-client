@@ -165,12 +165,12 @@ export class TableSelectedElementComponent implements OnInit, OnDestroy {
 
   getOccurrenceIdentification(occurrence: OccurrenceModel): string {
     const favoriteIdentification = this.identificationService.getFavoriteIdentification(occurrence);
-    return favoriteIdentification && favoriteIdentification.validatedName ? favoriteIdentification.validatedName : 'Relevé non identifié';
+    return favoriteIdentification && favoriteIdentification.taxonomicalName ? favoriteIdentification.taxonomicalName : 'Relevé non identifié';
   }
 
   getSyeIdentification(sye: Sye): string {
     const favoriteIdentification = this.identificationService.getFavoriteIdentification(sye);
-    return favoriteIdentification && favoriteIdentification.validatedName ? favoriteIdentification.validatedName : 'Sye non identifié';
+    return favoriteIdentification && favoriteIdentification.taxonomicalName ? favoriteIdentification.taxonomicalName : 'Sye non identifié';
   }
 
 }

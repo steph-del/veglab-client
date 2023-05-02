@@ -47,7 +47,7 @@ export class TableIdentificationsPreviewComponent implements OnInit {
   getIdentificationLabel(element: 'table' | 'sye' | 'releve', identifications: Array<IdentificationModel>): string {
     /*const favoriteIdentification = this.identificationService.getFavoriteIdentification(element, identifications);
     if (preferedIdentifi) {
-      return favoriteIdentification.validatedName;
+      return favoriteIdentification.taxonomicalName;
     } else {
       return 'Non identifié';
     }*/

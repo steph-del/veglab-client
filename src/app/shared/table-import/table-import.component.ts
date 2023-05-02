@@ -882,9 +882,9 @@ export class TableImportComponent implements OnInit, OnDestroy {
     taxon.identification.repositoryIdTaxo = data.idTaxo ? data.idTaxo.toString() : data.validOccurence ? data.validOccurence.idNomen.toString() : null;
     taxon.identification.updatedAt = new Date();
     taxon.identification.updatedBy = this.currentUser.id;
-    taxon.identification.validName = data.name + (data.author ? ' ' + data.author : '');
-    taxon.identification.validatedName = taxon.identification.validName;
-    taxon.id = (data.idNomen ? data.idNomen.toString() : 'nc') + '~' + taxon.layer + taxon.identification.validatedName;
+    taxon.identification.nomenclaturalName = data.name + (data.author ? ' ' + data.author : '');
+    taxon.identification.taxonomicalName = taxon.identification.nomenclaturalName;
+    taxon.id = (data.idNomen ? data.idNomen.toString() : 'nc') + '~' + taxon.layer + taxon.identification.taxonomicalName;
     taxon.rim = Object.assign(data);
     this.checkNamesStatus();
   }
@@ -937,9 +937,9 @@ export class TableImportComponent implements OnInit, OnDestroy {
                 repository: 'otherunknown',
                 repositoryIdNomen: randomInteger,
                 repositoryIdTaxo: randomInteger.toString(),
-                inputName: t[this.HEADERS_LABELS_COL_POS.position],
-                validatedName: null,
-                validName: null
+                citationName: t[this.HEADERS_LABELS_COL_POS.position],
+                taxonomicalName: null,
+                nomenclaturalName: null
               };
               currentContent.rim = {
                 repository: 'otherunknown',
@@ -956,9 +956,9 @@ export class TableImportComponent implements OnInit, OnDestroy {
                 repository: useRepo,
                 repositoryIdNomen: Number(t[this.NOMEN_COL_POS.position]),
                 repositoryIdTaxo: result.idTaxo.toString(),
-                inputName: t[this.HEADERS_LABELS_COL_POS.position],
-                validatedName: result.name + (result.author !== '' ? ' ' + result.author : ''),
-                validName: result.name + (result.author !== '' ? ' ' + result.author : '')
+                citationName: t[this.HEADERS_LABELS_COL_POS.position],
+                taxonomicalName: result.name + (result.author !== '' ? ' ' + result.author : ''),
+                nomenclaturalName: result.name + (result.author !== '' ? ' ' + result.author : '')
               };
               currentContent.rim = {
                 repository: useRepo,
@@ -987,9 +987,9 @@ export class TableImportComponent implements OnInit, OnDestroy {
               repository: 'otherunknown',
               repositoryIdNomen: randomInteger,
               repositoryIdTaxo: randomInteger.toString(),
-              inputName: t[this.HEADERS_LABELS_COL_POS.position],
-              validatedName: null,
-              validName: null
+              citationName: t[this.HEADERS_LABELS_COL_POS.position],
+              taxonomicalName: null,
+              nomenclaturalName: null
             };
             currentContent.rim = {
               repository: 'otherunknown',
@@ -1018,9 +1018,9 @@ export class TableImportComponent implements OnInit, OnDestroy {
           repository: 'otherunknown',
           repositoryIdNomen: randomInteger,
           repositoryIdTaxo: randomInteger.toString(),
-          inputName: t[this.HEADERS_LABELS_COL_POS.position],
-          validatedName: null,
-          validName: null
+          citationName: t[this.HEADERS_LABELS_COL_POS.position],
+          taxonomicalName: null,
+          nomenclaturalName: null
         };
         currentContent.rim = {
           repository: 'otherunknown',
@@ -1065,10 +1065,10 @@ export class TableImportComponent implements OnInit, OnDestroy {
   }
 
   getTaxoName(taxo: Taxo): string {
-    if (taxo.identification && taxo.identification.validName) {
-      return taxo.identification.validName;
-    } else if (taxo.identification && taxo.identification.inputName) {
-      return taxo.identification.inputName;
+    if (taxo.identification && taxo.identification.nomenclaturalName) {
+      return taxo.identification.nomenclaturalName;
+    } else if (taxo.identification && taxo.identification.citationName) {
+      return taxo.identification.citationName;
     } else {
       return '?';
     }
@@ -2515,9 +2515,9 @@ export class TableImportComponent implements OnInit, OnDestroy {
         repository:        this.identificationList.table.identification.consolidedIdentification.repository,
         repositoryIdNomen: Number(this.identificationList.table.identification.consolidedIdentification.idNomen),
         repositoryIdTaxo:  this.identificationList.table.identification.consolidedIdentification.idTaxo.toString(),
-        inputName:         this.identificationList.table.identification.consolidedIdentification.name,
-        validatedName:     this.identificationList.table.identification.consolidedIdentification.name,
-        validName:         this.identificationList.table.identification.consolidedIdentification.name
+        citationName:         this.identificationList.table.identification.consolidedIdentification.name,
+        taxonomicalName:     this.identificationList.table.identification.consolidedIdentification.name,
+        nomenclaturalName:         this.identificationList.table.identification.consolidedIdentification.name
       } : null;
       if (tableIdentification !== null) { newTable.identifications = [tableIdentification]; }
     }
@@ -2539,9 +2539,9 @@ export class TableImportComponent implements OnInit, OnDestroy {
             repository:        sye.identification.consolidedIdentification.repository,
             repositoryIdNomen: Number(sye.identification.consolidedIdentification.idNomen),
             repositoryIdTaxo:  sye.identification.consolidedIdentification.idTaxo.toString(),
-            inputName:         sye.identification.consolidedIdentification.name,
-            validatedName:     sye.identification.consolidedIdentification.name,
-            validName:         sye.identification.consolidedIdentification.name
+            citationName:         sye.identification.consolidedIdentification.name,
+            taxonomicalName:     sye.identification.consolidedIdentification.name,
+            nomenclaturalName:         sye.identification.consolidedIdentification.name
           } : null;
           if (syeIdentification !== null) { syeToBind.identifications = [syeIdentification]; }
         }
@@ -2571,9 +2571,9 @@ export class TableImportComponent implements OnInit, OnDestroy {
                 repository:        releve.identification.consolidedIdentification.repository,
                 repositoryIdNomen: Number(releve.identification.consolidedIdentification.idNomen),
                 repositoryIdTaxo:  releve.identification.consolidedIdentification.idTaxo.toString(),
-                inputName:         releve.identification.consolidedIdentification.name,
-                validatedName:     releve.identification.consolidedIdentification.name,
-                validName:         releve.identification.consolidedIdentification.name
+                citationName:         releve.identification.consolidedIdentification.name,
+                taxonomicalName:     releve.identification.consolidedIdentification.name,
+                nomenclaturalName:         releve.identification.consolidedIdentification.name
               } : null;
               for (const releveToBind of relevesToBind) {
                 if (releveIdentification !== null) {

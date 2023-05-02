@@ -117,9 +117,9 @@ export class IdentificationService {
     const preferedIdentification = this.getFavoriteIdentification(element);
     if (preferedIdentification) {
       if (preferedIdentification.repository === 'otherunknown') {
-        return preferedIdentification.inputName && preferedIdentification.inputName !== '' ? preferedIdentification.inputName : '?';
+        return preferedIdentification.citationName && preferedIdentification.citationName !== '' ? preferedIdentification.citationName : '?';
       } else {
-        return preferedIdentification.validatedName ? preferedIdentification.validatedName : preferedIdentification.inputName;
+        return preferedIdentification.taxonomicalName ? preferedIdentification.taxonomicalName : preferedIdentification.citationName;
       }
     } else {
       return '?';

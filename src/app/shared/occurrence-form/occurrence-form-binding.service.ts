@@ -54,9 +54,9 @@ export class OccurrenceFormBindingService {
           repository: citedSyntaxon.repository,
           repositoryIdNomen: +citedSyntaxon.idNomen,
           repositoryIdTaxo: xIdTaxo,
-          inputName: citedSyntaxon.name + ' ' + citedSyntaxon.author,
-          validName: citedSyntaxon.validOccurence.name + ' ' + citedSyntaxon.validOccurence.author,
-          validatedName: citedSyntaxon.validOccurence.name + ' ' + citedSyntaxon.validOccurence.author
+          citationName: citedSyntaxon.name + ' ' + citedSyntaxon.author,
+          nomenclaturalName: citedSyntaxon.validOccurence.name + ' ' + citedSyntaxon.validOccurence.author,
+          taxonomicalName: citedSyntaxon.validOccurence.name + ' ' + citedSyntaxon.validOccurence.author
         }];
       }
       // bind occurrences-shared data
@@ -80,9 +80,9 @@ export class OccurrenceFormBindingService {
           repository: occ.taxa.repository,
           repositoryIdNomen: +occ.taxa.idNomen,
           repositoryIdTaxo: yIdTaxo,
-          inputName: occ.taxa.name + ' ' + occ.taxa.author,
-          validName: occ.taxa.validOccurence ? occ.taxa.validOccurence.name + ' ' + occ.taxa.validOccurence.author : null,
-          validatedName: occ.taxa.validOccurence ? occ.taxa.validOccurence.name + ' ' + occ.taxa.validOccurence.author : null
+          citationName: occ.taxa.name + ' ' + occ.taxa.author,
+          nomenclaturalName: occ.taxa.validOccurence ? occ.taxa.validOccurence.name + ' ' + occ.taxa.validOccurence.author : null,
+          taxonomicalName: occ.taxa.validOccurence ? occ.taxa.validOccurence.name + ' ' + occ.taxa.validOccurence.author : null
         }];
         yOcc.coef = occ.coef;
         this.bindSharedData(yOcc, form, user, location, metadatas);
@@ -115,9 +115,9 @@ export class OccurrenceFormBindingService {
           repository: citedSyntaxon.repository,
           repositoryIdNomen: +citedSyntaxon.idNomen,
           repositoryIdTaxo: xIdTaxo,
-          inputName: citedSyntaxon.name + ' ' + citedSyntaxon.author,
-          validName: citedSyntaxon.validOccurence.name + ' ' + citedSyntaxon.validOccurence.author,
-          validatedName: citedSyntaxon.validOccurence.name + ' ' + citedSyntaxon.validOccurence.author
+          citationName: citedSyntaxon.name + ' ' + citedSyntaxon.author,
+          nomenclaturalName: citedSyntaxon.validOccurence.name + ' ' + citedSyntaxon.validOccurence.author,
+          taxonomicalName: citedSyntaxon.validOccurence.name + ' ' + citedSyntaxon.validOccurence.author
         }];
       }
       // bind occurrences-shared data
@@ -155,9 +155,9 @@ export class OccurrenceFormBindingService {
             repository: z.taxa.repository,
             repositoryIdNomen: +z.taxa.idNomen,
             repositoryIdTaxo: zIdTaxo,
-            inputName: z.taxa.name + ' ' + z.taxa.author,
-            validName: z.taxa.validOccurence ? z.taxa.validOccurence.name + ' ' + z.taxa.validOccurence.author : null,
-            validatedName: z.taxa.validOccurence ? z.taxa.validOccurence.name + ' ' + z.taxa.validOccurence.author : null
+            citationName: z.taxa.name + ' ' + z.taxa.author,
+            nomenclaturalName: z.taxa.validOccurence ? z.taxa.validOccurence.name + ' ' + z.taxa.validOccurence.author : null,
+            taxonomicalName: z.taxa.validOccurence ? z.taxa.validOccurence.name + ' ' + z.taxa.validOccurence.author : null
           }];
           this.bindSharedData(zOcc, form, user, location, metadatas);
 

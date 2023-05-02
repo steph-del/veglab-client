@@ -22,7 +22,7 @@
         <span class="level" *ngIf="_element.level && _element.level === 'phytocenosis'">φ</span>
         <span class="layer" *ngIf="_element.layer && _element.layer !== null">{{ _element.layer }}</span>
         <span class="text" [class.delete-icon]="allowDelete">
-          <span>[{{ myIdentification.repository }}] {{ myIdentification.validatedName }}</span>
+          <span>[{{ myIdentification.repository }}] {{ myIdentification.taxonomicalName }}</span>
           <span class="delete-icon" *ngIf="allowDelete">
             <mat-icon inline="true" matTooltip="Supprimer cette identification" (click)="deleteElement(myIdentification)">delete</mat-icon>
           </span>
@@ -49,7 +49,7 @@
           <span class="level" *ngIf="_element.level && _element.level === 'microcenosis'">µC</span>
           <span class="level" *ngIf="_element.level && _element.level === 'phytocenosis'">φ</span>
           <span class="layer" *ngIf="_element.layer && _element.layer !== null">{{ _element.layer }}</span>
-          <span class="text">[{{ identification.repository }}] {{ identification.validatedName }}</span>
+          <span class="text">[{{ identification.repository }}] {{ identification.taxonomicalName }}</span>
         </span>
       </li>
     </div>
@@ -65,7 +65,7 @@
         <span class="level" *ngIf="_element.level && _element.level === 'microcenosis'">µC</span>
         <span class="level" *ngIf="_element.level && _element.level === 'phytocenosis'">φ</span>
         <span class="layer" *ngIf="_element.layer && _element.layer !== null">{{ _element.layer }}</span>
-        <span class="text">[{{ otherIdentifications[0].repository }}] {{ otherIdentifications[0].validatedName }}</span>
+        <span class="text">[{{ otherIdentifications[0].repository }}] {{ otherIdentifications[0].taxonomicalName }}</span>
       </span>
       <!--<mat-icon *ngIf="!showAllIdentifications" [class.disabled]="otherIdentifications.length === 1" (click)="toggleShowAllIdentifications()">keyboard_arrow_up</mat-icon>
       <mat-icon *ngIf="showAllIdentifications" (click)="toggleShowAllIdentifications()">keyboard_arrow_down</mat-icon>-->
@@ -88,7 +88,7 @@
           <span class="level" *ngIf="_element.level && _element.level === 'microcenosis'">µC</span>
           <span class="level" *ngIf="_element.level && _element.level === 'phytocenosis'">φ</span>
           <span class="layer" *ngIf="_element.layer && _element.layer !== null">{{ _element.layer }}</span>
-          <span class="text">[{{ identification.repository }}] {{ identification.validatedName }}</span>
+          <span class="text">[{{ identification.repository }}] {{ identification.taxonomicalName }}</span>
         </span>
       </li>
     </div>
