@@ -5,7 +5,7 @@ import { InputSource } from '../_enums/input-source-enum';
 import { PublishedLocation } from '../_enums/published-location-enum';
 import { LocationAccuracy } from '../_enums/location-accuracy-enum';
 import { VlAccuracyEnum } from 'tb-geoloc-lib';
-import { OccurrenceValidationModel } from './occurrence-validation.model';
+import { IdentificationModel } from './identification.model';
 import { Level } from '../_enums/level-enum';
 import { LayerEnum } from '../_enums/layer-list';
 import { EsExtendedFieldModel } from './es-extended-field-model';
@@ -93,7 +93,7 @@ export interface EsOccurrenceModel {
   project?: string;      // IRI
   userProfile: Array<number>;  // ???
   photos?: Array<any>;
-  validations?: Array<OccurrenceValidationModel>;
+  identifications?: Array<IdentificationModel>;
 
   delUpdateNotifications: any; // I don't care
 

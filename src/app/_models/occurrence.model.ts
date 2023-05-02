@@ -1,4 +1,4 @@
-import { OccurrenceValidationModel } from './occurrence-validation.model';
+import { IdentificationModel } from './identification.model';
 import { ExtendedFieldOccurrence } from './extended-field-occurrence';
 
 import { Certainly } from '../_enums/certainly-enum';
@@ -98,7 +98,7 @@ export interface OccurrenceModel {
   project?: string;      // IRI
   userProfile: Array<number>;  // ???
   photos?: Array<any>;
-  validations?: Array<OccurrenceValidationModel>;
+  identifications?: Array<IdentificationModel>;
 
   delUpdateNotifications: any; // I don't care
 

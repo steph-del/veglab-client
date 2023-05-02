@@ -50,7 +50,7 @@ export class TableSearchComponent implements OnInit, OnDestroy {
   defaultSyntaxonRepository: string;
 
   // VAR Table filters
-  tableValidation: RepositoryItemModel = null;
+  tableIdentification: RepositoryItemModel = null;
   tableMustBeADiagnosis = false;
   tableMustHaveAPdf = false;
   tableMustBeMine = false;
@@ -144,13 +144,13 @@ export class TableSearchComponent implements OnInit, OnDestroy {
   // -------------
   // TABLE FILTERS
   // -------------
-  setTableValidationFilter(item: RepositoryItemModel): void {
-    this.tableValidation = item;
+  setTableIdentificationFilter(item: RepositoryItemModel): void {
+    this.tableIdentification = item;
     this.search();
   }
 
-  removeTableValidationFilter(): void {
-    this.tableValidation = null;
+  removeTableIdentificationFilter(): void {
+    this.tableIdentification = null;
     this.search();
   }
 
@@ -265,7 +265,7 @@ export class TableSearchComponent implements OnInit, OnDestroy {
   // FILTERS
   // -------
   noFilterApplied(): boolean {
-    if (this.tableValidation === null &&
+    if (this.tableIdentification === null &&
       this.tableMustBeADiagnosis === false && // @Todo user should filter on NO diagnosis
       this.tableMustBeMine === false &&
       this.mustContainColOccurrences.length === 0 &&
@@ -417,7 +417,7 @@ export class TableSearchComponent implements OnInit, OnDestroy {
           const ct = this.tableService.createTable(); // a new Table with an unique empty sye
           if (setSye === true) {
             // keep syes
-            // + duplicate table (remove sye synthetic column and validations ids to avoid them to be moved between entities)
+            // + duplicate table (remove sye synthetic column and identifications ids to avoid them to be moved between entities)
             let newTable = this.tableService.setSyesToTable(syes, ct, this.currentUser);
             newTable = this.tableService.duplicateTable(newTable);
             this.tableService.setCurrentTable(newTable, true);
@@ -479,7 +479,7 @@ export class TableSearchComponent implements OnInit, OnDestroy {
         // 4. Set currentTable Syes OR Set occurrences
         if (setSye === true) {
           // keep syes
-          // + duplicate table (remove sye synthetic column and validations ids to avoid them to be moved between entities)
+          // + duplicate table (remove sye synthetic column and identifications ids to avoid them to be moved between entities)
           let newTable = this.tableService.mergeSyesToTable(syes, ct, this.currentUser);
           newTable = this.tableService.duplicateTable(newTable);
           this.tableService.setCurrentTable(newTable, true);
@@ -542,13 +542,13 @@ export class TableSearchComponent implements OnInit, OnDestroy {
    * Output example :
    * `
    *   "must": [
-   *     { "match_phrase": { "tableValidation": "bdtfx~164534" } },
-   *     { "match_phrase": { "rowsValidations": "bdtfx~164534" } }
+   *     { "match_phrase": { "tableIdentification": "bdtfx~164534" } },
+   *     { "match_phrase": { "rowsIdentifications": "bdtfx~164534" } }
    *   ]
    * `
    */
   esMustClauseAssembler(): string {
-    const tableValidation: Array<string> = this.esMustTableValidationQueryPart();
+    const tableIdentification: Array<string> = this.esMustTableIdentificationQueryPart();
     const tableBiblio: Array<string> = this.esMustTableBiblioQueryPart();
     const tableMustBeADiagnosis: Array<string> = this.esMustTableBeDiagnosisPart();
     const tableMustHaveAPdf: Array<string> = this.esMustTableHaveAPdfPart();
@@ -556,7 +556,7 @@ export class TableSearchComponent implements OnInit, OnDestroy {
     const rowOcc: Array<string> = this.esRowOccurrencesMustQueryPart(this.mustContainRowOccurrences);
     const colOcc: Array<string> = this.esColOccurrencesMustQueryPart(this.mustContainColOccurrences);
 
-    const parts = [].concat(...tableValidation, ...tableBiblio, ...tableMustBeADiagnosis, ...tableMustHaveAPdf, ...tableMustBeMine, ...colOcc, ...rowOcc);
+    const parts = [].concat(...tableIdentification, ...tableBiblio, ...tableMustBeADiagnosis, ...tableMustHaveAPdf, ...tableMustBeMine, ...colOcc, ...rowOcc);
 
     let stringParts = '';
     let i = 0;
@@ -569,38 +569,38 @@ export class TableSearchComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Constructs the EalsticSearch query part "MUST contains thoses column occurrences".
+   * Constructs the EalsticSearch query part "MUST contain these column occurrences".
    * Output example :
    * `
-   *   { "match_phrase": { "occurrencesValidations": "baseveg~50284" } },
-   *   { "match_phrase": { "occurrencesValidations": "baseveg~50912" } }
+   *   { "match_phrase": { "occurrencesIdentifications": "baseveg~50284" } },
+   *   { "match_phrase": { "occurrencesIdentifications": "baseveg~50912" } }
    * `
    */
-  esColOccurrencesMustQueryPart(colOccurrenceValidations: Array<RepositoryItemModel>): Array<string> {
+  esColOccurrencesMustQueryPart(colOccurrenceIdentifications: Array<RepositoryItemModel>): Array<string> {
     const parts: Array<string> = [];
-    colOccurrenceValidations.forEach(colOccurrenceValidation => {
+    colOccurrenceIdentifications.forEach(colOccurrenceIdentification => {
       let idTaxo: any = null;
-      if (colOccurrenceValidation.idTaxo !== null) { idTaxo = colOccurrenceValidation.idTaxo; } else if (colOccurrenceValidation.validOccurence.idNomen !== null) { idTaxo = colOccurrenceValidation.validOccurence.idNomen; } else { throw new Error(`We can't retrieve a (syn)taxonomic ID for the [${colOccurrenceValidation.idTaxo}]${colOccurrenceValidation.idNomen} (syn)taxonomic nomenclatural ID.`); }
-      const matchPhrase = `{ "match_phrase": { "occurrencesAndSyeValidations": "${colOccurrenceValidation.repository}~${idTaxo}" } }`;
+      if (colOccurrenceIdentification.idTaxo !== null) { idTaxo = colOccurrenceIdentification.idTaxo; } else if (colOccurrenceIdentification.validOccurence.idNomen !== null) { idTaxo = colOccurrenceIdentification.validOccurence.idNomen; } else { throw new Error(`We can't retrieve a (syn)taxonomic ID for the [${colOccurrenceIdentification.idTaxo}]${colOccurrenceIdentification.idNomen} (syn)taxonomic nomenclatural ID.`); }
+      const matchPhrase = `{ "match_phrase": { "occurrencesAndSyeIdentifications": "${colOccurrenceIdentification.repository}~${idTaxo}" } }`;
       parts.push(matchPhrase);
     });
     return parts;
   }
 
   /**
-   * Constructs the EalsticSearch query part "MUST contains thoses row occurrences".
+   * Constructs the EalsticSearch query part "MUST contain these row occurrences".
    * Output example :
    * `
-   *   { "match_phrase": { "rowsValidations": "bdtfx~50284" } },
-   *   { "match_phrase": { "rowsValidations": "bdtfx~50912" } }
+   *   { "match_phrase": { "rowsIdentifications": "bdtfx~50284" } },
+   *   { "match_phrase": { "rowsIdentifications": "bdtfx~50912" } }
    * `
    */
-  esRowOccurrencesMustQueryPart(rowOccurrenceValidations: Array<RepositoryItemModel>): Array<string> {
+  esRowOccurrencesMustQueryPart(rowOccurrenceIdentifications: Array<RepositoryItemModel>): Array<string> {
     const parts: Array<string> = [];
-    rowOccurrenceValidations.forEach(rowOccurrenceValidation => {
+    rowOccurrenceIdentifications.forEach(rowOccurrenceIdentification => {
       let idTaxo: any = null;
-      if (rowOccurrenceValidation.idTaxo !== null) { idTaxo = rowOccurrenceValidation.idTaxo; } else if (rowOccurrenceValidation.validOccurence.idNomen !== null) { idTaxo = rowOccurrenceValidation.validOccurence.idNomen; } else { throw new Error(`We can't retrieve a (syn)taxonomic ID for the [${rowOccurrenceValidation.idTaxo}]${rowOccurrenceValidation.idNomen} (syn)taxonomic nomenclatural ID.`); }
-      const matchPhrase = `{ "match_phrase": { "rowsValidations": "${rowOccurrenceValidation.repository}~${idTaxo}" } }`;
+      if (rowOccurrenceIdentification.idTaxo !== null) { idTaxo = rowOccurrenceIdentification.idTaxo; } else if (rowOccurrenceIdentification.validOccurence.idNomen !== null) { idTaxo = rowOccurrenceIdentification.validOccurence.idNomen; } else { throw new Error(`We can't retrieve a (syn)taxonomic ID for the [${rowOccurrenceIdentification.idTaxo}]${rowOccurrenceIdentification.idNomen} (syn)taxonomic nomenclatural ID.`); }
+      const matchPhrase = `{ "match_phrase": { "rowsIdentifications": "${rowOccurrenceIdentification.repository}~${idTaxo}" } }`;
       parts.push(matchPhrase);
     });
     return parts;
@@ -611,8 +611,8 @@ export class TableSearchComponent implements OnInit, OnDestroy {
    * Output example :
    * `
    *   "must_not": [
-   *     { "match_phrase": { "tableValidation": "bdtfx~164534" } },
-   *     { "match_phrase": { "rowsValidations": "bdtfx~164534" } }
+   *     { "match_phrase": { "tableIdentification": "bdtfx~164534" } },
+   *     { "match_phrase": { "rowsIdentifications": "bdtfx~164534" } }
    *   ]
    * `
    */
@@ -633,47 +633,47 @@ export class TableSearchComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Constructs the EalsticSearch query part "MUST NOT contains thoses col occurrences (ie relevés)".
+   * Constructs the EalsticSearch query part "MUST NOT contain these col occurrences (ie relevés)".
    * Output example :
    * `
-   *   { "match_phrase": { "occurrencesValidations": "bdtfx~50284" } },
-   *   { "match_phrase": { "occurrencesValidations": "bdtfx~50912" } }
+   *   { "match_phrase": { "occurrencesIdentifications": "bdtfx~50284" } },
+   *   { "match_phrase": { "occurrencesIdentifications": "bdtfx~50912" } }
    * `
    */
-  esColOccurrencesMustNotQueryPart(colOccurrenceValidations: Array<RepositoryItemModel>): Array<string> {
+  esColOccurrencesMustNotQueryPart(colOccurrenceIdentifications: Array<RepositoryItemModel>): Array<string> {
     const parts: Array<string> = [];
-    colOccurrenceValidations.forEach(colOccurrenceValidation => {
+    colOccurrenceIdentifications.forEach(colOccurrenceIdentification => {
       let idTaxo: any = null;
-      if (colOccurrenceValidation.idTaxo !== null) { idTaxo = colOccurrenceValidation.idTaxo; } else if (colOccurrenceValidation.validOccurence.idNomen !== null) { idTaxo = colOccurrenceValidation.validOccurence.idNomen; } else { throw new Error(`We can't retrieve a (syn)taxonomic ID for the [${colOccurrenceValidation.idTaxo}]${colOccurrenceValidation.idNomen} (syn)taxonomic nomenclatural ID.`); }
-      const matchPhrase = `{ "match_phrase": { "occurrencesValidations": "${colOccurrenceValidation.repository}~${idTaxo}" } }`;
+      if (colOccurrenceIdentification.idTaxo !== null) { idTaxo = colOccurrenceIdentification.idTaxo; } else if (colOccurrenceIdentification.validOccurence.idNomen !== null) { idTaxo = colOccurrenceIdentification.validOccurence.idNomen; } else { throw new Error(`We can't retrieve a (syn)taxonomic ID for the [${colOccurrenceIdentification.idTaxo}]${colOccurrenceIdentification.idNomen} (syn)taxonomic nomenclatural ID.`); }
+      const matchPhrase = `{ "match_phrase": { "occurrencesIdentifications": "${colOccurrenceIdentification.repository}~${idTaxo}" } }`;
       parts.push(matchPhrase);
     });
     return parts;
   }
 
   /**
-   * Constructs the EalsticSearch query part "MUST NOT contains thoses row occurrences (ie 'species')".
+   * Constructs the EalsticSearch query part "MUST NOT contain these row occurrences (ie 'species')".
    * Output example :
    * `
-   *   { "match_phrase": { "rowsValidations": "bdtfx~50284" } },
-   *   { "match_phrase": { "rowsValidations": "bdtfx~50912" } }
+   *   { "match_phrase": { "rowsIdentifications": "bdtfx~50284" } },
+   *   { "match_phrase": { "rowsIdentifications": "bdtfx~50912" } }
    * `
    */
-  esRowOccurrencesMustNotQueryPart(rowOccurrenceValidations: Array<RepositoryItemModel>): Array<string> {
+  esRowOccurrencesMustNotQueryPart(rowOccurrenceIdentifications: Array<RepositoryItemModel>): Array<string> {
     const parts: Array<string> = [];
-    rowOccurrenceValidations.forEach(rowOccurrenceValidation => {
+    rowOccurrenceIdentifications.forEach(rowOccurrenceIdentification => {
       let idTaxo: any = null;
-      if (rowOccurrenceValidation.idTaxo !== null) { idTaxo = rowOccurrenceValidation.idTaxo; } else if (rowOccurrenceValidation.validOccurence.idNomen !== null) { idTaxo = rowOccurrenceValidation.validOccurence.idNomen; } else { throw new Error(`We can't retrieve a (syn)taxonomic ID for the [${rowOccurrenceValidation.idTaxo}]${rowOccurrenceValidation.idNomen} (syn)taxonomic nomenclatural ID.`); }
-      const matchPhrase = `{ "match_phrase": { "rowsValidations": "${rowOccurrenceValidation.repository}~${idTaxo}" } }`;
+      if (rowOccurrenceIdentification.idTaxo !== null) { idTaxo = rowOccurrenceIdentification.idTaxo; } else if (rowOccurrenceIdentification.validOccurence.idNomen !== null) { idTaxo = rowOccurrenceIdentification.validOccurence.idNomen; } else { throw new Error(`We can't retrieve a (syn)taxonomic ID for the [${rowOccurrenceIdentification.idTaxo}]${rowOccurrenceIdentification.idNomen} (syn)taxonomic nomenclatural ID.`); }
+      const matchPhrase = `{ "match_phrase": { "rowsIdentifications": "${rowOccurrenceIdentification.repository}~${idTaxo}" } }`;
       parts.push(matchPhrase);
     });
     return parts;
   }
 
-  esMustTableValidationQueryPart(): Array<string> {
+  esMustTableIdentificationQueryPart(): Array<string> {
     const parts: Array<string> = [];
-    if (this.tableValidation) {
-      const matchPhrase = `{ "match_phrase": { "tableValidation": "${this.tableValidation.repository}~${this.tableValidation.idTaxo}" } }`;
+    if (this.tableIdentification) {
+      const matchPhrase = `{ "match_phrase": { "tableIdentification": "${this.tableIdentification.repository}~${this.tableIdentification.idTaxo}" } }`;
       parts.push(matchPhrase);
     }
     return parts;

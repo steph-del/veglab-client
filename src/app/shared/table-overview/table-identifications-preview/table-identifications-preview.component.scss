@@ -1,4 +1,4 @@
-.table-validations-preview-wrapper {
+.table-identifications-preview-wrapper {
   table {
     width: 100%;
     font-size: .9em;
@@ -20,7 +20,7 @@
               padding-left: 30px;
             }
           }
-          &.validation {
+          &.identification {
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -28,7 +28,7 @@
           }
         }
       }
-      
+
     }
   }
 }

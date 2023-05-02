@@ -32,7 +32,7 @@
                   </mat-form-field>
                 </div>
               </div>-->
-              
+
               <!-- search by vegetation -->
               <div class="tab-section">
                 <div class="section-title">
@@ -47,16 +47,16 @@
                       autoResetWhenSelected="true"
                       [defaultRepository]="defaultSyntaxonRepository"
                       [showRepositoryInput]="true"
-                      (newData)="setTableValidationFilter($event)">
+                      (newData)="setTableIdentificationFilter($event)">
                     </tb-tsb-search-box>
-            
-                    <div class="table-filter" *ngIf="tableValidation">
+
+                    <div class="table-filter" *ngIf="tableIdentification">
                       <div class="result-item">
                         <mat-chip-list #chipList>
                           <mat-chip
                             [removable]="true"
-                            (removed)="removeTableValidationFilter()">
-                            <div class="chip-text-nowrap">{{ tableValidation.name }}</div>
+                            (removed)="removeTableIdentificationFilter()">
+                            <div class="chip-text-nowrap">{{ tableIdentification.name }}</div>
                             <mat-icon matChipRemove>cancel</mat-icon>
                           </mat-chip>
                         </mat-chip-list>
@@ -64,7 +64,7 @@
                     </div>
                 </div>
               </div>
-              
+
               <!-- search bu biblio -->
               <div class="tab-section">
                 <div class="section-title">
@@ -124,7 +124,7 @@
                   </mat-form-field>
                 </div>
               </div>-->
-              
+
               <!-- search by "species" -->
               <div class="tab-section">
                 <div class="section-title">
@@ -281,11 +281,11 @@
               <mat-menu #setTables="matMenu">
                 <button mat-menu-item (click)="setSelectedTablesAsCurrentTable(true)">Conserver les groupes de colonnes</button>
                 <button mat-menu-item (click)="setSelectedTablesAsCurrentTable(false)">Ne conserver que les relevés</button>
-              </mat-menu>  
+              </mat-menu>
               <mat-menu #mergeTables="matMenu">
                 <button mat-menu-item (click)="mergeSelectedTablesWithCurrentTable(true)">Conserver les groupes de colonnes</button>
                 <button mat-menu-item (click)="mergeSelectedTablesWithCurrentTable(false)">Ne conserver que les relevés</button>
-              </mat-menu>          
+              </mat-menu>
             </div>
           </div>
         </div>

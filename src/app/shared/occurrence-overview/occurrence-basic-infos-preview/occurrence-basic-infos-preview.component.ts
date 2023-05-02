@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { OccurrenceModel as EsOccurrenceModel } from 'src/app/_models/occurrence.model';
 
-import { ValidationService } from 'src/app/_services/validation.service';
+import { IdentificationService } from '../../../_services/identification.service';
 
 import * as _ from 'lodash';
 
@@ -15,7 +15,7 @@ import * as _ from 'lodash';
 export class OccurrenceBasicInfosPreviewComponent implements OnInit {
   @Input() occurrence: EsOccurrenceModel;
 
-  constructor(private validationService: ValidationService) { }
+  constructor(private identificationService: IdentificationService) { }
 
   ngOnInit() {
   }
@@ -33,8 +33,8 @@ export class OccurrenceBasicInfosPreviewComponent implements OnInit {
     }
   }
 
-  public getPreferedValidation(occurrence: EsOccurrenceModel) {
-    this.validationService.getPreferedValidation(occurrence);
+  public getFavoriteIdentification(occurrence: EsOccurrenceModel) {
+    this.identificationService.getFavoriteIdentification(occurrence);
   }
 
 }

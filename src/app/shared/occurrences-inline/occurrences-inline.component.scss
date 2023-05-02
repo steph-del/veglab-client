@@ -21,7 +21,7 @@ $cell-width: 30px;
     white-space: nowrap;
     font-size: .8em;
     mat-icon.mat-icon-inline {
-      width: auto;  
+      width: auto;
     }
   }
   .checkbox {
@@ -49,7 +49,7 @@ $cell-width: 30px;
     max-width: $cell-width;
     width: $cell-width;
   }
-  .validation {
+  .identification {
     max-width: $cell-width * 8;
     width: $cell-width * 8;
   }
@@ -81,7 +81,7 @@ $cell-width: 30px;
       }
     }
   }
-  
+
   .row-with-children {
     display: flex;
     flex-direction: column;

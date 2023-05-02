@@ -19,7 +19,7 @@ import { UserService } from 'src/app/_services/user.service';
 
 import { FileData } from 'tb-dropfile-lib/lib/_models/fileData';
 import { RejectedFileData } from 'tb-dropfile-lib/lib/_models/rejectedFileData';
-import { OccurrenceValidationModel } from '../../_models/occurrence-validation.model';
+import { IdentificationModel } from '../../_models/identification.model';
 import { LocationModel as TbLocationModel } from 'tb-geoloc-lib';
 import { ExtendedFieldModel } from 'src/app/_models/extended-field.model';
 import { ExtendedFieldOccurrence } from 'src/app/_models/extended-field-occurrence';
@@ -86,7 +86,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
   @Output() stepAuthorsDatesStatus = new EventEmitter<'complete' | 'warning' | 'error' | 'pending'>();
   @Output() stepMetadataStatus =     new EventEmitter<'complete' | 'warning' | 'error' | 'pending'>();
   @Output() stepBiblioStatus =       new EventEmitter<'complete' | 'warning' | 'error' | 'pending'>();
-  @Output() stepValidationStatus =   new EventEmitter<'complete' | 'warning' | 'error' | 'pending'>();
+  @Output() stepIdentificationStatus =   new EventEmitter<'complete' | 'warning' | 'error' | 'pending'>();
   @Output() table = new EventEmitter<Table>();
 
   // Global vars
@@ -95,7 +95,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
   parsedCsvFile: Array<Array<string>> = [];
   rawHeaders: Array<Array<string>> = [];
   rawLocation: Array<Array<string>> = [];
-  rawValidation: Array<Array<string>> = [];
+  rawIdentification: Array<Array<string>> = [];
   rawBiblio: Array<Array<string>> = [];
   rawRelevesCount: Array<Array<string>> = [];
   rawMetadata: Array<Array<string>> = [];
@@ -115,7 +115,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
     places:       { index: 3, label: 'Localisation' },
     metadata:     { index: 4, label: 'Métadonnées' },
     biblio:       { index: 5, label: 'Bibliographie' },
-    validations:  { index: 6, label: 'Identification' }
+    identifications:  { index: 6, label: 'Identification' }
   };
   currentStepIndex = 0;
   contentFullWidth = false;
@@ -132,7 +132,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
   stepAuthorsDates: BehaviorSubject<StepStatus> = new BehaviorSubject<StepStatus> ({ started: false, currentStatus: 'pending', message: 'Lancez la vérification des auteurs et des dates pour commencer', tip: ''});
   stepMetadata: BehaviorSubject<StepStatus> =     new BehaviorSubject<StepStatus> ({ started: false, currentStatus: 'pending', message: 'Lancez la vérification des métadonnées pour commencer', tip: ''});
   stepBiblio: BehaviorSubject<StepStatus> =       new BehaviorSubject<StepStatus> ({ started: false, currentStatus: 'pending', message: 'Lancez la vérification des références bibliographiques pour commencer', tip: '' });
-  stepValidation: BehaviorSubject<StepStatus> =   new BehaviorSubject<StepStatus> ({ started: false, currentStatus: 'pending', message: 'Lancez la vérification des identifications pour commencer', tip: '' });
+  stepIdentification: BehaviorSubject<StepStatus> =   new BehaviorSubject<StepStatus> ({ started: false, currentStatus: 'pending', message: 'Lancez la vérification des identifications pour commencer', tip: '' });
 
   stepFileSubscription: Subscription;
   stepNamesSubscription: Subscription;
@@ -140,7 +140,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
   stepAuthorsDatesSubscription: Subscription;
   stepMetadataSubscription: Subscription;
   stepBiblioSubscription: Subscription;
-  stepValidationSubscription: Subscription;
+  stepIdentificationSubscription: Subscription;
 
   // File rows / col properties
   GROUP_ROW_POS         = { initialPos: 0,  groupPosition: 0, keywords: ['Groupe'] };
@@ -177,7 +177,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
   isLoadingTaxonomicList = false;
   isEditingTaxon = false;
   resetEditTaxonBox = false;
-  editedTaxon: {id: string, validation: OccurrenceValidationModel, rim?: RepositoryItemModel};
+  editedTaxon: {id: string, identification: IdentificationModel, rim?: RepositoryItemModel};
 
   // Location vars
   currentLocation: TbLocationModel;
@@ -214,25 +214,25 @@ export class TableImportComponent implements OnInit, OnDestroy {
   // expandedElement: {id: string, metadataName: string, metadataValue: string, consolidedValue: any, metadataModel: ExtendedFieldModel} | null;
 
   // Identification vars
-  validationList: {
+  identificationList: {
     table: {
-      validation: ImportValidation,
+      identification: ImportIdentification,
       sye: Array<{
         id: string,
-        validation: ImportValidation,
+        identification: ImportIdentification,
         syntheticSye?: boolean,
         releves: Array<{
           id: string,
-          validation: ImportValidation
+          identification: ImportIdentification
         }>
       }>
     }
-  } = { table: { validation: null, sye: []}};
-  isEditingTableValidation = false;
-  isEditingSyeValidation = false;
-  isEditingRelevesValidation = false;
-  editingReleves: Array<{id: string, validation: ImportValidation}> = [];
-  editingSye: {id: string, validation: ImportValidation};
+  } = { table: { identification: null, sye: []}};
+  isEditingTableIdentification = false;
+  isEditingSyeIdentification = false;
+  isEditingRelevesIdentification = false;
+  editingReleves: Array<{id: string, identification: ImportIdentification}> = [];
+  editingSye: {id: string, identification: ImportIdentification};
 
   // Biblio vars
   biblioList: Array<{biblioUserInput: string, biblioSelected: Biblio}> = [];
@@ -305,7 +305,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
     this.stepAuthorsDatesSubscription = this.stepAuthorsDates.subscribe(value => { this.stepAuthorsDatesStatus.emit(value.currentStatus); } );
     this.stepMetadataSubscription     = this.stepMetadata.subscribe(value => { this.stepMetadataStatus.emit(value.currentStatus); } );
     this.stepBiblioSubscription       = this.stepBiblio.subscribe(value => { this.stepBiblioStatus.emit(value.currentStatus); } );
-    this.stepValidationSubscription   = this.stepValidation.subscribe(value => { this.stepValidationStatus.emit(value.currentStatus); } );
+    this.stepIdentificationSubscription   = this.stepIdentification.subscribe(value => { this.stepIdentificationStatus.emit(value.currentStatus); } );
 
     // Set initial import status
     this.importFileStatus.next('pending');
@@ -321,7 +321,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
     if (this.stepAuthorsDatesSubscription) { this.stepAuthorsDatesSubscription.unsubscribe(); }
     if (this.stepMetadataSubscription) { this.stepMetadataSubscription.unsubscribe(); }
     if (this.stepBiblioSubscription) { this.stepBiblioSubscription.unsubscribe(); }
-    if (this.stepValidationSubscription) { this.stepValidationSubscription.unsubscribe(); }
+    if (this.stepIdentificationSubscription) { this.stepIdentificationSubscription.unsubscribe(); }
   }
 
   resetComponent(): void {
@@ -329,7 +329,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
     this.parsedCsvFile = [];
     this.rawHeaders = [];
     this.rawLocation = [];
-    this.rawValidation = [];
+    this.rawIdentification = [];
     this.rawBiblio = [];
     this.rawRelevesCount = [];
     this.rawMetadata = [];
@@ -342,7 +342,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
     this.stepAuthorsDates.next({ started: false, currentStatus: 'pending', message: 'Lancez la vérification des auteurs et des dates pour commencer', tip: ''});
     this.stepMetadata.next({ started: false, currentStatus: 'pending', message: 'Lancez la vérification des métadonnées pour commencer', tip: ''});
     this.stepBiblio.next({ started: false, currentStatus: 'pending', message: 'Lancez la vérification des références bibliographiques pour commencer', tip: '' });
-    this.stepValidation.next({ started: false, currentStatus: 'pending', message: 'Lancez la vérification des identifications pour commencer', tip: '' });
+    this.stepIdentification.next({ started: false, currentStatus: 'pending', message: 'Lancez la vérification des identifications pour commencer', tip: '' });
 
     this.taxonomicList = [];
     this.locationList = [];
@@ -350,10 +350,10 @@ export class TableImportComponent implements OnInit, OnDestroy {
     this.dateList = [];
     this.metadataList = [];
     this.flatMetadataList = [];
-    this.validationList = { table: { validation: null, sye: []}};
-    this.isEditingTableValidation = false;
-    this.isEditingSyeValidation = false;
-    this.isEditingRelevesValidation = false;
+    this.identificationList = { table: { identification: null, sye: []}};
+    this.isEditingTableIdentification = false;
+    this.isEditingSyeIdentification = false;
+    this.isEditingRelevesIdentification = false;
     this.editingReleves = [];
     this.biblioList = [];
 
@@ -445,7 +445,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
                 this.setLocationList();
                 this.setMetadataList();
                 this.setBiblioList();
-                this.setValidationList();
+                this.setIdentificationList();
               }
             }
           }
@@ -473,9 +473,9 @@ export class TableImportComponent implements OnInit, OnDestroy {
       this.rawLocation = this.parsedCsvFile.splice(0, 7);
       console.log('raw location', this.rawLocation);
 
-      // Splice validation attributes
-      this.rawValidation = this.parsedCsvFile.splice(0, 2);
-      console.log('raw validation', this.rawValidation);
+      // Splice identification attributes
+      this.rawIdentification = this.parsedCsvFile.splice(0, 2);
+      console.log('raw identification', this.rawIdentification);
 
       // Splice biblio attributes
       this.rawBiblio = this.parsedCsvFile.splice(0, 1);
@@ -581,11 +581,11 @@ export class TableImportComponent implements OnInit, OnDestroy {
       this.importFileMessagesPush(`Votre tableau ne contient pas de donnée '${this.PLACE_ROW_POS.keywords.toString()}'`);
     }
 
-    if (this.REPOSITORY_ROW_POS.keywords.indexOf(this.rawValidation[this.REPOSITORY_ROW_POS.groupPosition][this.ignoreFirstXCols - 1]) === -1) {
+    if (this.REPOSITORY_ROW_POS.keywords.indexOf(this.rawIdentification[this.REPOSITORY_ROW_POS.groupPosition][this.ignoreFirstXCols - 1]) === -1) {
       this.importFileStatus.next('error');
       this.importFileMessagesPush(`Votre tableau ne contient pas de donnée '${this.REPOSITORY_ROW_POS.keywords.toString()}'`);
     }
-    if (this.REPOSITORY_ID_ROW_POS.keywords.indexOf(this.rawValidation[this.REPOSITORY_ID_ROW_POS.groupPosition][this.ignoreFirstXCols - 1]) === -1) {
+    if (this.REPOSITORY_ID_ROW_POS.keywords.indexOf(this.rawIdentification[this.REPOSITORY_ID_ROW_POS.groupPosition][this.ignoreFirstXCols - 1]) === -1) {
       this.importFileStatus.next('error');
       this.importFileMessagesPush(`Votre tableau ne contient pas de donnée '${this.REPOSITORY_ID_ROW_POS.keywords.toString()}'`);
     }
@@ -856,7 +856,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
           layer: t[this.LAYER_COL_POS.position].toString(),
           group,
           groupPosition,
-          validation: null,
+          identification: null,
           rim: null});
       }
     }
@@ -877,14 +877,14 @@ export class TableImportComponent implements OnInit, OnDestroy {
   mainRepositoryChange(value): void { }
 
   updateTaxon(taxon: Taxo, data: RepositoryItemModel): void {
-    taxon.validation.repository = data.repository;
-    taxon.validation.repositoryIdNomen = Number(data.idNomen);
-    taxon.validation.repositoryIdTaxo = data.idTaxo ? data.idTaxo.toString() : data.validOccurence ? data.validOccurence.idNomen.toString() : null;
-    taxon.validation.updatedAt = new Date();
-    taxon.validation.updatedBy = this.currentUser.id;
-    taxon.validation.validName = data.name + (data.author ? ' ' + data.author : '');
-    taxon.validation.validatedName = taxon.validation.validName;
-    taxon.id = (data.idNomen ? data.idNomen.toString() : 'nc') + '~' + taxon.layer + taxon.validation.validatedName;
+    taxon.identification.repository = data.repository;
+    taxon.identification.repositoryIdNomen = Number(data.idNomen);
+    taxon.identification.repositoryIdTaxo = data.idTaxo ? data.idTaxo.toString() : data.validOccurence ? data.validOccurence.idNomen.toString() : null;
+    taxon.identification.updatedAt = new Date();
+    taxon.identification.updatedBy = this.currentUser.id;
+    taxon.identification.validName = data.name + (data.author ? ' ' + data.author : '');
+    taxon.identification.validatedName = taxon.identification.validName;
+    taxon.id = (data.idNomen ? data.idNomen.toString() : 'nc') + '~' + taxon.layer + taxon.identification.validatedName;
     taxon.rim = Object.assign(data);
     this.checkNamesStatus();
   }
@@ -930,7 +930,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
           result => {
             if (result === undefined || (result !== undefined && result.idTaxo == null)) { // @Todo : duplicate code (see error catching below)
               const randomInteger = _.random(-1, -1000000, false);
-              currentContent.validation = {
+              currentContent.identification = {
                 validatedBy: this.currentUser.id,
                 validatedAt: now,
                 owner: this.currentVlUser,
@@ -949,7 +949,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
                 author: ''
               };
             } else {
-              currentContent.validation = {
+              currentContent.identification = {
                 validatedBy: this.currentUser.id,
                 validatedAt: now,
                 owner: this.currentVlUser,
@@ -980,7 +980,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
           },
           error => {
             const randomInteger = _.random(-1, -1000000, false);
-            currentContent.validation = {
+            currentContent.identification = {
               validatedBy: this.currentUser.id,
               validatedAt: now,
               owner: this.currentVlUser,
@@ -1011,7 +1011,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
       } else if (currentContent !== undefined) {
         // row with other/unknown data
         const randomInteger = _.random(-1, -1000000, false);
-        currentContent.validation = {
+        currentContent.identification = {
           validatedBy: this.currentUser.id,
           validatedAt: now,
           owner: this.currentVlUser,
@@ -1065,10 +1065,10 @@ export class TableImportComponent implements OnInit, OnDestroy {
   }
 
   getTaxoName(taxo: Taxo): string {
-    if (taxo.validation && taxo.validation.validName) {
-      return taxo.validation.validName;
-    } else if (taxo.validation && taxo.validation.inputName) {
-      return taxo.validation.inputName;
+    if (taxo.identification && taxo.identification.validName) {
+      return taxo.identification.validName;
+    } else if (taxo.identification && taxo.identification.inputName) {
+      return taxo.identification.inputName;
     } else {
       return '?';
     }
@@ -1878,66 +1878,66 @@ export class TableImportComponent implements OnInit, OnDestroy {
   }
 
   // **********
-  // VALIDATION
+  // IDENTIFICATION
   // **********
-  prepareValidationList(): void {
+  prepareIdentificationList(): void {
     const clonedRawHeaders = this.spliceStartingCols(_.cloneDeep(this.rawHeaders));
     const groupsLabels = _.uniq(clonedRawHeaders[this.GROUP_ROW_POS.groupPosition]); // ie. ["A", "B"]
     for (const gl of groupsLabels) {
-      const sye = {id: gl, validation: null, isSynthetic: false, releves: []};
-      this.validationList.table.sye.push(sye);
+      const sye = {id: gl, identification: null, isSynthetic: false, releves: []};
+      this.identificationList.table.sye.push(sye);
     }
 
-    if (this.rawHeaders.length > 0 && this.rawValidation.length > 0) {
+    if (this.rawHeaders.length > 0 && this.rawIdentification.length > 0) {
       for (let l = 0; l < this.rawHeaders[0].length - this.ignoreFirstXCols; l++) {
         const groupId = this.rawHeaders[0][l + this.ignoreFirstXCols].toString();
-        const sye = _.find(this.validationList.table.sye, s => s.id === groupId);
+        const sye = _.find(this.identificationList.table.sye, s => s.id === groupId);
         const isSyntheticColumn = Number(this.rawRelevesCount[0][l + this.ignoreFirstXCols]) > 1 ? true : false;
         sye.syntheticSye = isSyntheticColumn;
 
         sye.releves.push({
           id: this.rawHeaders[1][this.ignoreFirstXCols + l].toString(),
-          validation: {nomen: this.rawValidation[1][l + this.ignoreFirstXCols], repository: this.rawValidation[0][l + this.ignoreFirstXCols], repositoryIsAvailable: false, consolidedValidation: null}
+          identification: {nomen: this.rawIdentification[1][l + this.ignoreFirstXCols], repository: this.rawIdentification[0][l + this.ignoreFirstXCols], repositoryIsAvailable: false, consolidedIdentification: null}
         });
       }
     }
-    console.log('VALIDATION LIST:');
-    console.log(this.validationList);
+    console.log('IDENTIFICATION LIST:');
+    console.log(this.identificationList);
   }
 
   checkRepositoryValues(): void {
     const availableRepositories: Array<RepositoryModel> = this.tsbRepositoryService.listAllRepositories();
     // table repository check
-    if (this.validationList.table.validation && this.validationList.table.validation.repository) {
-      if (_.find(availableRepositories, ar => ar.id.toLowerCase() === this.validationList.table.validation.repository.toLowerCase())
-         || _.find(availableRepositories, ar => ar.label.toLowerCase() === this.validationList.table.validation.repository.toLowerCase())) {
-          this.validationList.table.validation.repositoryIsAvailable = true;
+    if (this.identificationList.table.identification && this.identificationList.table.identification.repository) {
+      if (_.find(availableRepositories, ar => ar.id.toLowerCase() === this.identificationList.table.identification.repository.toLowerCase())
+         || _.find(availableRepositories, ar => ar.label.toLowerCase() === this.identificationList.table.identification.repository.toLowerCase())) {
+          this.identificationList.table.identification.repositoryIsAvailable = true;
       } else {
-        this.validationList.table.validation.repositoryIsAvailable = false;
+        this.identificationList.table.identification.repositoryIsAvailable = false;
       }
     }
 
     // sye repository check
-    if (this.validationList.table.sye.length > 0) {
-      this.validationList.table.sye.forEach(sye => {
-        if (sye.validation) {
-          if (_.find(availableRepositories, ar => ar.id.toLowerCase() === sye.validation.repository.toLowerCase())
-            || _.find(availableRepositories, ar => ar.label.toLowerCase() === sye.validation.repository.toLowerCase())) {
-            sye.validation.repositoryIsAvailable = true;
+    if (this.identificationList.table.sye.length > 0) {
+      this.identificationList.table.sye.forEach(sye => {
+        if (sye.identification) {
+          if (_.find(availableRepositories, ar => ar.id.toLowerCase() === sye.identification.repository.toLowerCase())
+            || _.find(availableRepositories, ar => ar.label.toLowerCase() === sye.identification.repository.toLowerCase())) {
+            sye.identification.repositoryIsAvailable = true;
           } else {
-            sye.validation.repositoryIsAvailable = false;
+            sye.identification.repositoryIsAvailable = false;
           }
         }
 
         // relevé repository check
         if (sye.releves.length > 0) {
           sye.releves.forEach(releve => {
-            if (releve.validation) {
-              if (_.find(availableRepositories, ar => ar.id.toLowerCase() === releve.validation.repository.toLocaleLowerCase())
-                  || _.find(availableRepositories, ar => ar.label.toLowerCase() === releve.validation.repository.toLowerCase())) {
-                    releve.validation.repositoryIsAvailable = true;
+            if (releve.identification) {
+              if (_.find(availableRepositories, ar => ar.id.toLowerCase() === releve.identification.repository.toLocaleLowerCase())
+                  || _.find(availableRepositories, ar => ar.label.toLowerCase() === releve.identification.repository.toLowerCase())) {
+                    releve.identification.repositoryIsAvailable = true;
               } else {
-                releve.validation.repositoryIsAvailable = false;
+                releve.identification.repositoryIsAvailable = false;
               }
             }
           });
@@ -1949,13 +1949,13 @@ export class TableImportComponent implements OnInit, OnDestroy {
   consolidRepositoryValues() {
     // First we get uniques repository / nomen values to avoid too much API calls
     const consolidedValues: Array<{ repository: string, nomen: string, consolidedValue?: RepositoryItemModel }> = [];
-    if (this.validationList.table.validation && this.validationList.table.validation.repositoryIsAvailable) { consolidedValues.push({repository: this.validationList.table.validation.repository, nomen: this.validationList.table.validation.nomen}); }
-    if (this.validationList.table.sye) {
-      this.validationList.table.sye.forEach(sye => {
-        if (sye.validation && sye.validation.repositoryIsAvailable) { consolidedValues.push({repository: sye.validation.repository, nomen: sye.validation.nomen}); }
+    if (this.identificationList.table.identification && this.identificationList.table.identification.repositoryIsAvailable) { consolidedValues.push({repository: this.identificationList.table.identification.repository, nomen: this.identificationList.table.identification.nomen}); }
+    if (this.identificationList.table.sye) {
+      this.identificationList.table.sye.forEach(sye => {
+        if (sye.identification && sye.identification.repositoryIsAvailable) { consolidedValues.push({repository: sye.identification.repository, nomen: sye.identification.nomen}); }
         if (sye.releves) {
           sye.releves.forEach(releve => {
-            if (releve.validation && releve.validation.repositoryIsAvailable) { consolidedValues.push({repository: releve.validation.repository, nomen: releve.validation.nomen}); }
+            if (releve.identification && releve.identification.repositoryIsAvailable) { consolidedValues.push({repository: releve.identification.repository, nomen: releve.identification.nomen}); }
           });
         }
       });
@@ -1973,8 +1973,8 @@ export class TableImportComponent implements OnInit, OnDestroy {
             ucv.consolidedValue = result[0];
             if (i === uniqConsolidedValues.length) {
               this.applyConsolidation(uniqConsolidedValues);
-              this.consolidSyeAndTableValidation();
-              this.updateStepValidationStatus();
+              this.consolidSyeAndTableIdentification();
+              this.updateStepIdentificationStatus();
             }
           },
           error => {
@@ -1984,28 +1984,28 @@ export class TableImportComponent implements OnInit, OnDestroy {
         );
       }
     } else {
-      this.updateStepValidationStatus();
+      this.updateStepIdentificationStatus();
     }
   }
 
   private applyConsolidation(uniqConsolidedValue: Array<{ repository: string, nomen: string, consolidedValue?: RepositoryItemModel }>): void {
-    const table = this.validationList.table;
-    if (table.validation && table.validation.repositoryIsAvailable) {
-      const consolidedTableValidation = _.find(uniqConsolidedValue, ucv => ucv.nomen === table.validation.nomen && ucv.repository === table.validation.repository);
-      table.validation.consolidedValidation = consolidedTableValidation ? consolidedTableValidation.consolidedValue : null;
+    const table = this.identificationList.table;
+    if (table.identification && table.identification.repositoryIsAvailable) {
+      const consolidedTableIdentification = _.find(uniqConsolidedValue, ucv => ucv.nomen === table.identification.nomen && ucv.repository === table.identification.repository);
+      table.identification.consolidedIdentification = consolidedTableIdentification ? consolidedTableIdentification.consolidedValue : null;
     }
     if (table.sye && table.sye.length > 0) {
       for (const sye of table.sye) {
-        if (sye.validation) {
-          const consolidedSyeValidation = _.find(uniqConsolidedValue, ucv => ucv.nomen === sye.validation.nomen && ucv.repository === sye.validation.repository);
-          sye.validation.consolidedValidation = consolidedSyeValidation ? consolidedSyeValidation.consolidedValue : null;
+        if (sye.identification) {
+          const consolidedSyeIdentification = _.find(uniqConsolidedValue, ucv => ucv.nomen === sye.identification.nomen && ucv.repository === sye.identification.repository);
+          sye.identification.consolidedIdentification = consolidedSyeIdentification ? consolidedSyeIdentification.consolidedValue : null;
         }
 
         if (sye.releves && sye.releves.length > 0) {
           for (const releve of sye.releves) {
-            if (releve.validation) {
-              const consolidedReleveValidation = _.find(uniqConsolidedValue, ucv => ucv.nomen === releve.validation.nomen && ucv.repository === releve.validation.repository);
-              releve.validation.consolidedValidation = consolidedReleveValidation ? consolidedReleveValidation.consolidedValue : null;
+            if (releve.identification) {
+              const consolidedReleveIdentification = _.find(uniqConsolidedValue, ucv => ucv.nomen === releve.identification.nomen && ucv.repository === releve.identification.repository);
+              releve.identification.consolidedIdentification = consolidedReleveIdentification ? consolidedReleveIdentification.consolidedValue : null;
             }
           }
         }
@@ -2014,88 +2014,88 @@ export class TableImportComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Set table and syes `validation`and `consolidedValue` according to releves values
-   * (within a sye, if all releves have got the same validation, then set this validation to the sye)
-   * (whithin a table, if all syes have got the same validation, then set this validation to the table)
+   * Set table and syes `identification`and `consolidedValue` according to releves values
+   * (within a sye, if all releves have got the same identification, then set this identification to the sye)
+   * (whithin a table, if all syes have got the same identification, then set this identification to the table)
    */
-  private consolidSyeAndTableValidation(): void {
-    const table = this.validationList.table;
+  private consolidSyeAndTableIdentification(): void {
+    const table = this.identificationList.table;
     for (const sye of table.sye) {
-      if (this.checkRelevesValidationConsistency(sye.releves)) {
-        sye.validation = sye.releves[0].validation;
+      if (this.checkRelevesIdentificationConsistency(sye.releves)) {
+        sye.identification = sye.releves[0].identification;
       }
     }
-    if (this.checkSyeValidationConsistency(table.sye)) {
-      table.validation = table.sye[0].validation;
+    if (this.checkSyeIdentificationConsistency(table.sye)) {
+      table.identification = table.sye[0].identification;
     }
   }
 
-  getUniqConsolidedValidation(items: Array<{id: string, validation: ImportValidation}>): Array<RepositoryItemModel> {
+  getUniqConsolidedIdentification(items: Array<{id: string, identification: ImportIdentification}>): Array<RepositoryItemModel> {
     if (items && items.length > 0) {
-      const consolidedValidations = [];
-      for (const i of items) { if (i.validation && i.validation.consolidedValidation) { consolidedValidations.push(i.validation.consolidedValidation); } }
-      return _.uniqBy(consolidedValidations, cv => (cv.idNomen ? cv.idNomen : cv.name) + cv.repository);
+      const consolidedIdentifications = [];
+      for (const i of items) { if (i.identification && i.identification.consolidedIdentification) { consolidedIdentifications.push(i.identification.consolidedIdentification); } }
+      return _.uniqBy(consolidedIdentifications, cv => (cv.idNomen ? cv.idNomen : cv.name) + cv.repository);
     } else {
       return null;
     }
   }
 
-  countUnconsolidedValidation(items: Array<{id: string, validation: ImportValidation}>): number {
+  countUnconsolidedIdentifications(items: Array<{id: string, identification: ImportIdentification}>): number {
     let count = 0;
-    for (const i of items) { if (!i.validation || !i.validation.consolidedValidation) { count++; }}
+    for (const i of items) { if (!i.identification || !i.identification.consolidedIdentification) { count++; }}
     return count;
   }
 
-  setValidationList(): void {
-    this.stepValidation.next({currentStatus: 'pending', started: true, message: 'Chargement des données', tip: 'Merci de patienter'});
-    this.prepareValidationList();
+  setIdentificationList(): void {
+    this.stepIdentification.next({currentStatus: 'pending', started: true, message: 'Chargement des données', tip: 'Merci de patienter'});
+    this.prepareIdentificationList();
     this.checkRepositoryValues();
     this.consolidRepositoryValues();  // asynchronous
   }
 
-  updateStepValidationStatus(): void {
+  updateStepIdentificationStatus(): void {
     // count unconsolided data
     let unconsolidedData = 0;
-    if (!this.validationList.table.validation || !this.validationList.table.validation.consolidedValidation) { unconsolidedData++; }
-    if (this.validationList.table.sye) {
-      unconsolidedData += this.countUnconsolidedValidation(this.validationList.table.sye);
-      for (const sye of this.validationList.table.sye) {
+    if (!this.identificationList.table.identification || !this.identificationList.table.identification.consolidedIdentification) { unconsolidedData++; }
+    if (this.identificationList.table.sye) {
+      unconsolidedData += this.countUnconsolidedIdentifications(this.identificationList.table.sye);
+      for (const sye of this.identificationList.table.sye) {
         if (sye.releves) {
-          unconsolidedData += this.countUnconsolidedValidation(sye.releves);
+          unconsolidedData += this.countUnconsolidedIdentifications(sye.releves);
         }
       }
     }
 
-    const _stepValidation = this.stepValidation.getValue();
+    const _stepIdentification = this.stepIdentification.getValue();
     if (unconsolidedData === 0) {
-      this.stepValidation.next({currentStatus: 'complete', started: _stepValidation.started, message: 'Parfait !', tip: ''});
+      this.stepIdentification.next({currentStatus: 'complete', started: _stepIdentification.started, message: 'Parfait !', tip: ''});
     } else {
-      this.stepValidation.next({currentStatus: 'warning', started: _stepValidation.started, message: 'Certains éléments ne sont pas identifiés', tip: 'Complétez au mieux les identifications et essayant de nommer les végétations d\'après un référentiel. Cette étape n\'est pas obligatoire.'});
+      this.stepIdentification.next({currentStatus: 'warning', started: _stepIdentification.started, message: 'Certains éléments ne sont pas identifiés', tip: 'Complétez au mieux les identifications et essayant de nommer les végétations d\'après un référentiel. Cette étape n\'est pas obligatoire.'});
     }
   }
 
   /**
-   * Return true if every `releve` have the same validation value
+   * Return true if every `releve` have the same identification value
    */
-  checkRelevesValidationConsistency(releves: Array<{id: string, validation: ImportValidation}>): boolean {
+  checkRelevesIdentificationConsistency(releves: Array<{id: string, identification: ImportIdentification}>): boolean {
     if (!releves || releves.length === 0) { return false; }
-    let previousValidation: ImportValidation = null;
+    let previousIdentification: ImportIdentification = null;
     for (const releve of releves) {
-      if (previousValidation && !_.isEqual(releve.validation, previousValidation)) {
+      if (previousIdentification && !_.isEqual(releve.identification, previousIdentification)) {
         return false;
       }
-      previousValidation = releve.validation;
+      previousIdentification = releve.identification;
     }
     return true;
   }
 
   /**
-   * Return true if every `releve` have a consolided validation
+   * Return true if every `releve` have a consolided identification
    */
-  checkRelevesHaveConsolidedValidation(releves: Array<{id: string, validation: ImportValidation}>): boolean {
+  checkRelevesHaveConsolidedIdentification(releves: Array<{id: string, identification: ImportIdentification}>): boolean {
     if (!releves || releves.length === 0) { return false; }
     for (const releve of releves) {
-      if (!releve.validation || !releve.validation.consolidedValidation) {
+      if (!releve.identification || !releve.identification.consolidedIdentification) {
         return false;
       }
     }
@@ -2103,32 +2103,32 @@ export class TableImportComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Return true if every `releve` have the same validation value
+   * Return true if every `releve` have the same identification value
    */
-  checkSyeValidationConsistency(syes: Array<{id: string, validation: ImportValidation}>): boolean {
+  checkSyeIdentificationConsistency(syes: Array<{id: string, identification: ImportIdentification}>): boolean {
     if (!syes || syes.length === 0) { return false; }
-    let previousValidation: ImportValidation = null;
+    let previousIdentification: ImportIdentification = null;
     for (const sye of syes) {
-      if (previousValidation && !_.isEqual(sye.validation, previousValidation)) {
+      if (previousIdentification && !_.isEqual(sye.identification, previousIdentification)) {
         return false;
       }
-      previousValidation = sye.validation;
+      previousIdentification = sye.identification;
     }
     return true;
   }
 
-  fakeConsolidation(releve: {id: string, validation?: ImportValidation}): RepositoryItemModel {
+  fakeConsolidation(item: {id: string, identification?: ImportIdentification}): RepositoryItemModel {
     const rim: RepositoryItemModel = {
       repository: 'otherunknow',
       idNomen: null,
-      name: null !== releve.validation ? releve.validation.nomen : '',
+      name: null !== item.identification ? item.identification.nomen : '',
       author: ''
     };
     return rim;
   }
 
-  getReleveById(id: string): {id: string, validation: ImportValidation } {
-    for (const sye of this.validationList.table.sye) {
+  getReleveById(id: string): {id: string, identification: ImportIdentification } {
+    for (const sye of this.identificationList.table.sye) {
       for (const releve of sye.releves) {
         if (releve.id === id) { return releve; }
       }
@@ -2137,62 +2137,62 @@ export class TableImportComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get sye by its id from this.validationList.table
+   * Get sye by its id from this.identificationList.table
    */
-  getSyeById(id: string): {id: string, validation: ImportValidation} {
-    if (this.validationList.table && this.validationList.table.sye) {
-      for (const sye of this.validationList.table.sye) {
+  getSyeById(id: string): {id: string, identification: ImportIdentification} {
+    if (this.identificationList.table && this.identificationList.table.sye) {
+      for (const sye of this.identificationList.table.sye) {
         if (sye.id === id) { return sye; }
       }
     }
     return null;
   }
 
-  updateReleveConsolidedValidation(releve: {id: string, validation: ImportValidation}, newConsolidedValidation: RepositoryItemModel): void {
-    if (newConsolidedValidation.repository !== 'otherunknown') {
-      releve.validation.repositoryIsAvailable = true;
-      releve.validation.repository = newConsolidedValidation.repository;
-      releve.validation.nomen = newConsolidedValidation.idNomen.toString();
-      releve.validation.consolidedValidation = _.cloneDeep(newConsolidedValidation);
+  updateReleveConsolidedIdentification(releve: {id: string, identification: ImportIdentification}, newConsolidedIdentification: RepositoryItemModel): void {
+    if (newConsolidedIdentification.repository !== 'otherunknown') {
+      releve.identification.repositoryIsAvailable = true;
+      releve.identification.repository = newConsolidedIdentification.repository;
+      releve.identification.nomen = newConsolidedIdentification.idNomen.toString();
+      releve.identification.consolidedIdentification = _.cloneDeep(newConsolidedIdentification);
     } else {
-      releve.validation.repositoryIsAvailable = true; // set true because user choose a repo, even if it's 'otherunknonwn'
-      releve.validation.repository = 'otherunknown';
-      releve.validation.nomen = null;
-      releve.validation.consolidedValidation = _.cloneDeep(newConsolidedValidation);
+      releve.identification.repositoryIsAvailable = true; // set true because user choose a repo, even if it's 'otherunknonwn'
+      releve.identification.repository = 'otherunknown';
+      releve.identification.nomen = null;
+      releve.identification.consolidedIdentification = _.cloneDeep(newConsolidedIdentification);
     }
-    this.updateStepValidationStatus();
+    this.updateStepIdentificationStatus();
   }
 
-  updateSyeConsolidedValidation(sye: {id: string, validation: ImportValidation}, newConsolidedValidation: RepositoryItemModel): void {
-    const newValidation: ImportValidation = {
-      nomen: newConsolidedValidation.idNomen ? newConsolidedValidation.idNomen.toString() : null,
-      repository: newConsolidedValidation.repository,
+  updateSyeConsolidedIdentification(sye: {id: string, identification: ImportIdentification}, newConsolidedIdentification: RepositoryItemModel): void {
+    const newIdentification: ImportIdentification = {
+      nomen: newConsolidedIdentification.idNomen ? newConsolidedIdentification.idNomen.toString() : null,
+      repository: newConsolidedIdentification.repository,
       repositoryIsAvailable: true,
-      consolidedValidation: _.cloneDeep(newConsolidedValidation)
+      consolidedIdentification: _.cloneDeep(newConsolidedIdentification)
     };
-    sye.validation = newValidation;
-    this.updateStepValidationStatus();
+    sye.identification = newIdentification;
+    this.updateStepIdentificationStatus();
   }
 
-  updateTableConsolidedValidation(newConsolidedValidation: RepositoryItemModel): void {
-    const newValidation: ImportValidation = {
-      nomen: newConsolidedValidation.idNomen ? newConsolidedValidation.idNomen.toString() : null,
-      repository: newConsolidedValidation.repository,
+  updateTableConsolidedIdentification(newConsolidedIdentification: RepositoryItemModel): void {
+    const newIdentification: ImportIdentification = {
+      nomen: newConsolidedIdentification.idNomen ? newConsolidedIdentification.idNomen.toString() : null,
+      repository: newConsolidedIdentification.repository,
       repositoryIsAvailable: true,
-      consolidedValidation: _.cloneDeep(newConsolidedValidation)
+      consolidedIdentification: _.cloneDeep(newConsolidedIdentification)
     };
-    this.validationList.table.validation = newValidation;
-    this.updateStepValidationStatus();
+    this.identificationList.table.identification = newIdentification;
+    this.updateStepIdentificationStatus();
   }
 
-  doesSyeHasConsolidedValidation(sye: {id: string, validation?: ImportValidation}): boolean {
-    if (null == sye.validation) {
+  doesSyeHasConsolidedIdentification(sye: {id: string, identification?: ImportIdentification}): boolean {
+    if (null == sye.identification) {
       return false;
     } else {
-      if (!sye.validation.repositoryIsAvailable) {
+      if (!sye.identification.repositoryIsAvailable) {
         return false;
       } else {
-        if (null == sye.validation.consolidedValidation) {
+        if (null == sye.identification.consolidedIdentification) {
           return false;
         } else {
           return true;
@@ -2201,14 +2201,14 @@ export class TableImportComponent implements OnInit, OnDestroy {
     }
   }
 
-  doesTableHasConsolidedValidation(): boolean {
-    if (null == this.validationList.table.validation) {
+  doesTableHasConsolidedIdentification(): boolean {
+    if (null == this.identificationList.table.identification) {
       return false;
     } else {
-      if (!this.validationList.table.validation.repositoryIsAvailable) {
+      if (!this.identificationList.table.identification.repositoryIsAvailable) {
         return false;
       } else {
-        if (null == this.validationList.table.validation.consolidedValidation) {
+        if (null == this.identificationList.table.identification.consolidedIdentification) {
           return false;
         } else {
           return true;
@@ -2217,9 +2217,9 @@ export class TableImportComponent implements OnInit, OnDestroy {
     }
   }
 
-  getSyeIdForReleve(releve: {id: string, validation: ImportValidation}): string {
+  getSyeIdForReleve(releve: {id: string, identification: ImportIdentification}): string {
     let response = '?';
-    for (const sye of this.validationList.table.sye) {
+    for (const sye of this.identificationList.table.sye) {
       for (const _releve of sye.releves) {
         if (_releve.id === releve.id) { response = sye.id; }
       }
@@ -2227,33 +2227,33 @@ export class TableImportComponent implements OnInit, OnDestroy {
     return response;
   }
 
-  startEditingTableValidation(): void {
-    this.stopEditingSyeValidation();
-    this.stopEditingRelevesValidation();
-    this.isEditingTableValidation = true;
+  startEditingTableIdentification(): void {
+    this.stopEditingSyeIdentification();
+    this.stopEditingRelevesIdentification();
+    this.isEditingTableIdentification = true;
   }
 
-  stopEditingTableValidation(): void {
-    this.isEditingTableValidation = false;
+  stopEditingTableIdentification(): void {
+    this.isEditingTableIdentification = false;
   }
 
   /**
    * When user click on the edit button of a group
-   * @Note we use a setTimeout in order to force tb-tsb-lib component destruction (see template '*ngIf="this.isEditingSyeValidation"')change detection (otherwise, we just mutate this.editingSye object)
+   * @Note we use a setTimeout in order to force tb-tsb-lib component destruction (see template '*ngIf="this.isEditingSyeIdentification"') change detection (otherwise, we just mutate this.editingSye object)
    */
-  startEditingSyeValidation(sye: {id: string, validation: ImportValidation}): void {
-    this.stopEditingTableValidation();
-    this.stopEditingSyeValidation();
-    this.stopEditingRelevesValidation();
-    setTimeout(() => {this.isEditingSyeValidation = true; }, 10);
+  startEditingSyeIdentification(sye: {id: string, identification: ImportIdentification}): void {
+    this.stopEditingTableIdentification();
+    this.stopEditingSyeIdentification();
+    this.stopEditingRelevesIdentification();
+    setTimeout(() => {this.isEditingSyeIdentification = true; }, 10);
     this.editingSye = sye;
   }
 
   /**
-   * When sye validation edition is finished
+   * When sye identification edition is finished
    */
-  stopEditingSyeValidation(): void {
-    this.isEditingSyeValidation = false;
+  stopEditingSyeIdentification(): void {
+    this.isEditingSyeIdentification = false;
     this.editingSye = null;
   }
 
@@ -2262,16 +2262,16 @@ export class TableImportComponent implements OnInit, OnDestroy {
    * @Note there is no need to use a setTimeout() because tsb components are included in a template for-of loop
    * so Angular will automatically destroy and recreate those components each time
    */
-  startEditingRelevesValidation(releves: Array<{id: string, validation: ImportValidation}>): void {
-    this.stopEditingTableValidation();
-    this.stopEditingSyeValidation();
-    this.stopEditingRelevesValidation();
-    this.isEditingRelevesValidation = true;
+  startEditingRelevesIdentification(releves: Array<{id: string, identification: ImportIdentification}>): void {
+    this.stopEditingTableIdentification();
+    this.stopEditingSyeIdentification();
+    this.stopEditingRelevesIdentification();
+    this.isEditingRelevesIdentification = true;
     this.editingReleves = releves;
   }
 
-  stopEditingRelevesValidation(): void {
-    this.isEditingRelevesValidation = false;
+  stopEditingRelevesIdentification(): void {
+    this.isEditingRelevesIdentification = false;
     this.editingReleves = [];
   }
 
@@ -2322,13 +2322,13 @@ export class TableImportComponent implements OnInit, OnDestroy {
 
     newTable.rowsDefinition = this.getTableRowsDefinition();
 
-    // prepare and merge data from lists (taxonomicList, validationList, etc.)
+    // prepare and merge data from lists (taxonomicList, identificationList, etc.)
     const tablePreview = this.getTablePreview();
     const taxoCoefsArray = this.getTaxoCoefsArray();
 
     let syeCount = 0;
     let releveCount = 0;
-    for (const sye of this.validationList.table.sye) {
+    for (const sye of this.identificationList.table.sye) {
       const newSye: Sye = {
         id: null,
         userId,
@@ -2436,7 +2436,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
                   layer: newSynusy.layer,
                   children: [],
                   coef: taxoItem.coefs[releveCount],
-                  validations: [taxoItem.taxo.validation],
+                  identifications: [taxoItem.taxo.identification],
                   inputSource: InputSource.VEGLAB,
                   vlWorkspace: this.wsService.currentWS.getValue()
                 };
@@ -2473,7 +2473,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
               layer: newOccurrence0.layer,
               children: [],
               coef: taxoItem.coefs[releveCount],
-              validations: [taxoItem.taxo.validation],
+              identifications: [taxoItem.taxo.identification],
               inputSource: InputSource.VEGLAB,
               vlWorkspace: this.wsService.currentWS.getValue()
             };
@@ -2504,80 +2504,80 @@ export class TableImportComponent implements OnInit, OnDestroy {
     this.tableService.createSyntheticColumnsForSyeOnTable(newTable, this.currentUser);
     this.tableService.createTableSyntheticColumn(newTable, this.currentUser);
 
-    // Bind validations
-    // table validation
-    const validationDate = new Date();
-    if (this.validationList.table.validation && this.validationList.table.validation.consolidedValidation) {
-      const tableValidation: OccurrenceValidationModel = this.validationList.table.validation.consolidedValidation ? {
+    // Bind identifications
+    // table identification
+    const identificationDate = new Date();
+    if (this.identificationList.table.identification && this.identificationList.table.identification.consolidedIdentification) {
+      const tableIdentification: IdentificationModel = this.identificationList.table.identification.consolidedIdentification ? {
         validatedBy:       userId,
-        validatedAt:       validationDate,
+        validatedAt:       identificationDate,
         owner:              this.currentVlUser,
-        repository:        this.validationList.table.validation.consolidedValidation.repository,
-        repositoryIdNomen: Number(this.validationList.table.validation.consolidedValidation.idNomen),
-        repositoryIdTaxo:  this.validationList.table.validation.consolidedValidation.idTaxo.toString(),
-        inputName:         this.validationList.table.validation.consolidedValidation.name,
-        validatedName:     this.validationList.table.validation.consolidedValidation.name,
-        validName:         this.validationList.table.validation.consolidedValidation.name
+        repository:        this.identificationList.table.identification.consolidedIdentification.repository,
+        repositoryIdNomen: Number(this.identificationList.table.identification.consolidedIdentification.idNomen),
+        repositoryIdTaxo:  this.identificationList.table.identification.consolidedIdentification.idTaxo.toString(),
+        inputName:         this.identificationList.table.identification.consolidedIdentification.name,
+        validatedName:     this.identificationList.table.identification.consolidedIdentification.name,
+        validName:         this.identificationList.table.identification.consolidedIdentification.name
       } : null;
-      if (tableValidation !== null) { newTable.validations = [tableValidation]; }
+      if (tableIdentification !== null) { newTable.identifications = [tableIdentification]; }
     }
 
-    // table synthetic column validation
-    if (newTable.syntheticColumn && newTable.validations && newTable.validations.length > 0) {
-      newTable.syntheticColumn.validations = newTable.validations;
+    // table synthetic column identification
+    if (newTable.syntheticColumn && newTable.identifications && newTable.identifications.length > 0) {
+      newTable.syntheticColumn.identifications = newTable.identifications;
     }
 
-    // sye validation
-    if (this.validationList.table.sye) {
-      for (const sye of this.validationList.table.sye) {
-        if (sye.validation) {
+    // sye identification
+    if (this.identificationList.table.sye) {
+      for (const sye of this.identificationList.table.sye) {
+        if (sye.identification) {
           const syeToBind = this.getSyeInTableById(sye.id, newTable);
-          const syeValidation: OccurrenceValidationModel = sye.validation.consolidedValidation ? {
+          const syeIdentification: IdentificationModel = sye.identification.consolidedIdentification ? {
             validatedBy:       userId,
-            validatedAt:       validationDate,
+            validatedAt:       identificationDate,
             owner:              this.currentVlUser,
-            repository:        sye.validation.consolidedValidation.repository,
-            repositoryIdNomen: Number(sye.validation.consolidedValidation.idNomen),
-            repositoryIdTaxo:  sye.validation.consolidedValidation.idTaxo.toString(),
-            inputName:         sye.validation.consolidedValidation.name,
-            validatedName:     sye.validation.consolidedValidation.name,
-            validName:         sye.validation.consolidedValidation.name
+            repository:        sye.identification.consolidedIdentification.repository,
+            repositoryIdNomen: Number(sye.identification.consolidedIdentification.idNomen),
+            repositoryIdTaxo:  sye.identification.consolidedIdentification.idTaxo.toString(),
+            inputName:         sye.identification.consolidedIdentification.name,
+            validatedName:     sye.identification.consolidedIdentification.name,
+            validName:         sye.identification.consolidedIdentification.name
           } : null;
-          if (syeValidation !== null) { syeToBind.validations = [syeValidation]; }
+          if (syeIdentification !== null) { syeToBind.identifications = [syeIdentification]; }
         }
       }
     }
 
-    // sye synthetic column validation
+    // sye synthetic column identification
     if (newTable.sye && newTable.sye.length > 0) {
       for (const sye of newTable.sye) {
-        if (sye.syntheticColumn && sye.validations && sye.validations.length > 0) {
-          sye.syntheticColumn.validations = sye.validations;
+        if (sye.syntheticColumn && sye.identifications && sye.identifications.length > 0) {
+          sye.syntheticColumn.identifications = sye.identifications;
         }
       }
     }
 
-    // releves validation
-    if (this.validationList.table) {
-      if (this.validationList.table.sye) {
-        for (const sye of this.validationList.table.sye) {
+    // releves identification
+    if (this.identificationList.table) {
+      if (this.identificationList.table.sye) {
+        for (const sye of this.identificationList.table.sye) {
           if (sye.releves) {
             for (const releve of sye.releves) {
               const relevesToBind = this.getRelevesInTableById(releve.id, newTable, false);
-              const releveValidation: OccurrenceValidationModel = releve.validation && releve.validation.consolidedValidation ? {
+              const releveIdentification: IdentificationModel = releve.identification && releve.identification.consolidedIdentification ? {
                 validatedBy:       userId,
-                validatedAt:       validationDate,
+                validatedAt:       identificationDate,
                 owner:              this.currentVlUser,
-                repository:        releve.validation.consolidedValidation.repository,
-                repositoryIdNomen: Number(releve.validation.consolidedValidation.idNomen),
-                repositoryIdTaxo:  releve.validation.consolidedValidation.idTaxo.toString(),
-                inputName:         releve.validation.consolidedValidation.name,
-                validatedName:     releve.validation.consolidedValidation.name,
-                validName:         releve.validation.consolidedValidation.name
+                repository:        releve.identification.consolidedIdentification.repository,
+                repositoryIdNomen: Number(releve.identification.consolidedIdentification.idNomen),
+                repositoryIdTaxo:  releve.identification.consolidedIdentification.idTaxo.toString(),
+                inputName:         releve.identification.consolidedIdentification.name,
+                validatedName:     releve.identification.consolidedIdentification.name,
+                validName:         releve.identification.consolidedIdentification.name
               } : null;
               for (const releveToBind of relevesToBind) {
-                if (releveValidation !== null) {
-                  releveToBind.validations = [releveValidation];
+                if (releveIdentification !== null) {
+                  releveToBind.identifications = [releveIdentification];
                 }
               }
             }
@@ -2985,7 +2985,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
            && this.stepAuthorsDates.getValue().started
            && this.stepMetadata.getValue().started
            && this.stepBiblio.getValue().started
-           && this.stepValidation.getValue().started;
+           && this.stepIdentification.getValue().started;
   }
 
 
@@ -3059,7 +3059,7 @@ export interface Taxo {
   repo: string;
   nomen: string;
   layer: string;
-  validation: OccurrenceValidationModel;
+  identification: IdentificationModel;
   rim?: RepositoryItemModel;
 }
 
@@ -3103,11 +3103,11 @@ export interface MetadataList {
   metadata: Array<MetadataItem>;
 }
 
-export interface ImportValidation {
+export interface ImportIdentification {
   nomen: string;
   repository: string;
   repositoryIsAvailable: boolean;
-  consolidedValidation: RepositoryItemModel;
+  consolidedIdentification: RepositoryItemModel;
 }
 
 export interface StepStatus {

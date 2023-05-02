@@ -1,0 +1,14 @@
+<div *ngIf="!isTableEmpty()">
+  <p>Tab. [{{ table.id }}] : {{ getTableIdentification() }}</p>
+  <ul *ngFor="let sye of table.sye">
+    <li>Sye [{{ sye.id }}] : {{ getSyeIdentification(sye) }}</li>
+    <ul>
+      <li *ngFor="let releve of sye.occurrences">Rel. [{{ releve.id }}] : {{ getReleveIdentification(releve) }}</li>
+    </ul>
+  </ul>
+
+</div>
+
+<div *ngIf="isTableEmpty()" class="no-table">
+    Aucune donnée à afficher
+</div>

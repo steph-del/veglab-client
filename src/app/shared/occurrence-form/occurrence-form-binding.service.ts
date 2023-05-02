@@ -45,9 +45,9 @@ export class OccurrenceFormBindingService {
       let xIdTaxo = null;
       if (citedSyntaxon !== null && citedSyntaxon.idTaxo !== null) { xIdTaxo = citedSyntaxon.idTaxo.toString(); }
       if (xIdTaxo === null && citedSyntaxon !== null && citedSyntaxon.validOccurence.idTaxo !== null) { xIdTaxo =  citedSyntaxon.validOccurence.idTaxo.toString(); }
-      // bind validation
+      // bind identification
       if (citedSyntaxon && citedSyntaxon !== null) {
-        this.xOccurrence.validations = [{
+        this.xOccurrence.identifications = [{
           validatedBy: user.id,
           validatedAt: new Date(),
           owner: currentVlUser,
@@ -73,7 +73,7 @@ export class OccurrenceFormBindingService {
         let yIdTaxo = null;
         if (occ.taxa.idTaxo !== null) { yIdTaxo = occ.taxa.idTaxo.toString(); }
         if (yIdTaxo === null && occ.taxa.validOccurence !== null && occ.taxa.validOccurence.idNomen !== null) { yIdTaxo =  occ.taxa.validOccurence.idNomen.toString(); }
-        yOcc.validations = [{
+        yOcc.identifications = [{
           validatedBy: user.id,
           validatedAt: new Date(),
           owner: currentVlUser,
@@ -106,9 +106,9 @@ export class OccurrenceFormBindingService {
       let xIdTaxo = null;
       if (citedSyntaxon !== null && citedSyntaxon.idTaxo !== null) { xIdTaxo = citedSyntaxon.idTaxo.toString(); }
       if (xIdTaxo === null && citedSyntaxon !== null && citedSyntaxon.validOccurence.idTaxo !== null) { xIdTaxo =  citedSyntaxon.validOccurence.idTaxo.toString(); }
-      // bind validation
+      // bind identification
       if (citedSyntaxon && citedSyntaxon !== null) {
-        this.xOccurrence.validations = [{
+        this.xOccurrence.identifications = [{
           validatedBy: user.id,
           validatedAt: new Date(),
           owner: currentVlUser,
@@ -131,7 +131,7 @@ export class OccurrenceFormBindingService {
       for (const levelKey in yOccur) {
         const yOcc = this.occurenceService.getFreshOccurrence();
         yOcc.level = Level.SYNUSY;
-        yOcc.validations = [];
+        yOcc.identifications = [];
         yOcc.children = [];
         yOcc.parentLevel = this.xOccurrence.level;
         this.bindSharedData(yOcc, form, user, location, metadatas);
@@ -148,7 +148,7 @@ export class OccurrenceFormBindingService {
           let zIdTaxo = null;
           if (z.taxa.idTaxo !== null) { zIdTaxo = z.taxa.idTaxo.toString(); }
           if (zIdTaxo === null && z.taxa.validOccurence !== null && z.taxa.validOccurence.idNomen !== null) { zIdTaxo =  z.taxa.validOccurence.idNomen.toString(); }
-          zOcc.validations = [{
+          zOcc.identifications = [{
             validatedBy: user.id,
             validatedAt: new Date(),
             owner: currentVlUser,

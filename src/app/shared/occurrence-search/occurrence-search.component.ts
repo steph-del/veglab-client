@@ -69,9 +69,9 @@ export class OccurrenceSearchComponent implements OnInit, OnDestroy {
   layerFilter: string = null;
 
   // For the 2-levels nested occurrences (ie 'microcenosis' levels),
-  //   the 1st level occurrence (microcenosis) has got a 'childrenValidations' ES field composed from validations of children (synusy) + grandChildren (idiotaxon)
-  //   the 2nd level occurrence (synusy) has got a 'childrenValidations' ES field composed from validations childrend (idiotaxon)
-  // So the 1st level and the 2nd levels have got the same 'childrenValidations' idiotaxons parts !
+  //   the 1st level occurrence (microcenosis) has got a 'childrenIdentifications' ES field composed from identifications of children (synusy) + grandChildren (idiotaxon)
+  //   the 2nd level occurrence (synusy) has got a 'childrenIdentifications' ES field composed from identifications childrend (idiotaxon)
+  // So the 1st level and the 2nd levels have got the same 'childrenIdentifications' idiotaxons parts !
   // This is totaly assumed but when we search for an occurrence, it's redundant and disappointing for the user to retrieve & show a parent occurrence and its children at the same time
   returnsChildrenLevelOccurrences = false;
   returnsChildrenLevelOccurrencesEnabled = true;
@@ -450,7 +450,7 @@ export class OccurrenceSearchComponent implements OnInit, OnDestroy {
 
   /**
    * Searching an occurrence can be confusing because of the microcenosis / synusies level integration
-   * A microcenosis contains several synusies and all this occurrences share the same geometry data (and may share other data such as validation)
+   * A microcenosis contains several synusies and all this occurrences share the same geometry data (and may share other data such as identification)
    * So we order the occurrences by parent as   { occurrence: ~microcenosis level~, childOccurrences: ~synusy level~ }
    * Or, if the parent occurrence is a synusy : { occurrence: ~synusy level~ }
    * Note: from ES, parent is a number (occurrence id)
@@ -855,8 +855,8 @@ export class OccurrenceSearchComponent implements OnInit, OnDestroy {
    * Output example :
    * `
    *   "must": [
-   *     { "match_phrase": { "flatChildrenValidations": "bdtfx~50284" } },
-   *     { "match_phrase": { "flatChildrenValidations": "bdtfx~50912" } }
+   *     { "match_phrase": { "flatChildrenIdentifications": "bdtfx~50284" } },
+   *     { "match_phrase": { "flatChildrenIdentifications": "bdtfx~50912" } }
    *   ]
    * `
    */
@@ -891,8 +891,8 @@ export class OccurrenceSearchComponent implements OnInit, OnDestroy {
    * Output example :
    * `
    *   "should": [
-   *     { "match_phrase": { "flatChildrenValidations": "bdtfx~50284" } },
-   *     { "match_phrase": { "flatChildrenValidations": "bdtfx~50912" } }
+   *     { "match_phrase": { "flatChildrenIdentifications": "bdtfx~50284" } },
+   *     { "match_phrase": { "flatChildrenIdentifications": "bdtfx~50912" } }
    *   ]
    * `
    */
@@ -926,8 +926,8 @@ export class OccurrenceSearchComponent implements OnInit, OnDestroy {
    * `
    *   "must_not": [
    *     { "match_phrase": { "level": "idiotaxon" } },
-   *     { "match_phrase": { "flatChildrenValidations": "bdtfx~50284" } },
-   *     { "match_phrase": { "flatChildrenValidations": "bdtfx~50912" } }
+   *     { "match_phrase": { "flatChildrenIdentifications": "bdtfx~50284" } },
+   *     { "match_phrase": { "flatChildrenIdentifications": "bdtfx~50912" } }
    *   ]
    * `
    */
@@ -949,38 +949,38 @@ export class OccurrenceSearchComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Constructs the ElasticSearch query part "MUST contains thoses occurrences".
+   * Constructs the ElasticSearch query part "MUST contain these occurrences".
    * Output example :
    * `"must": [
-   *   { "match_phrase": { "flatChildrenValidations": "bdtfx~50284" } },
-   *   { "match_phrase": { "flatChildrenValidations": "bdtfx~50912" } }
+   *   { "match_phrase": { "flatChildrenIdentifications": "bdtfx~50284" } },
+   *   { "match_phrase": { "flatChildrenIdentifications": "bdtfx~50912" } }
    * ]`
    */
-  esOccurrencesMustQueryPart(occurrenceValidations: Array<RepositoryItemModel>): Array<string> {
+  esOccurrencesMustQueryPart(occurrenceIdentifications: Array<RepositoryItemModel>): Array<string> {
     const parts: Array<string> = [];
-    occurrenceValidations.forEach(occurrenceValidation => {
+    occurrenceIdentifications.forEach(occurrenceIdentification => {
       let idTaxo: any = null;
-      if (occurrenceValidation.idTaxo !== null) { idTaxo = occurrenceValidation.idTaxo; } else if (occurrenceValidation.validOccurence.idNomen !== null) { idTaxo = occurrenceValidation.validOccurence.idNomen; } else { throw new Error(`We can't retrieve a (syn)taxonomic ID for the [${occurrenceValidation.idTaxo}]${occurrenceValidation.idNomen} (syn)taxonomic nomenclatural ID.`); }
-      const matchPhrase = `{ "match_phrase": { "flatChildrenValidations": "${occurrenceValidation.repository}~${idTaxo}" } }`;
+      if (occurrenceIdentification.idTaxo !== null) { idTaxo = occurrenceIdentification.idTaxo; } else if (occurrenceIdentification.validOccurence.idNomen !== null) { idTaxo = occurrenceIdentification.validOccurence.idNomen; } else { throw new Error(`We can't retrieve a (syn)taxonomic ID for the [${occurrenceIdentification.idTaxo}]${occurrenceIdentification.idNomen} (syn)taxonomic nomenclatural ID.`); }
+      const matchPhrase = `{ "match_phrase": { "flatChildrenIdentifications": "${occurrenceIdentification.repository}~${idTaxo}" } }`;
       parts.push(matchPhrase);
     });
     return parts;
   }
 
   /**
-   * Constructs the ElasticSearch query part "MUST NOT contains thoses occurrences".
+   * Constructs the ElasticSearch query part "MUST NOT contain these occurrences".
    * Output example :
    * `
-   *   { "match_phrase": { "flatChildrenValidations": "bdtfx~50284" } },
-   *   { "match_phrase": { "flatChildrenValidations": "bdtfx~50912" } }
+   *   { "match_phrase": { "flatChildrenIdentifications": "bdtfx~50284" } },
+   *   { "match_phrase": { "flatChildrenIdentifications": "bdtfx~50912" } }
    * `
    */
-  esOccurrencesMustNotQueryPart(occurrenceValidations: Array<RepositoryItemModel>): Array<string> {
+  esOccurrencesMustNotQueryPart(occurrenceIdentifications: Array<RepositoryItemModel>): Array<string> {
     const parts: Array<string> = [];
-    occurrenceValidations.forEach(occurrenceValidation => {
+    occurrenceIdentifications.forEach(occurrenceIdentification => {
       let idTaxo: any = null;
-      if (occurrenceValidation.idTaxo !== null) { idTaxo = occurrenceValidation.idTaxo; } else if (occurrenceValidation.validOccurence.idNomen !== null) { idTaxo = occurrenceValidation.validOccurence.idNomen; } else { throw new Error(`We can't retrieve a (syn)taxonomic ID for the [${occurrenceValidation.idTaxo}]${occurrenceValidation.idNomen} (syn)taxonomic nomenclatural ID.`); }
-      const matchPhrase = `{ "match_phrase": { "flatChildrenValidations": "${occurrenceValidation.repository}~${idTaxo}" } }`;
+      if (occurrenceIdentification.idTaxo !== null) { idTaxo = occurrenceIdentification.idTaxo; } else if (occurrenceIdentification.validOccurence.idNomen !== null) { idTaxo = occurrenceIdentification.validOccurence.idNomen; } else { throw new Error(`We can't retrieve a (syn)taxonomic ID for the [${occurrenceIdentification.idTaxo}]${occurrenceIdentification.idNomen} (syn)taxonomic nomenclatural ID.`); }
+      const matchPhrase = `{ "match_phrase": { "flatChildrenIdentifications": "${occurrenceIdentification.repository}~${idTaxo}" } }`;
       parts.push(matchPhrase);
     });
     if (!this.returnsChildrenLevelOccurrences && this.returnsChildrenLevelOccurrencesEnabled) {
@@ -994,38 +994,38 @@ export class OccurrenceSearchComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Constructs the ElasticSearch query part "MUST contains thoses releves (syntaxons)".
+   * Constructs the ElasticSearch query part "MUST contain these releves (syntaxons)".
    * Output example :
    * `"must": [
-   *   { "match_phrase": { "flatValidations": "baseveg~50284" } },
-   *   { "match_phrase": { "flatValidations": "baseveg~50912" } }
+   *   { "match_phrase": { "flatIdentifications": "baseveg~50284" } },
+   *   { "match_phrase": { "flatIdentifications": "baseveg~50912" } }
    * ]`
    */
-  esRelevesMustQueryPart(occurrenceValidations: Array<RepositoryItemModel>): Array<string> {
+  esRelevesMustQueryPart(occurrenceIdentifications: Array<RepositoryItemModel>): Array<string> {
     const parts: Array<string> = [];
-    occurrenceValidations.forEach(occurrenceValidation => {
+    occurrenceIdentifications.forEach(occurrenceIdentification => {
       let idTaxo: any = null;
-      if (occurrenceValidation.idTaxo !== null) { idTaxo = occurrenceValidation.idTaxo; } else if (occurrenceValidation.validOccurence.idNomen !== null) { idTaxo = occurrenceValidation.validOccurence.idNomen; } else { throw new Error(`We can't retrieve a (syn)taxonomic ID for the [${occurrenceValidation.idTaxo}]${occurrenceValidation.idNomen} (syn)taxonomic nomenclatural ID.`); }
-      const matchPhrase = `{ "match_phrase": { "flatValidations": "${occurrenceValidation.repository}~${idTaxo}" } }`;
+      if (occurrenceIdentification.idTaxo !== null) { idTaxo = occurrenceIdentification.idTaxo; } else if (occurrenceIdentification.validOccurence.idNomen !== null) { idTaxo = occurrenceIdentification.validOccurence.idNomen; } else { throw new Error(`We can't retrieve a (syn)taxonomic ID for the [${occurrenceIdentification.idTaxo}]${occurrenceIdentification.idNomen} (syn)taxonomic nomenclatural ID.`); }
+      const matchPhrase = `{ "match_phrase": { "flatIdentifications": "${occurrenceIdentification.repository}~${idTaxo}" } }`;
       parts.push(matchPhrase);
     });
     return parts;
   }
 
   /**
-   * Constructs the ElasticSearch query part "MUST NOT contains thoses releves (syntaxons)".
+   * Constructs the ElasticSearch query part "MUST NOT contain these releves (syntaxons)".
    * Output example :
    * `
-   *   { "match_phrase": { "flatValidations": "baseveg~50284" } },
-   *   { "match_phrase": { "flatValidations": "baseveg~50912" } }
+   *   { "match_phrase": { "flatIdentifications": "baseveg~50284" } },
+   *   { "match_phrase": { "flatIdentifications": "baseveg~50912" } }
    * `
    */
-  esRelevesMustNotQueryPart(occurrenceValidations: Array<RepositoryItemModel>): Array<string> {
+  esRelevesMustNotQueryPart(occurrenceIdentifications: Array<RepositoryItemModel>): Array<string> {
     const parts: Array<string> = [];
-    occurrenceValidations.forEach(occurrenceValidation => {
+    occurrenceIdentifications.forEach(occurrenceIdentification => {
       let idTaxo: any = null;
-      if (occurrenceValidation.idTaxo !== null) { idTaxo = occurrenceValidation.idTaxo; } else if (occurrenceValidation.validOccurence.idNomen !== null) { idTaxo = occurrenceValidation.validOccurence.idNomen; } else { throw new Error(`We can't retrieve a (syn)taxonomic ID for the [${occurrenceValidation.idTaxo}]${occurrenceValidation.idNomen} (syn)taxonomic nomenclatural ID.`); }
-      const matchPhrase = `{ "match_phrase": { "flatValidations": "${occurrenceValidation.repository}~${idTaxo}" } }`;
+      if (occurrenceIdentification.idTaxo !== null) { idTaxo = occurrenceIdentification.idTaxo; } else if (occurrenceIdentification.validOccurence.idNomen !== null) { idTaxo = occurrenceIdentification.validOccurence.idNomen; } else { throw new Error(`We can't retrieve a (syn)taxonomic ID for the [${occurrenceIdentification.idTaxo}]${occurrenceIdentification.idNomen} (syn)taxonomic nomenclatural ID.`); }
+      const matchPhrase = `{ "match_phrase": { "flatIdentifications": "${occurrenceIdentification.repository}~${idTaxo}" } }`;
       parts.push(matchPhrase);
     });
     return parts;
@@ -1043,7 +1043,7 @@ export class OccurrenceSearchComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Constructs the ElasticSearch query part "MUST contains thoses layers".
+   * Constructs the ElasticSearch query part "MUST contain these layers".
    * Output example :
    * `
    *   { "match_phrase": { "layer": "th" } },

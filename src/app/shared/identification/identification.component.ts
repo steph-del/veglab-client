@@ -5,7 +5,7 @@ import { VlUser } from 'src/app/_models/vl-user.model';
 import { Table } from 'src/app/_models/table.model';
 import { OccurrenceModel } from 'src/app/_models/occurrence.model';
 import { Sye } from 'src/app/_models/sye.model';
-import { OccurrenceValidationModel } from 'src/app/_models/occurrence-validation.model';
+import { IdentificationModel } from '../../_models/identification.model';
 import { RepositoryItemModel } from 'tb-tsb-lib';
 import { SyntheticColumn } from 'src/app/_models/synthetic-column.model';
 import { TableActionEnum } from 'src/app/_enums/table-action-enum';
@@ -54,8 +54,8 @@ export class IdentificationComponent implements OnInit, OnDestroy {
   applyChangesToAllRelevesOfEditedSye = false;  // ... to all relevés of the edited Sye (exceptes synusies nested in a microcenosis)
 
   elementsToApplyNewIdentifications: Array<any> = [];                     // The elements (Table, Sye, Relevé, Synthetic column) that sould receive the identifications (pendingIdentifications & pendingIdentificationsToRemove)
-  pendingIdentifications: Array<OccurrenceValidationModel> = [];          // Identifications that user would apply to the desired elements
-  pendingIdentificationsToRemove: Array<OccurrenceValidationModel> = [];  // Identifications belonging to the edites element that have to be removed
+  pendingIdentifications: Array<IdentificationModel> = [];          // Identifications that user would apply to the desired elements
+  pendingIdentificationsToRemove: Array<IdentificationModel> = [];  // Identifications belonging to the edites element that have to be removed
 
   editAs: Array<{value: string, label: string, disabled: boolean}> = [    // The edition is made regarding a context
     { value: 'user', label: 'utilisateur', disabled: false },             // Edition could be made as an User edition or through other contexts
@@ -133,11 +133,11 @@ export class IdentificationComponent implements OnInit, OnDestroy {
     return this.tableService.isTableEmpty(this.currentTable);
   }
 
-  getTableValidation(table: Table): Array<OccurrenceValidationModel> {
-    if (this.currentTable == null || (this.currentTable && this.currentTable.validations && this.currentTable.validations.length === 0)) {
+  getTableIdentification(table: Table): Array<IdentificationModel> {
+    if (this.currentTable == null || (this.currentTable && this.currentTable.identifications && this.currentTable.identifications.length === 0)) {
       return [];
     } else {
-      return this.currentTable.validations;
+      return this.currentTable.identifications;
     }
   }
 
@@ -196,12 +196,12 @@ export class IdentificationComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * From a given RepositoryItemModel, create a new OccurrenceValidationModel
+   * From a given RepositoryItemModel, create a new OccurrenceIdentificationModel
    * and push it to the pending identifications array
    * Also check (and overwrite) duplicates
    */
   pushIdentificationToPendingIdentifications(data: RepositoryItemModel): void {
-    const newIdentification: OccurrenceValidationModel = {
+    const newIdentification: IdentificationModel = {
       // id?:               number;
       validatedBy:       this.currentUser.id,
       validatedAt:       new Date(),
@@ -222,7 +222,7 @@ export class IdentificationComponent implements OnInit, OnDestroy {
       this.pendingIdentifications.push(newIdentification);
     } else {
       // Is there duplicates ?
-      let duplicatePendingIdentification: Array<OccurrenceValidationModel> = [];
+      let duplicatePendingIdentification: Array<IdentificationModel> = [];
       if (this.selectedEditAs.value === 'user') {
         duplicatePendingIdentification = _.filter(this.pendingIdentifications, pi => pi.repository === newIdentification.repository && pi.userIdValidation && pi.userIdValidation === this.currentUser.id);
       } else {
@@ -248,21 +248,21 @@ export class IdentificationComponent implements OnInit, OnDestroy {
   /**
    * Remove an element from the pending list
    */
-  removePendingIdentification(identification: OccurrenceValidationModel): void {
+  removePendingIdentification(identification: IdentificationModel): void {
     _.remove(this.pendingIdentifications, pi => pi === identification);
   }
 
   /**
    * Add an element to the pendingIdentificationsToRemove list (from existing identifications)
    */
-  removeIdentification(identification: OccurrenceValidationModel): void {
+  removeIdentification(identification: IdentificationModel): void {
     this.pendingIdentificationsToRemove.push(identification);
   }
 
   /**
    * Remove the given identification from the pendingIdentificationsToRemove list
    */
-  removePendingIdentificationToRemove(identification: OccurrenceValidationModel): void {
+  removePendingIdentificationToRemove(identification: IdentificationModel): void {
     _.remove(this.pendingIdentificationsToRemove, pitr => pitr === identification);
   }
 
@@ -280,7 +280,7 @@ export class IdentificationComponent implements OnInit, OnDestroy {
     for (const element of this.elementsToApplyNewIdentifications) {
       // Deletions
       for (const identificationToRemove of this.pendingIdentificationsToRemove) {
-        _.remove(element.validations, ev => ev === identificationToRemove);
+        _.remove(element.identifications, ev => ev === identificationToRemove);
       }
 
       // Additions
@@ -288,7 +288,7 @@ export class IdentificationComponent implements OnInit, OnDestroy {
         // Is there an identification that should be overwritten ?
         let overwriteAtIndex: number;
         if (this.selectedEditAs.value === 'user') {
-          overwriteAtIndex = _.findIndex(element.validations as Array<OccurrenceValidationModel>, e => e.repository === newIdentification.repository && e.userIdValidation && e.userIdValidation === this.currentUser.id);
+          overwriteAtIndex = _.findIndex(element.identifications as Array<IdentificationModel>, e => e.repository === newIdentification.repository && e.userIdValidation && e.userIdValidation === this.currentUser.id);
         } else {
           // @Todo implements other cases (group identification, organization identification, etc.)
         }
@@ -297,10 +297,10 @@ export class IdentificationComponent implements OnInit, OnDestroy {
         if (overwriteAtIndex && overwriteAtIndex !== -1) {
           newIdentification.updatedBy = this.currentUser.id;
           newIdentification.updatedAt = new Date();
-          element.validations[overwriteAtIndex] = newIdentification;
+          element.identifications[overwriteAtIndex] = newIdentification;
         } else {
           // Push the new identification
-          element.validations !== null && element.validations.length > 0 ? element.validations.push(newIdentification) : element.validations = [newIdentification];
+          element.identifications !== null && element.identifications.length > 0 ? element.identifications.push(newIdentification) : element.identifications = [newIdentification];
         }
       }
     }

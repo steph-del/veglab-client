@@ -53,7 +53,7 @@ export class MyDataPageComponent implements OnInit, OnDestroy {
   myOccurrencesPaginatorSize = 5;
   occurrenceInfo: OccurrenceModel = null;     // occurrence to preview
   occurrenceToDelete: OccurrenceModel = null; // occurrence to be deleted
-  occurrencesDisplayedColumns = ['id', 'level', 'layer', 'custom_col_validation', 'dateObserved', 'locality', 'vlLocationAccuracy', 'custom_col_actions'];
+  occurrencesDisplayedColumns = ['id', 'level', 'layer', 'custom_col_identification', 'dateObserved', 'locality', 'vlLocationAccuracy', 'custom_col_actions'];
 
   waitingForReload = false; // We wait before reloading tables / occ after removing one of them because ES propagation takes some time
 

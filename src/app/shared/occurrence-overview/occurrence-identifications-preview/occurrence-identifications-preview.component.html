@@ -1,0 +1,21 @@
+<div class="occurrence-identifications-preview-wrapper">
+  <table *ngIf="!emptyIdentifications">
+    <tbody>
+        <tr>
+          <th class="item">Référentiel</th>
+          <th class="item">Par</th>
+          <th class="item">Le</th>
+          <th class="item value">Identification</th>
+        </tr>
+      <tr *ngFor="let identification of identifications">
+        <td>{{ identification.repository }}</td>
+        <td><vl-tb-user-label [userId]="getIdentificationAuthor(identification)"></vl-tb-user-label></td>
+        <td class="date">{{ getIdentificationDate(identification) }}</td>
+        <td class="name" title="{{ getIdentificationName(identification) }}">{{ getIdentificationName(identification) }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div *ngIf="emptyIdentifications" class="no-identifications">
+    Aucune identification
+  </div>
+</div>

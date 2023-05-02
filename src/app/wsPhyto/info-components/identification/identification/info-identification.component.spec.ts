@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ValidationComponent } from './validation.component';
+import { InfoIdentificationComponent } from './info-identification.component';
 
-describe('ValidationComponent', () => {
-  let component: ValidationComponent;
-  let fixture: ComponentFixture<ValidationComponent>;
+describe('InfoIdentificationComponent', () => {
+  let component: InfoIdentificationComponent;
+  let fixture: ComponentFixture<InfoIdentificationComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ValidationComponent ]
+      declarations: [ InfoIdentificationComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ValidationComponent);
+    fixture = TestBed.createComponent(InfoIdentificationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

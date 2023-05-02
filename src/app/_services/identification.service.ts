@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { OccurrenceValidationModel } from '../_models/occurrence-validation.model';
+import { IdentificationModel } from '../_models/identification.model';
 import { SyntheticColumn } from '../_models/synthetic-column.model';
 import { Sye } from '../_models/sye.model';
 import { Table } from '../_models/table.model';
@@ -13,7 +13,7 @@ import { EsTableModel } from '../_models/es-table.model';
 @Injectable({
   providedIn: 'root'
 })
-export class ValidationService {
+export class IdentificationService {
 
   tablePreferedRepositoriesId            = ['baseveg', 'pvf2'];
   syePreferedRepositoriesId              = ['baseveg', 'pvf2'];
@@ -59,14 +59,14 @@ export class ValidationService {
     return false;
   }
 
-  getPreferedValidation(element: Table | Sye | OccurrenceModel | SyntheticColumn | EsOccurrenceModel): OccurrenceValidationModel {
+  getFavoriteIdentification(element: Table | Sye | OccurrenceModel | SyntheticColumn | EsOccurrenceModel): IdentificationModel {
     let preferedRepositories: Array<string>;
 
-    if (element && element.validations) {
-      if (element.validations.length === 0) {
+    if (element && element.identifications) {
+      if (element.identifications.length === 0) {
         return null;
-      } else if (element.validations.length === 1) {
-        return element.validations[0];
+      } else if (element.identifications.length === 1) {
+        return element.identifications[0];
       } else {
 
         // Check element type to get suitable preferedRepositories
@@ -97,16 +97,16 @@ export class ValidationService {
       // Got the prefered repositories according to element type
       if (preferedRepositories == null) { return null; }
 
-      for (const validation of element.validations) {
+      for (const identification of element.identifications) {
         for (const preferedRepo of preferedRepositories) {
-          if (validation.repository === preferedRepo) {
-            return validation;
+          if (identification.repository === preferedRepo) {
+            return identification;
           }
         }
       }
 
-      // No prefered validation ?
-      return element.validations.find(x => x !== undefined); // get the first available item (the first item could not be validations[0] !)
+      // No prefered identification ?
+      return element.identifications.find(x => x !== undefined); // get the first available item (the first item could not be identifications[0] !)
 
     } else {
       return null;
@@ -114,12 +114,12 @@ export class ValidationService {
   }
 
   getSingleName(element: Table | Sye | OccurrenceModel | SyntheticColumn | EsOccurrenceModel): string {
-    const preferedValidation = this.getPreferedValidation(element);
-    if (preferedValidation) {
-      if (preferedValidation.repository === 'otherunknown') {
-        return preferedValidation.inputName && preferedValidation.inputName !== '' ? preferedValidation.inputName : '?';
+    const preferedIdentification = this.getFavoriteIdentification(element);
+    if (preferedIdentification) {
+      if (preferedIdentification.repository === 'otherunknown') {
+        return preferedIdentification.inputName && preferedIdentification.inputName !== '' ? preferedIdentification.inputName : '?';
       } else {
-        return preferedValidation.validatedName ? preferedValidation.validatedName : preferedValidation.inputName;
+        return preferedIdentification.validatedName ? preferedIdentification.validatedName : preferedIdentification.inputName;
       }
     } else {
       return '?';
@@ -127,30 +127,30 @@ export class ValidationService {
   }
 
   /**
-   * Remove the Validation ids ('id' and '@id' plus other ld+json values if exists)
+   * Remove the Identification ids ('id' and '@id' plus other ld+json values if exists)
    */
-  removeIds(validation: OccurrenceValidationModel): OccurrenceValidationModel {
-    const _validation = _.clone(validation);
+  removeIds(identification: IdentificationModel): IdentificationModel {
+    const _identification = _.clone(identification);
 
-    if (_validation == null) {
-      throw new Error('Can\'t remove validation ids for a non existing validation !');
+    if (_identification == null) {
+      throw new Error('Can\'t remove identification ids for a non existing identification !');
     }
 
-    if (_validation !== null && _validation.id !== null) {
-      // Remove validation id
-      _validation.id = null;
+    if (_identification !== null && _identification.id !== null) {
+      // Remove identification id
+      _identification.id = null;
     }
 
     // Remove '@id' property (ld+json support)
-    if (_validation['@id'] !== null) {
-      delete _validation['@id'];
+    if (_identification['@id'] !== null) {
+      delete _identification['@id'];
 
       // Remove other ld+json fields
-      if (_validation['@context'] !== null) { delete _validation['@context']; }
-      if (_validation['@type'] !== null) { delete _validation['@type']; }
+      if (_identification['@context'] !== null) { delete _identification['@context']; }
+      if (_identification['@type'] !== null) { delete _identification['@type']; }
     }
 
-    return _validation;
+    return _identification;
   }
 
 

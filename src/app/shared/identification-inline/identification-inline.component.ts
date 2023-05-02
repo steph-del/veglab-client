@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { OccurrenceValidationModel } from 'src/app/_models/occurrence-validation.model';
+import { IdentificationModel } from '../../_models/identification.model';
 
 import { OccurrenceModel } from 'src/app/_models/occurrence.model';
 import { Sye } from 'src/app/_models/sye.model';
@@ -19,20 +19,20 @@ import * as _ from 'lodash';
 export class IdentificationInlineComponent implements OnInit {
   @Input() set element(value: OccurrenceModel | Sye | Table | SyntheticColumn) {
     this._element = _.clone(value);
-    if (value && value.validations) {
-      this.validations = value.validations;
+    if (value && value.identifications) {
+      this.identifications = value.identifications;
     }
   }
   @Input() allowDelete = false;
 
-  @Output() elementToDelete = new EventEmitter<OccurrenceValidationModel>();
+  @Output() elementToDelete = new EventEmitter<IdentificationModel>();
 
   currentUser: UserModel; // SSO user
   _element: OccurrenceModel | Sye | Table | SyntheticColumn = null;
-  validations: Array<OccurrenceValidationModel> = [];
-  myValidations: Array<OccurrenceValidationModel> = undefined;
-  otherValidations: Array<OccurrenceValidationModel> = [];
-  showAllValidations = false;
+  identifications: Array<IdentificationModel> = [];
+  myIdentifications: Array<IdentificationModel> = undefined;
+  otherIdentifications: Array<IdentificationModel> = [];
+  showAllIdentifications = false;
 
   constructor(private userService: UserService) { }
 
@@ -40,23 +40,23 @@ export class IdentificationInlineComponent implements OnInit {
     // Get current user
     this.currentUser = this.userService.currentUser.getValue();
 
-    // Set validations lists
-    this.myValidations = this.currentUser && this.currentUser.id ? _.filter(this.validations, v => v.owner.id === this.currentUser.id) : [];
-    this.otherValidations = _.difference(this.validations, this.myValidations);
+    // Set identification lists
+    this.myIdentifications = this.currentUser && this.currentUser.id ? _.filter(this.identifications, v => v.owner.id === this.currentUser.id) : [];
+    this.otherIdentifications = _.difference(this.identifications, this.myIdentifications);
   }
 
-  toggleShowAllValidations() {
-    if (this.showAllValidations === false &&
-        ((this.myValidations.length > 0 && this.otherValidations.length > 1) ||
-        (this.myValidations.length === 0 && this.otherValidations.length > 2))) {
-      this.showAllValidations = true  ;
-    } else if (this.showAllValidations === true) {
-      this.showAllValidations = false;
+  toggleShowAllIdentifications() {
+    if (this.showAllIdentifications === false &&
+        ((this.myIdentifications.length > 0 && this.otherIdentifications.length > 1) ||
+        (this.myIdentifications.length === 0 && this.otherIdentifications.length > 2))) {
+      this.showAllIdentifications = true  ;
+    } else if (this.showAllIdentifications === true) {
+      this.showAllIdentifications = false;
     }
   }
 
-  deleteElement(validation: OccurrenceValidationModel): void {
-    this.elementToDelete.emit(validation);
+  deleteElement(identification: IdentificationModel): void {
+    this.elementToDelete.emit(identification);
   }
 
 }

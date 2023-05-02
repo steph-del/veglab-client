@@ -1,4 +1,4 @@
-import { OccurrenceValidationModel } from './occurrence-validation.model';
+import { IdentificationModel } from './identification.model';
 import { Sye } from './sye.model';
 import { TableRowDefinition } from './table-row-definition.model';
 import { SyntheticColumn } from './synthetic-column.model';
@@ -16,7 +16,7 @@ export interface Table {
   ownedByCurrentUser: boolean;  // not included in the database ; this field is populated at GET Table (table service)
 
   isDiagnosis?:    boolean;
-  validations?:    Array<OccurrenceValidationModel>;
+  identifications?:    Array<IdentificationModel>;
 
   createdBy:       string;
   createdAt:       Date;

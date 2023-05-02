@@ -7,7 +7,7 @@ import { NotificationService } from 'src/app/_services/notification.service';
 import { PdfFileService } from 'src/app/_services/pdf-file.service';
 
 import { Table } from 'src/app/_models/table.model';
-import { OccurrenceValidationModel } from 'src/app/_models/occurrence-validation.model';
+import { IdentificationModel } from '../../_models/identification.model';
 import { PdfFile } from 'src/app/_models/pdf-file.model';
 import { TableRelatedSyntaxon } from 'src/app/_models/table-related-syntaxon';
 import { UserModel } from 'src/app/_models/user.model';
@@ -110,15 +110,15 @@ export class TableFormComponent implements OnInit, OnDestroy {
     if (this.userSubscription) { this.userSubscription.unsubscribe(); }
   }
 
-  syntaxonChange(validation: RepositoryItemModel): void {
+  syntaxonChange(rim: RepositoryItemModel): void {
     if (this.relatedSyntaxon.length > 0) {
-      this.notificationService.warn('Un tableau ne peut contenir qu\'une seule validation');
+      this.notificationService.warn('Un tableau ne peut contenir qu\'une seule identification');
     } else {
-      const alreadyExist = _.find(this.relatedSyntaxon, rs => _.isEqual(rs, validation));
+      const alreadyExist = _.find(this.relatedSyntaxon, rs => _.isEqual(rs, rim));
       if (alreadyExist) {
         this.notificationService.warn('Vous ne pouvez pas ajouter deux fois la même référence');
       } else {
-        this.relatedSyntaxon.push(validation);
+        this.relatedSyntaxon.push(rim);
       }
     }
   }
@@ -187,7 +187,7 @@ export class TableFormComponent implements OnInit, OnDestroy {
    */
   postTable() {
     const prePostedTable = _.cloneDeep(this.tableService.getCurrentTable());
-    const prePostedTableValidations: Array<OccurrenceValidationModel> = [];
+    const prePostedTableIdentifications: Array<IdentificationModel> = [];
 
     // Check user is binded to table and syes (it should !)
     if (this.currentVlUser == null) {
@@ -209,14 +209,14 @@ export class TableFormComponent implements OnInit, OnDestroy {
     // diagnosis
     if (this.tableForm.controls.isDiagnosis.value === true) { prePostedTable.isDiagnosis = true; } else { prePostedTable.isDiagnosis = false; }
 
-    // Bind table validation
+    // Bind table identification
     const rs = this.relatedSyntaxon.length > 0 ? this.relatedSyntaxon[0] : null;
     if (rs) {
-      prePostedTableValidations.push(this.getValidationModelFromRepositoryItemModel(rs));
+      prePostedTableIdentifications.push(this.getIdentificationModelFromRepositoryItemModel(rs));
     }
 
-    if (prePostedTableValidations.length > 0) {
-      prePostedTable.validations = prePostedTableValidations;
+    if (prePostedTableIdentifications.length > 0) {
+      prePostedTable.identifications = prePostedTableIdentifications;
     }
 
     if (this.pdfFileIrisToLink.length > 0) {
@@ -249,7 +249,7 @@ export class TableFormComponent implements OnInit, OnDestroy {
    */
   putTable() {
     const prePatchedTable = _.cloneDeep(this.tableService.getCurrentTable());
-    const prePatchedTableValidations: Array<OccurrenceValidationModel> = [];
+    const prePatchedTableIdentifications: Array<IdentificationModel> = [];
 
     prePatchedTable.updatedAt = new Date();
 
@@ -259,28 +259,28 @@ export class TableFormComponent implements OnInit, OnDestroy {
     // is diagnosis
     if (this.tableForm.controls.isDiagnosis.value === true) { prePatchedTable.isDiagnosis = true; } else { prePatchedTable.isDiagnosis = false; }
 
-    // Bind table validation
+    // Bind table identification
     const rs = this.relatedSyntaxon.length > 0 ? this.relatedSyntaxon[0] : null;
-    if (prePatchedTable.validations.length === 0 && rs) {
-      // table has no validation yet
-      prePatchedTableValidations.push(this.getValidationModelFromRepositoryItemModel(rs));
-      prePatchedTable.validations.push(...prePatchedTableValidations);
-    } else if (prePatchedTable.validations.length > 0 && rs) {
-      // table already has a validation => check table validation and related syntaxon values
-      const tableValidation = prePatchedTable.validations[0];
-      if (tableValidation.repository === rs.repository && tableValidation.repositoryIdNomen === rs.idNomen && tableValidation.repositoryIdTaxo === rs.idTaxo) {
+    if (prePatchedTable.identifications.length === 0 && rs) {
+      // table has no identification yet
+      prePatchedTableIdentifications.push(this.getIdentificationModelFromRepositoryItemModel(rs));
+      prePatchedTable.identifications.push(...prePatchedTableIdentifications);
+    } else if (prePatchedTable.identifications.length > 0 && rs) {
+      // table already has a identification => check table identification and related syntaxon values
+      const tableIdentification = prePatchedTable.identifications[0];
+      if (tableIdentification.repository === rs.repository && tableIdentification.repositoryIdNomen === rs.idNomen && tableIdentification.repositoryIdTaxo === rs.idTaxo) {
         // do nothing
       } else {
-        // replace existing validation
-        // we 'move' the old validation id to the new validation so API platform will update the old validation instead of create a new one
-        const existingValidationId = prePatchedTable.validations[0].id;
-        prePatchedTable.validations[0] = this.getValidationModelFromRepositoryItemModel(rs);
-        prePatchedTable.validations[0].id = existingValidationId;
+        // replace existing identification
+        // we 'move' the old identification id to the new identification so API platform will update the old identification instead of create a new one
+        const existingIdentificationId = prePatchedTable.identifications[0].id;
+        prePatchedTable.identifications[0] = this.getIdentificationModelFromRepositoryItemModel(rs);
+        prePatchedTable.identifications[0].id = existingIdentificationId;
       }
-    } else if (prePatchedTable.validations.length > 0 && !rs) {
-      // table has a validation but related syntaxon doesn't exists => delete table validation
-      // remove table validation
-      prePatchedTable.validations = [];
+    } else if (prePatchedTable.identifications.length > 0 && !rs) {
+      // table has an identification but related syntaxon doesn't exist => delete table identification
+      // remove table identification
+      prePatchedTable.identifications = [];
     }
 
     // Bind pdf files
@@ -357,9 +357,9 @@ export class TableFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getValidationModelFromRepositoryItemModel(rim: RepositoryItemModel): OccurrenceValidationModel {
+  private getIdentificationModelFromRepositoryItemModel(rim: RepositoryItemModel): IdentificationModel {
     const name = rim.name + (rim.author && rim.author !== '' ? ' ' + rim.author : '');
-    const ovm: OccurrenceValidationModel = {
+    const ovm: IdentificationModel = {
       inputName: name,
       repository: rim.repository,
       repositoryIdNomen: +rim.idNomen,
@@ -388,12 +388,12 @@ export class TableFormComponent implements OnInit, OnDestroy {
     this.tableForm.controls.biblioSource.setValue('', {emitEvent: false});
     this.tableForm.controls.isDiagnosis.setValue(table.isDiagnosis, {emitEvent: false});
 
-    if (table.validations.length > 0) {
+    if (table.identifications.length > 0) {
       this.relatedSyntaxon = [{
-        repository: table.validations[0].repository,
-        idNomen: table.validations[0].repositoryIdNomen,
-        idTaxo: table.validations[0].repositoryIdTaxo,
-        name: table.validations[0].inputName,
+        repository: table.identifications[0].repository,
+        idNomen: table.identifications[0].repositoryIdNomen,
+        idTaxo: table.identifications[0].repositoryIdTaxo,
+        name: table.identifications[0].inputName,
         author: ''
       }];
     } else {

@@ -7,7 +7,7 @@ import { MatCheckboxChange } from '@angular/material';
 import { EsOccurrenceModel } from 'src/app/_models/es-occurrence-model';
 
 import { TableService } from 'src/app/_services/table.service';
-import { ValidationService } from 'src/app/_services/validation.service';
+import { IdentificationService } from '../../_services/identification.service';
 
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
@@ -54,7 +54,7 @@ export class OccurrencesTableViewComponent implements OnInit, OnDestroy {
   }
   @Input()  isLoading: boolean;
   // Use thie `diplayedColumns` input to show/hide columns
-  @Input()  displayedColumns: Array<string> = ['custom_col_selectable', 'id', 'level', 'layer', 'custom_col_validation', 'dateObserved', 'locality', 'vlLocationAccuracy', 'custom_col_actions'];
+  @Input()  displayedColumns: Array<string> = ['custom_col_selectable', 'id', 'level', 'layer', 'custom_col_identification', 'dateObserved', 'locality', 'vlLocationAccuracy', 'custom_col_actions'];
   @Input()  selectable = false;
   @Input()  deleteOption = false;
   @Output() pageChange: EventEmitter<PageEvent> = new EventEmitter<PageEvent>();
@@ -67,7 +67,7 @@ export class OccurrencesTableViewComponent implements OnInit, OnDestroy {
   occurrencesIdsInCurrentTableSubscription: Subscription;
   _occurrencesIdsInCurrentTable: Array<number> = [];
 
-  constructor(private tableService: TableService, private validationService: ValidationService) { }
+  constructor(private tableService: TableService, private identificationService: IdentificationService) { }
 
   ngOnInit() {
     // Get table occurrences ids
@@ -87,10 +87,10 @@ export class OccurrencesTableViewComponent implements OnInit, OnDestroy {
     if (this.occurrencesIdsInCurrentTableSubscription) { this.occurrencesIdsInCurrentTableSubscription.unsubscribe(); }
   }
 
-  getValidation(occurrence: EsOccurrenceModel): string {
-    if (occurrence && occurrence.validations && occurrence.validations.length > 0) {
-      const preferedValidation = this.validationService.getPreferedValidation(occurrence);
-      return preferedValidation ? preferedValidation.validatedName : '?';
+  getIdentification(occurrence: EsOccurrenceModel): string {
+    if (occurrence && occurrence.identifications && occurrence.identifications.length > 0) {
+      const favoriteIdentification = this.identificationService.getFavoriteIdentification(occurrence);
+      return favoriteIdentification ? favoriteIdentification.validatedName : '?';
     } else {
       return '?';
     }

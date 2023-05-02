@@ -9,7 +9,7 @@ import { UserService } from 'src/app/_services/user.service';
 import { NotificationService } from 'src/app/_services/notification.service';
 import { SyeService } from 'src/app/_services/sye.service';
 import { SyntheticColumnService } from 'src/app/_services/synthetic-column.service';
-import { ValidationService } from 'src/app/_services/validation.service';
+import { IdentificationService } from '../../_services/identification.service';
 import { EcologicalTraitsService } from 'src/app/_services/ecological-traits.service';
 import { WorkspaceService } from 'src/app/_services/workspace.service';
 
@@ -767,7 +767,7 @@ export class TableComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(private tableService: TableService,
               private syeService: SyeService,
               private syntheticColumnService: SyntheticColumnService,
-              private validationService: ValidationService,
+              private identificationService: IdentificationService,
               private cdr: ChangeDetectorRef,
               public router: Router,
               private userService: UserService,

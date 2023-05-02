@@ -2,7 +2,7 @@ import { RepositoryItemModel } from 'tb-tsb-lib';
 
 export interface TableRelatedSyntaxon {
   isDiagnosis: boolean;
-  validation: RepositoryItemModel;
+  identification: RepositoryItemModel;
   pdf?: {
     file: File,
     formData: FormData,

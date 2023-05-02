@@ -1,12 +1,12 @@
 @import '../../_styles/colors.scss';
 
-.validation-inline-wrapper {
+.identification-inline-wrapper {
   h1 {
     text-align: center;
     padding-right: 10px;
     font-size: 20px;
   }
-  ul.validation-element {
+  ul.identification-element {
     list-style-type: none;
     padding: 0;
     margin: 0;
@@ -15,10 +15,10 @@
       flex-direction: row;
       flex-wrap: nowrap;
       justify-content: space-between;
-      &.my-validation {
+      &.my-identification {
         font-weight: bold;
       }
-      &.showHideOtherValidations {
+      &.showHideOtherIdentifications {
         font-style: italic;
         color: grey;
         cursor: pointer;

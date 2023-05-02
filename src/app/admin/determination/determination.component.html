@@ -6,7 +6,7 @@
       (change)="useFrequency = $event.source.checked; search();">
     Utiliser la fréquence
   </mat-slide-toggle>
-  
+
   <tb-tsb-search-box
     level="idiotaxon"
     placeholder="Ajouter une espèce au filtre"
@@ -29,12 +29,12 @@
   <div class="results" *ngIf="results && results.count > 0">
     <p>{{ results.count }} résultats</p>
     <div *ngFor="let result of results.source">
-      <!-- result.score & result.source : result.source.validations & result.sources.items -->
-      <div *ngIf="result.source.validations.length > 0">
-        [{{ result.score }}] {{ result.source.validations[0].repository }} : {{ result.source.validations[0].validatedName }}
+      <!-- result.score & result.source : result.source.identifications & result.sources.items -->
+      <div *ngIf="result.source.identifications.length > 0">
+        [{{ result.score }}] {{ result.source.identifications[0].repository }} : {{ result.source.identifications[0].validatedName }}
       </div>
 
-      <!--<div *ngIf="result.source.validations.length === 0">
+      <!--<div *ngIf="result.source.identifications.length === 0">
         Aucune identification pour cet élément
       </div>-->
     </div>

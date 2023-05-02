@@ -1,0 +1,21 @@
+<div class="table-identifications-preview-wrapper">
+  <table>
+    <thead>
+      <tr class="row-header">
+        <th class="element">Élement</th>
+        <th class="id">id</th>
+        <th class="identification">Identification</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="row_" *ngFor="let identification of identifications">
+        <td class="element"
+            [class._table]="identification.element === 'table'"
+            [class._sye]="identification.element === 'sye'"
+            [class._releve]="identification.element === 'releve'">{{ identification.label }}</td>
+        <td class="id">{{ identification.value.id }}</td>
+        <td class="identification" title="{{ getIdentificationLabel(identification.element, identification.value.identifications) }}">{{ getIdentificationLabel(identification.element, identification.value.identifications) }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

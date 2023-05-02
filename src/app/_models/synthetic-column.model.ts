@@ -1,4 +1,4 @@
-import { OccurrenceValidationModel } from './occurrence-validation.model';
+import { IdentificationModel } from './identification.model';
 import { SyntheticItem } from './synthetic-item.model';
 import { Sye } from './sye.model';
 import { Biblio } from './biblio.model';
@@ -15,7 +15,7 @@ export interface SyntheticColumn {
   owner:            VlUser;
 
   sye:             Sye;
-  validations:     Array<OccurrenceValidationModel>;
+  identifications:     Array<IdentificationModel>;
   items:           Array<SyntheticItem>;
   vlBiblioSource?: Biblio;
   vlWorkspace:     string;

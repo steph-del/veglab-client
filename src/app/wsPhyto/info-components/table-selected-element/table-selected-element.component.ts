@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { TableService } from '../../../_services/table.service';
-import { ValidationService } from 'src/app/_services/validation.service';
+import { IdentificationService } from '../../../_services/identification.service';
 
 import { TableRowDefinition } from 'src/app/_models/table-row-definition.model';
 import { OccurrenceModel } from 'src/app/_models/occurrence.model';
@@ -38,11 +38,11 @@ export class TableSelectedElementComponent implements OnInit, OnDestroy {
   syeElement: Sye = null;
 
   constructor(private tableService: TableService,
-              private validationService: ValidationService) { }
+              private identificationService: IdentificationService) { }
 
   ngOnInit() {
     this.tableSelectionSubscriber = this.tableService.tableSelectionElement.subscribe(selectedElement => {
-      if (selectedElement === null) { return; } // null element may be send
+      if (selectedElement === null) { return; } // null element may be sent
       this.elementType = null;
       this.elementTypeDisplay = null;
       this.rowElements = [];
@@ -163,14 +163,14 @@ export class TableSelectedElementComponent implements OnInit, OnDestroy {
     }
   }
 
-  getOccurrenceValidation(occurrence: OccurrenceModel): string {
-    const preferedValidation = this.validationService.getPreferedValidation(occurrence);
-    return preferedValidation && preferedValidation.validatedName ? preferedValidation.validatedName : 'Relevé non identifié';
+  getOccurrenceIdentification(occurrence: OccurrenceModel): string {
+    const favoriteIdentification = this.identificationService.getFavoriteIdentification(occurrence);
+    return favoriteIdentification && favoriteIdentification.validatedName ? favoriteIdentification.validatedName : 'Relevé non identifié';
   }
 
-  getSyeValidation(sye: Sye): string {
-    const preferedValidation = this.validationService.getPreferedValidation(sye);
-    return preferedValidation && preferedValidation.validatedName ? preferedValidation.validatedName : 'Sye non identifié';
+  getSyeIdentification(sye: Sye): string {
+    const favoriteIdentification = this.identificationService.getFavoriteIdentification(sye);
+    return favoriteIdentification && favoriteIdentification.validatedName ? favoriteIdentification.validatedName : 'Sye non identifié';
   }
 
 }

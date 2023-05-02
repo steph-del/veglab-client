@@ -22,7 +22,7 @@
         <mat-list class="row-item parent">
           <mat-list-item>
             <p mat-line><b>{{ releve.level | level }} n° {{ releve.id }}</b></p>
-            <p mat-line><b>{{ getOccurrenceValidation(releve) }}</b></p>
+            <p mat-line><b>{{ getOccurrenceIdentification(releve) }}</b></p>
             <p mat-line>Strate : {{ releve.layer ? releve.layer : '-' }}</p>
             <p mat-line>Auteur(s) : {{ getOccurrenceVlObservers(releve) }}</p>
             <p mat-line *ngIf="!releve.dateObservedPrecision">Date : {{ releve.dateObserved | momentLocalDate }}</p>
@@ -34,7 +34,7 @@
           <mat-list *ngFor="let child of releve.children" class="row-item child">
             <mat-list-item>
                 <p mat-line><b>{{ child.level | level }} n° {{ child.id }}</b></p>
-              <p mat-line><b>{{ getOccurrenceValidation(releve) }}</b></p>
+              <p mat-line><b>{{ getOccurrenceIdentification(releve) }}</b></p>
               <p mat-line>Strate : {{ child.layer }}</p>
               <p mat-line>Auteur(s) : {{ getOccurrenceVlObservers(child) }}</p>
               <p mat-line *ngIf="!child.dateObservedPrecision">Date : {{ child.dateObserved | momentLocalDate }}</p>
@@ -54,7 +54,7 @@
       <mat-list class="row-item parent">
         <mat-list-item>
           <p mat-line><b>Colonne synthétique n° {{ syeElement.id }}</b></p>
-          <p mat-line><b>{{ getSyeValidation(syeElement) }}</b></p>
+          <p mat-line><b>{{ getSyeIdentification(syeElement) }}</b></p>
           <p mat-line *ngIf="syeElement.syntheticSye">Cette colonne synthétique ne contient aucun relevé</p>
           <p mat-line *ngIf="!syeElement.syntheticSye">Cette colonne synthétique contient {{ syeElement.occurrencesCount }} {{ syeElement.occurrencesCount > 1 ? 'relevés' : 'relevé' }}</p>
         </mat-list-item>
@@ -65,7 +65,7 @@
         <mat-list class="row-item parent">
           <mat-list-item>
             <p mat-line><b>{{ releve.level | level }} n° {{ releve.id }}</b></p>
-            <p mat-line><b>{{ getOccurrenceValidation(releve) }}</b></p>
+            <p mat-line><b>{{ getOccurrenceIdentification(releve) }}</b></p>
             <p mat-line>Strate : {{ releve.layer ? releve.layer : '-' }}</p>
             <p mat-line>Auteur(s) : {{ getOccurrenceVlObservers(releve) }}</p>
             <p mat-line *ngIf="!releve.dateObservedPrecision">Date : {{ releve.dateObserved | momentLocalDate }}</p>
@@ -77,7 +77,7 @@
           <mat-list *ngFor="let child of releve.children" class="row-item child">
             <mat-list-item>
                 <p mat-line><b>{{ child.level | level }} n° {{ child.id }}</b></p>
-              <p mat-line><b>{{ getOccurrenceValidation(releve) }}</b></p>
+              <p mat-line><b>{{ getOccurrenceIdentification(releve) }}</b></p>
               <p mat-line>Strate : {{ child.layer }}</p>
               <p mat-line>Auteur(s) : {{ getOccurrenceVlObservers(child) }}</p>
               <p mat-line *ngIf="!child.dateObservedPrecision">Date : {{ child.dateObserved | momentLocalDate }}</p>

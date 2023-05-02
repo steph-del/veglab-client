@@ -14,7 +14,7 @@ import { NotificationService } from './notification.service';
 import { ErrorService } from './error.service';
 import { SyntheticColumnService } from './synthetic-column.service';
 import { WorkspaceService } from './workspace.service';
-import { ValidationService } from './validation.service';
+import { IdentificationService } from './identification.service';
 
 import { TableViewRowName } from '../_models/table-view-row-name.model';
 import { TableRowDefinition, TableRow } from '../_models/table-row-definition.model';
@@ -22,7 +22,7 @@ import { SyntheticItem } from '../_models/synthetic-item.model';
 import { SyntheticColumn } from '../_models/synthetic-column.model';
 import { Sye } from '../_models/sye.model';
 import { PdfFileJsonLd } from '../_models/pdf-file.model';
-import { OccurrenceValidationModel } from '../_models/occurrence-validation.model';
+import { IdentificationModel } from '../_models/identification.model';
 import { EsTableResultModel } from '../_models/es-table-result.model';
 import { EsTableModel } from '../_models/es-table.model';
 import { GroupPositions } from '../_models/table/group-positions.model';
@@ -64,7 +64,7 @@ export class TableService {
     private syntheticColumnService: SyntheticColumnService,
     private http: HttpClient,
     private wsService: WorkspaceService,
-    private validationService: ValidationService) { }
+    private identificationService: IdentificationService) { }
 
   // --------------
   // TABLE I/O (DB)
@@ -431,20 +431,20 @@ export class TableService {
   }
 
   // @Todo MOVE funtion into table form component
-  public getTableValidationFromRelatedSyntaxonFormData(table: Table, relatedSyntaxon: TableRelatedSyntaxon): OccurrenceValidationModel {
-    const name: string = relatedSyntaxon.validation.name + (relatedSyntaxon.validation.author ? ' ' + relatedSyntaxon.validation.author : '');
-    const tableValidation: OccurrenceValidationModel = {
+  public getTableIdentificationFromRelatedSyntaxonFormData(table: Table, relatedSyntaxon: TableRelatedSyntaxon): IdentificationModel {
+    const name: string = relatedSyntaxon.identification.name + (relatedSyntaxon.identification.author ? ' ' + relatedSyntaxon.identification.author : '');
+    const tableIdentification: IdentificationModel = {
       inputName: name,
-      repository: relatedSyntaxon.validation.repository,
-      repositoryIdNomen: +relatedSyntaxon.validation.idNomen,
-      repositoryIdTaxo: relatedSyntaxon.validation.idTaxo.toString(),
+      repository: relatedSyntaxon.identification.repository,
+      repositoryIdNomen: +relatedSyntaxon.identification.idNomen,
+      repositoryIdTaxo: relatedSyntaxon.identification.idTaxo.toString(),
       validName: name,
       validatedAt: new Date(),
       validatedBy: table.createdBy,
       owner: table.owner,
       validatedName: name
     };
-    return tableValidation;
+    return tableIdentification;
   }
 
   // ---------------
@@ -514,7 +514,7 @@ export class TableService {
       ownedByCurrentUser: currentUser !== null,     // a new table is owned by its creator
 
       isDiagnosis: false,
-      validations: [],
+      identifications: [],
 
       createdBy: currentUser ? currentUser.id : null,
       createdAt: new Date(Date.now()),
@@ -609,9 +609,9 @@ export class TableService {
 
   // ---------------
   // DUPLICATE TABLE
-  // To duplicate a table, we remove all id properties (from Table, Syes, Synthetic columns, Row def, Validation and Pdf files)
+  // To duplicate a table, we remove all id properties (from Table, Syes, Synthetic columns, Row def, Identifications and Pdf files)
   // and set user as currentUser for table, sye and synthetic columns
-  // Note : Validations are not modified
+  // Note : Identifications are not modified
   // ---------------
   duplicateTable(table: Table): Table {
     const cu = this.userService.currentUser.getValue();
@@ -649,33 +649,33 @@ export class TableService {
       }
     }
 
-    // 4. remove validations
-    // table validations
-    if (tableToDuplicate.validations !== null && tableToDuplicate.validations !== undefined) {
-      for (let k = 0; k < tableToDuplicate.validations.length; k++) {
-        tableToDuplicate.validations[k] = this.validationService.removeIds(tableToDuplicate.validations[k]);
+    // 4. remove identifications
+    // table identifications
+    if (tableToDuplicate.identifications !== null && tableToDuplicate.identifications !== undefined) {
+      for (let k = 0; k < tableToDuplicate.identifications.length; k++) {
+        tableToDuplicate.identifications[k] = this.identificationService.removeIds(tableToDuplicate.identifications[k]);
       }
     }
-    // sye validations
+    // sye identifications
     for (let l = 0; l < tableToDuplicate.sye.length; l++) {
       const sye = tableToDuplicate.sye[l];
-      if (sye.validations !== null && sye.validations !== undefined) {
-        for (let m = 0; m < sye.validations.length; m++) {
-          sye.validations[m] = this.validationService.removeIds(sye.validations[m]);
+      if (sye.identifications !== null && sye.identifications !== undefined) {
+        for (let m = 0; m < sye.identifications.length; m++) {
+          sye.identifications[m] = this.identificationService.removeIds(sye.identifications[m]);
         }
       }
-      // sye synthetic column validations
+      // sye synthetic column identifications
       if (sye.syntheticColumn !== null && sye.syntheticColumn !== undefined) {
-        for (let l2 = 0; l2 < sye.syntheticColumn.validations.length; l2++) {
-          sye.syntheticColumn.validations[l2] = this.validationService.removeIds(sye.syntheticColumn.validations[l2]);
+        for (let l2 = 0; l2 < sye.syntheticColumn.identifications.length; l2++) {
+          sye.syntheticColumn.identifications[l2] = this.identificationService.removeIds(sye.syntheticColumn.identifications[l2]);
         }
       }
     }
-    // table synthetic column validations
+    // table synthetic column identifications
     if (tableToDuplicate.syntheticColumn !== null && tableToDuplicate.syntheticColumn !== undefined) {
-      if (tableToDuplicate.syntheticColumn.validations !== null && tableToDuplicate.syntheticColumn.validations !== undefined) {
-        for (let l3 = 0; l3 < tableToDuplicate.syntheticColumn.validations.length; l3++) {
-          tableToDuplicate.syntheticColumn.validations[l3] = this.validationService.removeIds(tableToDuplicate.syntheticColumn.validations[l3]);
+      if (tableToDuplicate.syntheticColumn.identifications !== null && tableToDuplicate.syntheticColumn.identifications !== undefined) {
+        for (let l3 = 0; l3 < tableToDuplicate.syntheticColumn.identifications.length; l3++) {
+          tableToDuplicate.syntheticColumn.identifications[l3] = this.identificationService.removeIds(tableToDuplicate.syntheticColumn.identifications[l3]);
         }
       }
     }
@@ -811,31 +811,31 @@ export class TableService {
       if (occ.level !== 'microcenosis') {
         for (const childOcc of occ.children) {
           const occLayer = childOcc.layer;
-          if (childOcc.validations.length === 0) {
-            // @Todo it should never append because an 'idiotaxon' level occurrence must have at less one validation !
-          } else if (childOcc.validations.length === 1) {
+          if (childOcc.identifications.length === 0) {
+            // @Todo it should never append because an 'idiotaxon' level occurrence must have at less one identification !
+          } else if (childOcc.identifications.length === 1) {
             let name: string;
-            name = childOcc.validations[0].repository === 'otherunknown' ? childOcc.validations[0].inputName : childOcc.validations[0].validatedName;
+            name = childOcc.identifications[0].repository === 'otherunknown' ? childOcc.identifications[0].inputName : childOcc.identifications[0].validatedName;
             const newName = {
               group: {id: 0, label: 'default'}, // Add a default group
               // group: {id: group.id, label: group.label}, // TEST
               layer: occLayer,
-              repository: childOcc.validations[0].repository,
-              repositoryIdNomen: childOcc.validations[0].repositoryIdNomen,
-              repositoryIdTaxo: childOcc.validations[0].repositoryIdTaxo,
+              repository: childOcc.identifications[0].repository,
+              repositoryIdNomen: childOcc.identifications[0].repositoryIdNomen,
+              repositoryIdTaxo: childOcc.identifications[0].repositoryIdTaxo,
               name
             };
             names.push(newName);
-          } else if (childOcc.validations.length > 1) {
-            const preferedValidation = this.validationService.getPreferedValidation(childOcc);
+          } else if (childOcc.identifications.length > 1) {
+            const favoriteIdentification = this.identificationService.getFavoriteIdentification(childOcc);
             const newName = {
               group: {id: 0, label: 'default'}, // Add a default group
               // group: {id: group.id, label: group.label}, // TEST
               layer: occLayer,
-              repository: preferedValidation.repository,
-              repositoryIdNomen: preferedValidation.repositoryIdNomen,
-              repositoryIdTaxo: preferedValidation.repositoryIdTaxo,
-              name: preferedValidation.repository === 'otherunknown' ? preferedValidation.inputName : preferedValidation.validatedName
+              repository: favoriteIdentification.repository,
+              repositoryIdNomen: favoriteIdentification.repositoryIdNomen,
+              repositoryIdTaxo: favoriteIdentification.repositoryIdTaxo,
+              name: favoriteIdentification.repository === 'otherunknown' ? favoriteIdentification.inputName : favoriteIdentification.validatedName
             };
             names.push(newName);
           }
@@ -844,30 +844,30 @@ export class TableService {
         for (const childOcc of occ.children) {
           for (const grandChild of childOcc.children) {
             const occLayer = grandChild.layer;
-            if (grandChild.validations.length === 0) {
-              // @Todo it should never append because an 'idiotaxon' level occurrence must have at less one validation !
-            } else if (grandChild.validations.length === 1) {
+            if (grandChild.identifications.length === 0) {
+              // @Todo it should never append because an 'idiotaxon' level occurrence must have at less one identification !
+            } else if (grandChild.identifications.length === 1) {
               let name: string;
-              name = grandChild.validations[0].repository === 'otherunknown' ? grandChild.validations[0].inputName : grandChild.validations[0].validatedName;
+              name = grandChild.identifications[0].repository === 'otherunknown' ? grandChild.identifications[0].inputName : grandChild.identifications[0].validatedName;
               const newName = {
                 group: {id: 0, label: 'default'}, // Add a default group
                 layer: occLayer,
-                repository: grandChild.validations[0].repository,
-                repositoryIdNomen: grandChild.validations[0].repositoryIdNomen,
-                repositoryIdTaxo: grandChild.validations[0].repositoryIdTaxo,
+                repository: grandChild.identifications[0].repository,
+                repositoryIdNomen: grandChild.identifications[0].repositoryIdNomen,
+                repositoryIdTaxo: grandChild.identifications[0].repositoryIdTaxo,
                 name
               };
               names.push(newName);
-            } else if (grandChild.validations.length > 1) {
-              const preferedValidation = this.validationService.getPreferedValidation(grandChild);
+            } else if (grandChild.identifications.length > 1) {
+              const preferedfavoriteIdentification = this.identificationService.getFavoriteIdentification(grandChild);
               const newName = {
                 group: {id: 0, label: 'default'}, // Add a default group
                 // group: {id: group.id, label: group.label}, // TEST
                 layer: occLayer,
-                repository: preferedValidation.repository,
-                repositoryIdNomen: preferedValidation.repositoryIdNomen,
-                repositoryIdTaxo: preferedValidation.repositoryIdTaxo,
-                name: preferedValidation.repository === 'otherunknown' ? preferedValidation.inputName : preferedValidation.validatedName
+                repository: preferedfavoriteIdentification.repository,
+                repositoryIdNomen: preferedfavoriteIdentification.repositoryIdNomen,
+                repositoryIdTaxo: preferedfavoriteIdentification.repositoryIdTaxo,
+                name: preferedfavoriteIdentification.repository === 'otherunknown' ? preferedfavoriteIdentification.inputName : preferedfavoriteIdentification.validatedName
               };
               names.push(newName);
             }
@@ -1016,17 +1016,17 @@ export class TableService {
 
               const childOcc = this.getChildOccurrences(occ);
               for (const cOcc of childOcc) {
-                const cOccValidation = this.validationService.getPreferedValidation(cOcc);
+                const cOccIdentification = this.identificationService.getFavoriteIdentification(cOcc);
                 // @Todo check that there is only one child occurrence that match the if statment
                 //       (An occurrence can't contains several identical child occurrences)
-                if (cOccValidation.repositoryIdTaxo) {
-                  if (cOcc.layer === row.layer && cOccValidation.repositoryIdTaxo === row.repositoryIdTaxo) {
+                if (cOccIdentification.repositoryIdTaxo) {
+                  if (cOcc.layer === row.layer && cOccIdentification.repositoryIdTaxo === row.repositoryIdTaxo) {
                     minRowCoef = minRowCoef === '?' ? cOcc.coef : this.isLowerCoef(minRowCoef, cOcc.coef) ? cOcc.coef : minRowCoef;
                     maxRowCoef = maxRowCoef === '?' ? cOcc.coef : this.isUpperCoef(maxRowCoef, cOcc.coef) ? cOcc.coef : maxRowCoef;
                     item.value = cOcc.coef;
                   }
                 } else {
-                  // Validation could not have a repositoryIdTaxo value if the repository is otherunknown
+                  // Identification could not have a repositoryIdTaxo value if the repository is otherunknown
                 }
 
               }
@@ -2143,7 +2143,7 @@ export class TableService {
       };
 
       columnPositions.id = sye.syePosition;
-      columnPositions.label = 'sye';  // @Todo bind sye validation[x] name
+      columnPositions.label = 'sye';  // @Todo bind sye identification[x] name
 
       if (columnPositions.onlyShowSyntheticColumn) {
         columnPositions.startColumnPosition = i;
@@ -2385,7 +2385,7 @@ export class TableService {
       owner: vlUser,
       userPseudo: currentUser ? this.userService.getUserFullName() : null,
       sye: null,
-      validations: [],
+      identifications: [],
       items: [],
       vlWorkspace: this.wsService.currentWS.getValue()
     };
@@ -2427,17 +2427,17 @@ export class TableService {
         // @Todo manage no coef error
         for (const child of childrenOccurrences) {
           inputCoef = child.coef;
-          const childValidation = this.validationService.getPreferedValidation(child);
+          const childIdentification = this.identificationService.getFavoriteIdentification(child);
           // if (occCount !== null) {console.log('inputCoef', inputCoef);}
           if (minCoef === '?' && maxCoef === '?') {
-            if (child.coef && child.coef !== '' && childValidation && childValidation.repositoryIdTaxo === name.repositoryIdTaxo && child.layer === name.layer) {
+            if (child.coef && child.coef !== '' && childIdentification && childIdentification.repositoryIdTaxo === name.repositoryIdTaxo && child.layer === name.layer) {
               minCoef = child.coef;
               maxCoef = child.coef;
             }
           }
-          if (childValidation && childValidation.repositoryIdTaxo === name.repositoryIdTaxo && child.layer === name.layer) {
+          if (childIdentification && childIdentification.repositoryIdTaxo === name.repositoryIdTaxo && child.layer === name.layer) {
             occurrencesCount++;
-            displayName = this.validationService.getSingleName(child);
+            displayName = this.identificationService.getSingleName(child);
             minCoef = this.isLowerCoef(minCoef, child.coef) ? child.coef : minCoef;
             maxCoef = this.isUpperCoef(maxCoef, child.coef) ? child.coef : maxCoef;
           }
@@ -3060,8 +3060,8 @@ export class TableService {
         const colItems: Array<string> = [];
         for (const rd of table.rowsDefinition) {
           const occurrence = _.find(occurrences, occ => {
-            const occValidation = this.validationService.getPreferedValidation(occ);
-            if (occ.layer === rd.layer && occValidation.repository === rd.repository && occValidation.repositoryIdNomen === rd.repositoryIdNomen) {
+            const occIdentification = this.identificationService.getFavoriteIdentification(occ);
+            if (occ.layer === rd.layer && occIdentification.repository === rd.repository && occIdentification.repositoryIdNomen === rd.repositoryIdNomen) {
               return true;
             }
           });

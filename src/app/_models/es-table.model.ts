@@ -1,4 +1,4 @@
-import { OccurrenceValidationModel } from './occurrence-validation.model';
+import { IdentificationModel } from './identification.model';
 import { VlUser } from './vl-user.model';
 
 export interface EsTableModel {
@@ -19,11 +19,11 @@ export interface EsTableModel {
   occurrencesCount:       number;
   rowsCount:              number;
   syeCount:               number;
-  tableValidation:        string;
-  syeValidations:         string;
-  validations?:           Array<OccurrenceValidationModel>;
-  occurrencesValidations: string;
-  rowsValidations:        string;
+  tableIdentification:    string;
+  syeIdentifications:         string;
+  identifications?:           Array<IdentificationModel>;
+  occurrencesIdentifications: string;
+  rowsIdentifications:        string;
   tableName:              string;
   occurrencesNames:       string;
   preview:                Array<string>;

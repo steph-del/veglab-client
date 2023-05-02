@@ -46,7 +46,7 @@ export class TablesTableViewComponent implements OnInit, OnDestroy {
   moduleWidth: number;
 
   simpleColumns = ['id', 'title', 'dateCreated', 'custom_col_actions'];
-  fullColumns = ['id', 'title', 'custom_col_validation', 'dateCreated', 'custom_col_actions'];
+  fullColumns = ['id', 'title', 'custom_col_identification', 'dateCreated', 'custom_col_actions'];
 
   constructor(private tableService: TableService) { }
 

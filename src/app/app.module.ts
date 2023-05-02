@@ -95,7 +95,7 @@ import { ObserverSearchComponent } from './shared/observer-search/observer-searc
 import { BiblioSearchComponent } from './shared/biblio-search/biblio-search.component';
 import { OccurrencesInlineComponent } from './shared/occurrences-inline/occurrences-inline.component';
 import { TableOverviewMapComponent } from './shared/map/table-overview-map/table-overview-map/table-overview-map.component';
-import { ValidationComponent } from './wsPhyto/info-components/validation/validation/validation.component';
+import { InfoIdentificationComponent } from './wsPhyto/info-components/identification/identification/info-identification.component';
 import { TableSelectedElementComponent } from './wsPhyto/info-components/table-selected-element/table-selected-element.component';
 import { IdiotaxonImagesComponent } from './shared/idiotaxon-images/idiotaxon-images.component';
 import { MomentStringInputDatePipe } from './_pipes/moment-string-input-date.pipe';
@@ -107,13 +107,13 @@ import { OccurrencesTableViewComponent } from './shared/occurrences-table-view/o
 import { TablesTableViewComponent } from './shared/tables-table-view/tables-table-view.component';
 import { TablePreviewComponent } from './shared/table-overview/table-preview/table-preview.component';
 import { TableBasicInfosPreviewComponent } from './shared/table-overview/table-basic-infos-preview/table-basic-infos-preview.component';
-import { TableValidationsPreviewComponent } from './shared/table-overview/table-validations-preview/table-validations-preview.component';
+import { TableIdentificationsPreviewComponent } from './shared/table-overview/table-identifications-preview/table-identifications-preview.component';
 import { TableRenderPreviewComponent } from './shared/table-overview/table-render-preview/table-render-preview.component';
 import { OccurrenceBasicInfosPreviewComponent } from './shared/occurrence-overview/occurrence-basic-infos-preview/occurrence-basic-infos-preview.component';
 import { OccurrencePreviewComponent } from './shared/occurrence-overview/occurrence-preview/occurrence-preview.component';
 import { OccurrenceRenderPreviewComponent } from './shared/occurrence-overview/occurrence-render-preview/occurrence-render-preview.component';
 import { SimpleGeojsonMapComponent } from './shared/map/simple-geojson-map/simple-geojson-map.component';
-import { OccurrenceValidationsPreviewComponent } from './shared/occurrence-overview/occurrence-validations-preview/occurrence-validations-preview.component';
+import { OccurrenceIdentificationsPreviewComponent } from './shared/occurrence-overview/occurrence-identifications-preview/occurrence-identifications-preview.component';
 import { OccurrenceMetadataPreviewComponent } from './shared/occurrence-overview/occurrence-metadata-preview/occurrence-metadata-preview.component';
 import { TbUserLabelComponent } from './shared/tb-user-label/tb-user-label.component';
 import { SimpleNotificationsModule } from 'angular2-notifications';
@@ -121,7 +121,7 @@ import { SophyImportAndSplitCsvComponent } from './admin/sophy/sophy-import-and-
 import { TableSimpleComponent } from './shared/table-simple/table-simple.component';
 import { WsLabelPipe } from './_pipes/ws-label.pipe';
 import { SophyImportComponent } from './admin/sophy/sophy-import/sophy-import.component';
-import { DataSourcesPageComponent } from './admin/dataSources/data-sources-page.component';
+import { DataSourcesPageComponent } from './admin/dataSources/data-sources-page.component';
 import { IdentificationComponent } from './shared/identification/identification.component';
 import { IdentificationInlineComponent } from './shared/identification-inline/identification-inline.component';
 import { CreateUserFormComponent } from './user/create-user-form/create-user-form.component';
@@ -158,13 +158,13 @@ export class SentryErrorHandler implements ErrorHandler {
     ForestHomePageComponent, ForestAppPageComponent, // WS forest
     AdminHomePageComponent, AdminMetadataPageComponent, AdminCreateMetadataComponent, AdminEditMetadataComponent,
     AdminRemoveMetadataComponent, AdminTestMetadataComponent, MetadataFilterComponent, CitySearchComponent, ObserverSearchComponent,
-    BiblioSearchComponent, OccurrencesInlineComponent, PdfViewerComponent, TableOverviewMapComponent, ValidationComponent,
+    BiblioSearchComponent, OccurrencesInlineComponent, PdfViewerComponent, TableOverviewMapComponent, InfoIdentificationComponent,
     TableSelectedElementComponent, IdiotaxonImagesComponent, MomentStringInputDatePipe, EcologicalDiagramComponent,
     BaseflorDiagramComponent, BaseflorDiagramSelectorComponent, OccurrencesTableViewComponent, TablesTableViewComponent,
-    TablePreviewComponent, TableBasicInfosPreviewComponent, TableValidationsPreviewComponent, TableRenderPreviewComponent,
+    TablePreviewComponent, TableBasicInfosPreviewComponent, TableIdentificationsPreviewComponent, TableRenderPreviewComponent,
     OccurrenceBasicInfosPreviewComponent, OccurrencePreviewComponent, OccurrenceRenderPreviewComponent, SimpleGeojsonMapComponent,
-    OccurrenceValidationsPreviewComponent, OccurrenceMetadataPreviewComponent, TbUserLabelComponent, SophyImportAndSplitCsvComponent, CreateUserFormComponent,
-    TableSimpleComponent, WsLabelPipe, SophyImportComponent,  DataSourcesPageComponent, IdentificationComponent, IdentificationInlineComponent, AdminCreateUserComponent, DeterminationComponent// admin
+    OccurrenceIdentificationsPreviewComponent, OccurrenceMetadataPreviewComponent, TbUserLabelComponent, SophyImportAndSplitCsvComponent, CreateUserFormComponent,
+    TableSimpleComponent, WsLabelPipe, SophyImportComponent, DataSourcesPageComponent, IdentificationComponent, IdentificationInlineComponent, AdminCreateUserComponent, DeterminationComponent// admin
   ],
   entryComponents: [
     OccurrenceSearchMetadataModal1Component

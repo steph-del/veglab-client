@@ -32,7 +32,7 @@ export class SophyImportComponent implements OnInit {
     stepAuthorsDates: 'complete' | 'warning' | 'error' | 'pending',
     stepMetadata: 'complete' | 'warning' | 'error' | 'pending',
     stepBiblio: 'complete' | 'warning' | 'error' | 'pending',
-    stepValidation: 'complete' | 'warning' | 'error' | 'pending',
+    stepIdentification: 'complete' | 'warning' | 'error' | 'pending',
     isSaving: boolean,
     saveFinish: boolean,
     saveError: boolean
@@ -42,7 +42,7 @@ export class SophyImportComponent implements OnInit {
   fileToProcess: FileData = null;
   fileToProcessIndex = 0;
 
-  displayedColumns = ['filename', 'stepFile', 'stepNames', 'stepPlaces', 'stepAuthorsDates', 'stepMetadata', 'stepBiblio', 'stepValidation', 'saving'];
+  displayedColumns = ['filename', 'stepFile', 'stepNames', 'stepPlaces', 'stepAuthorsDates', 'stepMetadata', 'stepBiblio', 'stepIdentification', 'saving'];
 
   constructor(private tableService: TableService, private metadataService: MetadataService) { }
 
@@ -62,7 +62,7 @@ export class SophyImportComponent implements OnInit {
         stepAuthorsDates: null,
         stepMetadata: null,
         stepBiblio: null,
-        stepValidation: null,
+        stepIdentification: null,
         isSaving: false,
         saveFinish: false,
         saveError: false
@@ -103,7 +103,7 @@ export class SophyImportComponent implements OnInit {
         process.stepAuthorsDates === 'complete' &&
         process.stepMetadata === 'complete' &&
         process.stepBiblio === 'complete' &&
-        (process.stepValidation === 'complete' || process.stepValidation === 'warning')) {
+        (process.stepIdentification === 'complete' || process.stepIdentification === 'warning')) {
           return true;
         }
   }
@@ -214,11 +214,11 @@ export class SophyImportComponent implements OnInit {
   }
 
   /**
-   * VALIDATION
+   * IDENTIFICATION
    */
-  currentFileProcessingStepValidationChanges(value: 'complete' | 'warning' | 'error' | 'pending'): void {
-    console.log('STEP VALIDATION', value);
-    this.fq[this.fileToProcessIndex].stepValidation = value;
+  currentFileProcessingStepIdentificationChanges(value: 'complete' | 'warning' | 'error' | 'pending'): void {
+    console.log('STEP IDENTIFICATION', value);
+    this.fq[this.fileToProcessIndex].stepIdentification = value;
     this.checkStepsProgression();
   }
 

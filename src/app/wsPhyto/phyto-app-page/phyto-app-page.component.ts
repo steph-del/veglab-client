@@ -34,7 +34,7 @@ export class PhytoAppPageComponent implements OnInit, OnDestroy {
   chartAreaActive = false;
   mapAreaActive = true;
   pdfAreaActive = false;
-  validationAreaActive = false;
+  identificationAreaActive = false;
   panelsSizeChanged = new EventEmitter<boolean>();
   actionPanelOpenCloseSubscription: Subscription;
   actionPanelCloseButtonVisibleSubscription: Subscription;
@@ -160,8 +160,8 @@ export class PhytoAppPageComponent implements OnInit, OnDestroy {
     this.panelsSizeOrPositionHaveBeenUpdated();
   }
 
-  toggleValidation(): void {
-    this.validationAreaActive = !this.validationAreaActive;
+  toggleIdentification(): void {
+    this.identificationAreaActive = !this.identificationAreaActive;
     this.panelsSizeOrPositionHaveBeenUpdated();
   }
 
@@ -188,7 +188,7 @@ export class PhytoAppPageComponent implements OnInit, OnDestroy {
    * Returns true if no one sub-info panel (ie info, map, chart, pdf, ...) is active
    */
   noActiveArea(): boolean {
-    return !this.infoAreaActive && !this.idioPhotoAreaActive && !this.chartAreaActive && !this.mapAreaActive && !this.pdfAreaActive && !this.validationAreaActive;
+    return !this.infoAreaActive && !this.idioPhotoAreaActive && !this.chartAreaActive && !this.mapAreaActive && !this.pdfAreaActive && !this.identificationAreaActive;
   }
 
 }

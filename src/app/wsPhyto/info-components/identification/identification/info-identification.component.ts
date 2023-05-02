@@ -3,23 +3,23 @@ import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 
 import { TableService } from 'src/app/_services/table.service';
-import { ValidationService } from 'src/app/_services/validation.service';
+import { IdentificationService } from '../../../../_services/identification.service';
 
 import { Table } from 'src/app/_models/table.model';
 import { Sye } from 'src/app/_models/sye.model';
 import { OccurrenceModel } from 'src/app/_models/occurrence.model';
 
 @Component({
-  selector: 'vl-phyto-validation',
-  templateUrl: './validation.component.html',
-  styleUrls: ['./validation.component.scss']
+  selector: 'vl-phyto-info-identification',
+  templateUrl: './info-identification.component.html',
+  styleUrls: ['./info-identification.component.scss']
 })
-export class ValidationComponent implements OnInit, OnDestroy {
+export class InfoIdentificationComponent implements OnInit, OnDestroy {
   tableSubscriber: Subscription;
   tableDataviewSubscriber: Subscription;
   table: Table;
 
-  constructor(private tableService: TableService, private validationService: ValidationService) { }
+  constructor(private tableService: TableService, private identificationService: IdentificationService) { }
 
   ngOnInit() {
     // Check current table at startup
@@ -72,19 +72,19 @@ export class ValidationComponent implements OnInit, OnDestroy {
     return sye.occurrences.length;
   }
 
-  getTableValidation(): string {
-    const preferedValidation = this.validationService.getPreferedValidation(this.table);
-    return preferedValidation && preferedValidation.validName ? preferedValidation.validatedName : 'non identifié';
+  getTableIdentification(): string {
+    const favoriteIdentification = this.identificationService.getFavoriteIdentification(this.table);
+    return favoriteIdentification && favoriteIdentification.validName ? favoriteIdentification.validatedName : 'non identifié';
   }
 
-  getSyeValidation(sye: Sye): string {
-    const preferedValidation = this.validationService.getPreferedValidation(sye);
-    return preferedValidation && preferedValidation.validName ? preferedValidation.validatedName : 'non identifié';
+  getSyeIdentification(sye: Sye): string {
+    const favoriteIdentification = this.identificationService.getFavoriteIdentification(sye);
+    return favoriteIdentification && favoriteIdentification.validName ? favoriteIdentification.validatedName : 'non identifié';
   }
 
-  getReleveValidation(releve: OccurrenceModel): string {
-    const preferedValidation = this.validationService.getPreferedValidation(releve);
-    return preferedValidation && preferedValidation.validName ? preferedValidation.validatedName : 'non identifié';
+  getReleveIdentification(releve: OccurrenceModel): string {
+    const favoriteIdentification = this.identificationService.getFavoriteIdentification(releve);
+    return favoriteIdentification && favoriteIdentification.validName ? favoriteIdentification.validatedName : 'non identifié';
   }
 
 }

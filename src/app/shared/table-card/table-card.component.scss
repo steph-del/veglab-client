@@ -25,11 +25,11 @@
   .flex.summary {
     font-size: 1em;
   }
-  .text-validation {
+  .text-identification {
     font-size: 1.2em;
     color: $table-color;
     text-align: center;
-    &.no-validation {
+    &.no-identification {
       font-weight: normal !important;
     }
   }

@@ -26,7 +26,7 @@
       <td class="item-content" *ngIf="occurrence.dateObserved && !occurrence.dateObservedPrecision">{{ occurrence.dateObserved }}</td>
       <td class="item-content" *ngIf="occurrence.dateObserved && occurrence.dateObservedPrecision">{{ occurrence.dateObserved | momentLocalDate:occurrence.dateObservedPrecision }}</td>
     </tr>
-    <!-- Validation + biblio -->
+    <!-- Identification + biblio -->
     <tr>
       <td class="item-header">Identifications</td>
       <td class="item-content"><vl-identification-inline [element]="occurrence"></vl-identification-inline></td>

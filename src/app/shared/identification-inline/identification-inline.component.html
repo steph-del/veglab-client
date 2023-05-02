@@ -1,5 +1,5 @@
-<div class="validation-inline-wrapper">
-  <ul class="validation-element" *ngIf="myValidations.length === 0 && otherValidations.length === 0">
+<div class="identification-inline-wrapper">
+  <ul class="identification-element" *ngIf="myIdentifications.length === 0 && otherIdentifications.length === 0">
     <li>
       <span class="label">
         <span class="level" *ngIf="_element.level && _element.level === 'synusy'">σ</span>
@@ -11,8 +11,8 @@
     </li>
   </ul>
 
-  <ul class="validation-element" *ngIf="myValidations.length > 0">
-    <li class="my-validation" *ngFor="let myValidation of myValidations">
+  <ul class="identification-element" *ngIf="myIdentifications.length > 0">
+    <li class="my-identification" *ngFor="let myIdentification of myIdentifications">
       <span class="label">
         <span class="text user-icon">
           <mat-icon class="mine" inline="true" matTooltip="Cette identification est la vôtre">account_circle</mat-icon>
@@ -22,73 +22,73 @@
         <span class="level" *ngIf="_element.level && _element.level === 'phytocenosis'">φ</span>
         <span class="layer" *ngIf="_element.layer && _element.layer !== null">{{ _element.layer }}</span>
         <span class="text" [class.delete-icon]="allowDelete">
-          <span>[{{ myValidation.repository }}] {{ myValidation.validatedName }}</span>
+          <span>[{{ myIdentification.repository }}] {{ myIdentification.validatedName }}</span>
           <span class="delete-icon" *ngIf="allowDelete">
-            <mat-icon inline="true" matTooltip="Supprimer cette identification" (click)="deleteElement(myValidation)">delete</mat-icon>
+            <mat-icon inline="true" matTooltip="Supprimer cette identification" (click)="deleteElement(myIdentification)">delete</mat-icon>
           </span>
         </span>
       </span>
-      <!--<mat-icon *ngIf="!showAllValidations" [class.disabled]="otherValidations.length === 0" (click)="toggleShowAllValidations()">keyboard_arrow_up</mat-icon>
-      <mat-icon *ngIf="showAllValidations" (click)="toggleShowAllValidations()">keyboard_arrow_down</mat-icon>-->
+      <!--<mat-icon *ngIf="!showAllIdentifications" [class.disabled]="otherIdentifications.length === 0" (click)="toggleShowAllIdentifications()">keyboard_arrow_up</mat-icon>
+      <mat-icon *ngIf="showAllIdentifications" (click)="toggleShowAllIdentifications()">keyboard_arrow_down</mat-icon>-->
     </li>
-    <li class="showHideOtherValidations" *ngIf="!showAllValidations && otherValidations.length > 0" (click)="showAllValidations = !showAllValidations">
-      <span class="text" *ngIf="otherValidations.length === 1">Afficher 1 autre identification</span>
-      <span class="text" *ngIf="otherValidations.length > 1">Afficher {{ otherValidations.length }} autres identifications</span>
+    <li class="showHideOtherIdentifications" *ngIf="!showAllIdentifications && otherIdentifications.length > 0" (click)="showAllIdentifications = !showAllIdentifications">
+      <span class="text" *ngIf="otherIdentifications.length === 1">Afficher 1 autre identification</span>
+      <span class="text" *ngIf="otherIdentifications.length > 1">Afficher {{ otherIdentifications.length }} autres identifications</span>
     </li>
-    <li class="showHideOtherValidations" *ngIf="showAllValidations && otherValidations.length > 0" (click)="showAllValidations = !showAllValidations">
-      <span class="text" *ngIf="otherValidations.length === 1">Masquer  1 autre identification</span>
-      <span class="text" *ngIf="otherValidations.length > 1">Masquer {{ otherValidations.length }} autres identifications</span>
+    <li class="showHideOtherIdentifications" *ngIf="showAllIdentifications && otherIdentifications.length > 0" (click)="showAllIdentifications = !showAllIdentifications">
+      <span class="text" *ngIf="otherIdentifications.length === 1">Masquer  1 autre identification</span>
+      <span class="text" *ngIf="otherIdentifications.length > 1">Masquer {{ otherIdentifications.length }} autres identifications</span>
     </li>
-    <div *ngIf="showAllValidations">
-      <li class="other-validation" *ngFor="let validation of otherValidations">
+    <div *ngIf="showAllIdentifications">
+      <li class="other-identification" *ngFor="let identification of otherIdentifications">
         <span class="label">
-          <span class="text user-icon" *ngIf="validation.owner !== null">
-            <mat-icon inline="true" matTooltip="Identifié par '{{ validation.owner.username }}'">account_circle</mat-icon>
+          <span class="text user-icon" *ngIf="identification.owner !== null">
+            <mat-icon inline="true" matTooltip="Identifié par '{{ identification.owner.username }}'">account_circle</mat-icon>
           </span>
           <span class="level" *ngIf="_element.level && _element.level === 'synusy'">σ</span>
           <span class="level" *ngIf="_element.level && _element.level === 'microcenosis'">µC</span>
           <span class="level" *ngIf="_element.level && _element.level === 'phytocenosis'">φ</span>
           <span class="layer" *ngIf="_element.layer && _element.layer !== null">{{ _element.layer }}</span>
-          <span class="text">[{{ validation.repository }}] {{ validation.validatedName }}</span>
+          <span class="text">[{{ identification.repository }}] {{ identification.validatedName }}</span>
         </span>
       </li>
     </div>
   </ul>
 
-  <ul class="validation-element" *ngIf="myValidations.length === 0">
-    <li *ngIf="otherValidations.length > 0">
+  <ul class="identification-element" *ngIf="myIdentifications.length === 0">
+    <li *ngIf="otherIdentifications.length > 0">
       <span class="label">
-        <span class="text user-icon" *ngIf="otherValidations[0].owner !== null">
-          <mat-icon inline="true" matTooltip="Identifié par '{{ otherValidations[0].owner.username }}'">account_circle</mat-icon>
+        <span class="text user-icon" *ngIf="otherIdentifications[0].owner !== null">
+          <mat-icon inline="true" matTooltip="Identifié par '{{ otherIdentifications[0].owner.username }}'">account_circle</mat-icon>
         </span>
         <span class="level" *ngIf="_element.level && _element.level === 'synusy'">σ</span>
         <span class="level" *ngIf="_element.level && _element.level === 'microcenosis'">µC</span>
         <span class="level" *ngIf="_element.level && _element.level === 'phytocenosis'">φ</span>
         <span class="layer" *ngIf="_element.layer && _element.layer !== null">{{ _element.layer }}</span>
-        <span class="text">[{{ otherValidations[0].repository }}] {{ otherValidations[0].validatedName }}</span>
+        <span class="text">[{{ otherIdentifications[0].repository }}] {{ otherIdentifications[0].validatedName }}</span>
       </span>
-      <!--<mat-icon *ngIf="!showAllValidations" [class.disabled]="otherValidations.length === 1" (click)="toggleShowAllValidations()">keyboard_arrow_up</mat-icon>
-      <mat-icon *ngIf="showAllValidations" (click)="toggleShowAllValidations()">keyboard_arrow_down</mat-icon>-->
+      <!--<mat-icon *ngIf="!showAllIdentifications" [class.disabled]="otherIdentifications.length === 1" (click)="toggleShowAllIdentifications()">keyboard_arrow_up</mat-icon>
+      <mat-icon *ngIf="showAllIdentifications" (click)="toggleShowAllIdentifications()">keyboard_arrow_down</mat-icon>-->
     </li>
-    <li class="showHideOtherValidations" *ngIf="!showAllValidations && otherValidations.length > 1" (click)="showAllValidations = !showAllValidations">
-      <span class="text" *ngIf="otherValidations.length - 1 === 1">Afficher 1 autre identification</span>
-      <span class="text" *ngIf="otherValidations.length - 1 > 1">Afficher {{ otherValidations.length - 1 }} autres identifications</span>
+    <li class="showHideOtherIdentifications" *ngIf="!showAllIdentifications && otherIdentifications.length > 1" (click)="showAllIdentifications = !showAllIdentifications">
+      <span class="text" *ngIf="otherIdentifications.length - 1 === 1">Afficher 1 autre identification</span>
+      <span class="text" *ngIf="otherIdentifications.length - 1 > 1">Afficher {{ otherIdentifications.length - 1 }} autres identifications</span>
     </li>
-    <li class="showHideOtherValidations" *ngIf="showAllValidations && otherValidations.length > 1" (click)="showAllValidations = !showAllValidations">
-      <span class="text" *ngIf="otherValidations.length - 1 === 1">Masquer 1 autre identification</span>
-      <span class="text" *ngIf="otherValidations.length - 1 > 1">Masquer {{ otherValidations.length - 1 }} autres identifications</span>
+    <li class="showHideOtherIdentifications" *ngIf="showAllIdentifications && otherIdentifications.length > 1" (click)="showAllIdentifications = !showAllIdentifications">
+      <span class="text" *ngIf="otherIdentifications.length - 1 === 1">Masquer 1 autre identification</span>
+      <span class="text" *ngIf="otherIdentifications.length - 1 > 1">Masquer {{ otherIdentifications.length - 1 }} autres identifications</span>
     </li>
-    <div *ngIf="showAllValidations">
-      <li class="other-validation" *ngFor="let validation of otherValidations | slice:1">
+    <div *ngIf="showAllIdentifications">
+      <li class="other-identification" *ngFor="let identification of otherIdentifications | slice:1">
         <span class="label">
-          <span class="text user-icon" *ngIf="validation.user !== null">
-            <mat-icon inline="true" matTooltip="Identifié par '{{ validation.user.username }}'">account_circle</mat-icon>
+          <span class="text user-icon" *ngIf="identification.user !== null">
+            <mat-icon inline="true" matTooltip="Identifié par '{{ identification.user.username }}'">account_circle</mat-icon>
           </span>
           <span class="level" *ngIf="_element.level && _element.level === 'synusy'">σ</span>
           <span class="level" *ngIf="_element.level && _element.level === 'microcenosis'">µC</span>
           <span class="level" *ngIf="_element.level && _element.level === 'phytocenosis'">φ</span>
           <span class="layer" *ngIf="_element.layer && _element.layer !== null">{{ _element.layer }}</span>
-          <span class="text">[{{ validation.repository }}] {{ validation.validatedName }}</span>
+          <span class="text">[{{ identification.repository }}] {{ identification.validatedName }}</span>
         </span>
       </li>
     </div>

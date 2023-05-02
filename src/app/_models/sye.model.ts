@@ -1,6 +1,6 @@
 import { OccurrenceModel } from './occurrence.model';
 import { SyntheticColumn } from './synthetic-column.model';
-import { OccurrenceValidationModel } from './occurrence-validation.model';
+import { IdentificationModel } from './identification.model';
 import { Biblio } from './biblio.model';
 import { VlUser } from './vl-user.model';
 
@@ -20,7 +20,7 @@ export interface Sye {
   syntheticColumn:    SyntheticColumn;
   syntheticSye?: boolean;
   onlyShowSyntheticColumn: boolean;
-  validations?:       Array<OccurrenceValidationModel>;
+  identifications?:       Array<IdentificationModel>;
   vlBiblioSource?:    Biblio;
   vlWorkspace:        string;
 }

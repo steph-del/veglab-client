@@ -45,7 +45,7 @@ export class OccurrenceService {
       userProfile: null,
       owner: null,
 
-      validations: [],
+      identifications: [],
 
       dateCreated: null,
       dateObserved: null,

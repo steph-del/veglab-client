@@ -480,14 +480,14 @@ export class SophyImportAndSplitCsvComponent implements OnInit {
           }
         }
 
-        // Create Validation headers
-        const validationHeader: Array<Array<string>> = [
+        // Create Identification headers
+        const identificationHeader: Array<Array<string>> = [
           ['', '', '', 'Référentiel'],
           ['', '', '', 'Numéro nomenclatural']
         ];
-        // No validation given => fill with empty values
-        this.fillArrayWithValue(validationHeader[0], rawTable.rawReleves.length, '');
-        this.fillArrayWithValue(validationHeader[1], rawTable.rawReleves.length, '');
+        // No identification given => fill with empty values
+        this.fillArrayWithValue(identificationHeader[0], rawTable.rawReleves.length, '');
+        this.fillArrayWithValue(identificationHeader[1], rawTable.rawReleves.length, '');
 
         // Create Biblio header
         const biblioHeader: Array<Array<string>> = [
@@ -542,7 +542,7 @@ export class SophyImportAndSplitCsvComponent implements OnInit {
         }
 
         // Concatenate headers & table
-        const headers = _.concat(mainHeader, locationHeader, validationHeader, biblioHeader, sophyMetaHeader);
+        const headers = _.concat(mainHeader, locationHeader, identificationHeader, biblioHeader, sophyMetaHeader);
         const table = _.find(publication.tables, t => t.tableId === rawTable.tableId);
         const mergedData: Array<Array<string>> = _.clone(headers);
 

@@ -16,7 +16,7 @@ export class DeterminationComponent implements OnInit {
   results: {count: number, source: Array<{
     score: number,
     source: {
-      validations: Array<RepositoryItemModel>,      // Synthetic column validations
+      identifications: Array<RepositoryItemModel>,      // Synthetic column identifications
       items: Array<SyntheticItem>                   // Synthetic column items
     }
   }>};
@@ -67,11 +67,11 @@ export class DeterminationComponent implements OnInit {
       map(result => _.map(result.hits.hits, (hit) => {
         return {score: hit._score, source: hit._source};
       })),
-      // tap(result => _.map(result, r => r.source.validations = r.source.validations)),
+      // tap(result => _.map(result, r => r.source.identifications = r.source.identifications)),
       map(result => {
         return {source: result, count};
       })// ,
-      // map(result => _.map(result.tables, table => table.source.validations = JSON.parse(table.source.validations)))
+      // map(result => _.map(result.tables, table => table.source.identifications = JSON.parse(table.source.identifications)))
     ).subscribe(results => {
       console.log(results);
       this.results = results;
@@ -182,19 +182,19 @@ export class DeterminationComponent implements OnInit {
    *   { "match": { "items.repositoryIdNomen": "50912" } }
    * `
    */
-  private esRowOccurrencesMustQueryPart(rowOccurrenceValidations: Array<RepositoryItemModel>): Array<string> {
+  private esRowOccurrencesMustQueryPart(rowOccurrenceIdentifications: Array<RepositoryItemModel>): Array<string> {
     const parts: Array<string> = [];
-    rowOccurrenceValidations.forEach(rowOccurrenceValidation => {
+    rowOccurrenceIdentifications.forEach(rowOccurrenceIdentification => {
       let idTaxo: any = null;
-      if (rowOccurrenceValidation.idTaxo !== null) {
-        idTaxo = rowOccurrenceValidation.idTaxo;
-       } else if (rowOccurrenceValidation.validOccurence.idNomen !== null) {
-         idTaxo = rowOccurrenceValidation.validOccurence.idNomen;
+      if (rowOccurrenceIdentification.idTaxo !== null) {
+        idTaxo = rowOccurrenceIdentification.idTaxo;
+       } else if (rowOccurrenceIdentification.validOccurence.idNomen !== null) {
+         idTaxo = rowOccurrenceIdentification.validOccurence.idNomen;
         } else {
-          throw new Error(`We can't retrieve a (syn)taxonomic ID for the [${rowOccurrenceValidation.idTaxo}]${rowOccurrenceValidation.idNomen} (syn)taxonomic nomenclatural ID.`);
+          throw new Error(`We can't retrieve a (syn)taxonomic ID for the [${rowOccurrenceIdentification.idTaxo}]${rowOccurrenceIdentification.idNomen} (syn)taxonomic nomenclatural ID.`);
         }
-      const matchPhrase = `{ "match": { "items.repository": "${rowOccurrenceValidation.repository}" } },
-                           { "match": { "items.repositoryIdNomen": "${rowOccurrenceValidation.idNomen}" } }`;
+      const matchPhrase = `{ "match": { "items.repository": "${rowOccurrenceIdentification.repository}" } },
+                           { "match": { "items.repositoryIdNomen": "${rowOccurrenceIdentification.idNomen}" } }`;
       parts.push(matchPhrase);
     });
     return parts;

@@ -15,12 +15,12 @@
     <div class="title">{{ table.title }}</div>
     <div class="description">{{ table.description }}</div>
   </div>
-  <div class="flex validations">
+  <div class="flex identifications">
     <div *ngIf="table.tableName  == ''" style="width: 100%;">
-      <div class="text-validation no-validation">Ce tableau n'est pas été nommé</div>
+      <div class="text-identification no-identification">Ce tableau n'est pas été nommé</div>
     </div>
     <div *ngIf="table.tableName  !== ''" style="width: 100%;">
-      <div class="text-validation" title="{{ table.tableName }}">{{ table.tableName }}</div>
+      <div class="text-identification" title="{{ table.tableName }}">{{ table.tableName }}</div>
     </div>
   </div>
   <div class="flex summary row">
