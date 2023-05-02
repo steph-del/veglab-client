@@ -42,7 +42,7 @@ export class OccurrenceIdentificationsPreviewComponent implements OnInit {
       let result = true;
       for (const identification of identifications) {
         if (!identification.owner
-            && identification.validatedAt == null
+            && identification.createdAt == null
             && identification.updatedBy == null
             && identification.updatedAt == null
             && identification.repository == null
@@ -94,8 +94,8 @@ export class OccurrenceIdentificationsPreviewComponent implements OnInit {
     if (identification !== null) {
       if (identification.updatedAt) {
         return this.datePipe.transform(identification.updatedAt);
-      } else if (identification.validatedAt) {
-        return this.datePipe.transform(identification.validatedAt);
+      } else if (identification.createdAt) {
+        return this.datePipe.transform(identification.createdAt);
       } else  {
         return '?';
       }

@@ -931,7 +931,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
             if (result === undefined || (result !== undefined && result.idTaxo == null)) { // @Todo : duplicate code (see error catching below)
               const randomInteger = _.random(-1, -1000000, false);
               currentContent.identification = {
-                validatedAt: now,
+                createdAt: now,
                 owner: this.currentVlUser,
                 repository: 'otherunknown',
                 repositoryIdNomen: randomInteger,
@@ -949,7 +949,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
               };
             } else {
               currentContent.identification = {
-                validatedAt: now,
+                createdAt: now,
                 owner: this.currentVlUser,
                 repository: useRepo,
                 repositoryIdNomen: Number(t[this.NOMEN_COL_POS.position]),
@@ -979,7 +979,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
           error => {
             const randomInteger = _.random(-1, -1000000, false);
             currentContent.identification = {
-              validatedAt: now,
+              createdAt: now,
               owner: this.currentVlUser,
               repository: 'otherunknown',
               repositoryIdNomen: randomInteger,
@@ -1009,7 +1009,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
         // row with other/unknown data
         const randomInteger = _.random(-1, -1000000, false);
         currentContent.identification = {
-          validatedAt: now,
+          createdAt: now,
           owner: this.currentVlUser,
           repository: 'otherunknown',
           repositoryIdNomen: randomInteger,
@@ -2505,7 +2505,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
     const identificationDate = new Date();
     if (this.identificationList.table.identification && this.identificationList.table.identification.consolidedIdentification) {
       const tableIdentification: IdentificationModel = this.identificationList.table.identification.consolidedIdentification ? {
-        validatedAt:       identificationDate,
+        createdAt:       identificationDate,
         owner:              this.currentVlUser,
         repository:        this.identificationList.table.identification.consolidedIdentification.repository,
         repositoryIdNomen: Number(this.identificationList.table.identification.consolidedIdentification.idNomen),
@@ -2528,7 +2528,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
         if (sye.identification) {
           const syeToBind = this.getSyeInTableById(sye.id, newTable);
           const syeIdentification: IdentificationModel = sye.identification.consolidedIdentification ? {
-            validatedAt:       identificationDate,
+            createdAt:       identificationDate,
             owner:              this.currentVlUser,
             repository:        sye.identification.consolidedIdentification.repository,
             repositoryIdNomen: Number(sye.identification.consolidedIdentification.idNomen),
@@ -2559,7 +2559,7 @@ export class TableImportComponent implements OnInit, OnDestroy {
             for (const releve of sye.releves) {
               const relevesToBind = this.getRelevesInTableById(releve.id, newTable, false);
               const releveIdentification: IdentificationModel = releve.identification && releve.identification.consolidedIdentification ? {
-                validatedAt:       identificationDate,
+                createdAt:       identificationDate,
                 owner:              this.currentVlUser,
                 repository:        releve.identification.consolidedIdentification.repository,
                 repositoryIdNomen: Number(releve.identification.consolidedIdentification.idNomen),

@@ -366,7 +366,7 @@ export class TableFormComponent implements OnInit, OnDestroy {
       repositoryIdTaxo: rim.idTaxo.toString(),
       nomenclaturalName: name,
       taxonomicalName: name,
-      validatedAt: new Date(),
+      createdAt: new Date(),
       owner: this.currentVlUser
     };
     return ovm;

@@ -439,7 +439,7 @@ export class TableService {
       repositoryIdNomen: +relatedSyntaxon.identification.idNomen,
       repositoryIdTaxo: relatedSyntaxon.identification.idTaxo.toString(),
       nomenclaturalName: name,
-      validatedAt: new Date(),
+      createdAt: new Date(),
       owner: table.owner,
       taxonomicalName: name
     };

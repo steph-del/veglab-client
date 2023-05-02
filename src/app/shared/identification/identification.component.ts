@@ -203,7 +203,7 @@ export class IdentificationComponent implements OnInit, OnDestroy {
   pushIdentificationToPendingIdentifications(data: RepositoryItemModel): void {
     const newIdentification: IdentificationModel = {
       // id?:               number;
-      validatedAt:       new Date(),
+      createdAt:       new Date(),
       owner:              this.currentVlUser,
       // updatedBy?:        string;     // user id
       // updatedAt?:        Date;

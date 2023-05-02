@@ -3,7 +3,7 @@ import { VlUser } from './vl-user.model';
 
 export interface IdentificationModel {
   id?:               number;
-  validatedAt:       Date;
+  createdAt:       Date;
   owner:             VlUser;
   updatedBy?:        string;    // user id
   updatedAt?:        Date;
