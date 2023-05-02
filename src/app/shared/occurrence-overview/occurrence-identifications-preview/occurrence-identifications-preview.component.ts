@@ -28,8 +28,6 @@ export class OccurrenceIdentificationsPreviewComponent implements OnInit {
 
   private getIdentifications(occurrence: EsOccurrenceModel): Array<IdentificationModel> {
     let identifications: Array<IdentificationModel> = null;
-    const result: Array<{repo: string, name: string, validatedBy: number, validatedAt: any}> = [];
-
     if (occurrence !== null && occurrence.identifications && occurrence.identifications.length > 0) {
       identifications = occurrence.identifications;
     }
@@ -43,7 +41,7 @@ export class OccurrenceIdentificationsPreviewComponent implements OnInit {
       if (identifications == null || (identifications && identifications.length === 0)) { return true; }
       let result = true;
       for (const identification of identifications) {
-        if (identification.validatedBy == null
+        if (!identification.owner
             && identification.validatedAt == null
             && identification.updatedBy == null
             && identification.updatedAt == null
@@ -82,8 +80,8 @@ export class OccurrenceIdentificationsPreviewComponent implements OnInit {
     if (identification !== null) {
       if (identification.updatedBy) {
         return identification.updatedBy.toString();   // @Todo show name instead of user id
-      } else if (identification.validatedBy) {
-        return identification.validatedBy.toString(); // @Todo show name instead of user id
+      } else if (identification.owner) {
+        return identification.owner.id; // @Todo show name instead of user id
       } else  {
         return '?';
       }

@@ -367,7 +367,6 @@ export class TableFormComponent implements OnInit, OnDestroy {
       nomenclaturalName: name,
       taxonomicalName: name,
       validatedAt: new Date(),
-      validatedBy: this.currentUser.id,
       owner: this.currentVlUser
     };
     return ovm;

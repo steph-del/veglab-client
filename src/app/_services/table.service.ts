@@ -440,7 +440,6 @@ export class TableService {
       repositoryIdTaxo: relatedSyntaxon.identification.idTaxo.toString(),
       nomenclaturalName: name,
       validatedAt: new Date(),
-      validatedBy: table.createdBy,
       owner: table.owner,
       taxonomicalName: name
     };

@@ -48,7 +48,6 @@ export class OccurrenceFormBindingService {
       // bind identification
       if (citedSyntaxon && citedSyntaxon !== null) {
         this.xOccurrence.identifications = [{
-          validatedBy: user.id,
           validatedAt: new Date(),
           owner: currentVlUser,
           repository: citedSyntaxon.repository,
@@ -74,7 +73,6 @@ export class OccurrenceFormBindingService {
         if (occ.taxa.idTaxo !== null) { yIdTaxo = occ.taxa.idTaxo.toString(); }
         if (yIdTaxo === null && occ.taxa.validOccurence !== null && occ.taxa.validOccurence.idNomen !== null) { yIdTaxo =  occ.taxa.validOccurence.idNomen.toString(); }
         yOcc.identifications = [{
-          validatedBy: user.id,
           validatedAt: new Date(),
           owner: currentVlUser,
           repository: occ.taxa.repository,
@@ -109,7 +107,6 @@ export class OccurrenceFormBindingService {
       // bind identification
       if (citedSyntaxon && citedSyntaxon !== null) {
         this.xOccurrence.identifications = [{
-          validatedBy: user.id,
           validatedAt: new Date(),
           owner: currentVlUser,
           repository: citedSyntaxon.repository,
@@ -149,7 +146,6 @@ export class OccurrenceFormBindingService {
           if (z.taxa.idTaxo !== null) { zIdTaxo = z.taxa.idTaxo.toString(); }
           if (zIdTaxo === null && z.taxa.validOccurence !== null && z.taxa.validOccurence.idNomen !== null) { zIdTaxo =  z.taxa.validOccurence.idNomen.toString(); }
           zOcc.identifications = [{
-            validatedBy: user.id,
             validatedAt: new Date(),
             owner: currentVlUser,
             repository: z.taxa.repository,
