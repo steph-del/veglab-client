@@ -5,6 +5,10 @@ FROM node:12.13.0 AS veglab_client_dev
 #RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
 #RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
 #RUN apt-get update && apt-get install -yq google-chrome-stable gettext
+
+# node:12.13.0 use Debian9 which has been archived on 27/03/2023 (https://lists.debian.org/debian-devel-announce/2023/03/msg00006.html)
+# So we temporary add archive.debian.org to the sources.list
+RUN echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.list
 RUN apt-get update && apt-get install -yq gettext
 
 # set working directory
