@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {environment} from '../../../../environments/environment';
 
 @Component({
   selector: 'vl-admin-create-user',
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./admin-create-user.component.scss']
 })
 export class AdminCreateUserComponent implements OnInit {
-
+  createAccountUrl= environment.sso.registrationPage;
   constructor() { }
 
   ngOnInit() {

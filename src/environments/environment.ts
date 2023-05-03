@@ -18,12 +18,15 @@ export const environment = {
   },
   sso: {
     clientId:         '${SSO_CLIENT_ID}',
+    realmId:          '${KEYCLOAK_REALM}',
     baseUrl:          'https://${SSO_HOST}${SSO_URI}',
     loginEndpoint:    'https://${SSO_HOST}${SSO_URI}${SSO_LOGIN_ENDPOINT}',
     logoutEndpoint:   'https://${SSO_HOST}${SSO_URI}${SSO_LOGOUT_ENDPOINT}',
     identiteEndpoint: 'https://${SSO_HOST}${SSO_URI}${SSO_REFRESH_ENDPOINT}',
     refreshEndpoint:  'https://${SSO_HOST}${SSO_URI}${SSO_REFRESH_ENDPOINT}',
     refreshInterval:  '${SSO_REFRESH_INTERVAL}',
+    authentificationPage: 'https://${SSO_HOST}/auth/realms/${KEYCLOAK_REALM}/login-actions/authenticate?client_id=account',
+    registrationPage: 'https://${SSO_HOST}/auth/realms/${KEYCLOAK_REALM}/login-actions/registration?client_id=account',
     roles: {
       admin: '${SSO_ROLE_ADMIN}'
     }
