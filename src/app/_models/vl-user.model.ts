@@ -7,11 +7,9 @@ export interface VlUser {
   '@id'?:        string;
   '@type'?:      string;
   id:            string;
-  enabled:       boolean;
-  emailVerified: boolean;
-  firstName:     string;
-  lastName:      string;
-  username:      string;
+  firstname:     string;
+  lastname:      string;
   email:         string;
-  password?:      string; // not persisted in API database !
+  acronym:       string;
+  roles:         Array<string>;
 }
