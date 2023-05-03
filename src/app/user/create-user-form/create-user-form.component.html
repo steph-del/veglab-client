@@ -9,19 +9,13 @@
       <form class="form" [formGroup]="form">
         <div class="form-fields" *ngIf="userHasBeenCreated === null">
           <mat-form-field>
-            <input matInput formControlName="firstName" name="firstName" autocomplete="given-name" placeholder="Prénom" type="text" pattern="[A-zÀ-ú(.)(\-)( )?]*">
-            <mat-error >Entrez votre prénom. Seuls les points et les tirets sont accéptés en plus des lettres.</mat-error>
+            <input matInput formControlName="firstname" name="firstname" autocomplete="given-name" placeholder="Prénom" type="text" pattern="[A-zÀ-ú(.)(\-)( )?]*">
+            <mat-error >Entrez votre prénom. Seuls les points et les tirets sont acceptés en plus des lettres.</mat-error>
           </mat-form-field>
 
           <mat-form-field>
-            <input matInput formControlName="lastName" name="lastName" autocomplete="family-name" placeholder="Nom" type="text" pattern="[A-zÀ-ú(.)(\-)( )?]*">
-            <mat-error>Entrez votre nom. Seuls les points et les tirets sont accéptés en plus des lettres.</mat-error>
-          </mat-form-field>
-
-          <mat-form-field>
-            <input matInput formControlName="username" name="userName" autocomplete="off" placeholder="Nom d'utilisateur" type="text" pattern="[A-zÀ-ú(.)(\-)( )?]*">
-            <mat-hint>Votre nom, tel qu'il apparaîtra dans l'application</mat-hint>
-            <mat-error>Entrez votre nom d'utilsateur. Seuls les points et les tirets sont accéptés en plus des lettres.</mat-error>
+            <input matInput formControlName="lastname" name="lastname" autocomplete="family-name" placeholder="Nom" type="text" pattern="[A-zÀ-ú(.)(\-)( )?]*">
+            <mat-error>Entrez votre nom. Seuls les points et les tirets sont acceptés en plus des lettres.</mat-error>
           </mat-form-field>
 
           <mat-form-field>
@@ -47,12 +41,11 @@
 
         <div class="actions">
           <button mat-flat-button color="primary"
-                  submit
                   *ngIf="userHasBeenCreated === null"
                   (click)="createUser($event)"
                   [class.spinner]="creatingUser"
                   [disabled]="!form.valid || creatingUser">Valider</button>
-          
+
           <button mat-flat-button *ngIf="userHasBeenCreated !== null" (click)="router.navigate(['/login'])">Se connecter</button>
         </div>
       </form>

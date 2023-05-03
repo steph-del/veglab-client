@@ -25,7 +25,7 @@ export const environment = {
     refreshEndpoint:  'https://${SSO_HOST}${SSO_URI}${SSO_REFRESH_ENDPOINT}',
     refreshInterval:  '${SSO_REFRESH_INTERVAL}',
     roles: {
-      admin: 'admin'
+      admin: '${SSO_ROLE_ADMIN}'
     }
   },
   mapQuestApiKey: 'ApIFfQWsb8jW6bkYDD2i0Sq5BD9moJ3l',

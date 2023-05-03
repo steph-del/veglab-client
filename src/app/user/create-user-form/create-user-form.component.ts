@@ -36,15 +36,12 @@ export class CreateUserFormComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.form = new FormGroup({
-      firstName: new FormControl('', [Validators.required, Validators.pattern('[A-zÀ-ú(.)(\-)( )?]*')]),
-      lastName: new FormControl('', [Validators.required, Validators.pattern('[A-zÀ-ú(.)(\-)( )?]*')]),
-      username: new FormControl('', [Validators.required, Validators.pattern('[A-zÀ-ú(.)(\-)( )?]*')]),
+      firstname: new FormControl('', [Validators.required, Validators.pattern('[A-zÀ-ú(.)(\-)( )?]*')]),
+      lastname: new FormControl('', [Validators.required, Validators.pattern('[A-zÀ-ú(.)(\-)( )?]*')]),
       email: this.emailCtrl,
       emailVerification: this.emailVerificationCtrl,
       password: new FormControl('', [Validators.required, Validators.minLength(8)]),
-      // passwordVerification: new FormControl('', [Validators.required, Validators.pattern('^[a-z]+')]),
-      enabled: new FormControl(true, [Validators.required]),
-      emailVerified: new FormControl(true, [Validators.required])
+      // passwordVerification: new FormControl('', [Validators.required, Validators.pattern('^[a-z]+')])
     });
 
     this.emailValueSubscr = this.emailCtrl.valueChanges.subscribe(value => {
@@ -69,22 +66,26 @@ export class CreateUserFormComponent implements OnInit, OnDestroy {
     if (this.emailValueSubscr) { this.emailValueSubscr.unsubscribe(); }
   }
 
+  logErrors(): void {
+    const errors = this.form.errors;
+    console.log(errors);
+  }
 
   createUser(ev: Event): void {
     ev.preventDefault();
-
+    console.log('CREATE USER');
     // Are fields valid ?
     if (this.form.valid) {
+      console.log('form is valid');
       this.creatingUser = true;
+      console.log('create new user...');
       const newUser: VlUser = {
         id: null,
-        enabled: this.form.controls.enabled.value,
-        emailVerified: this.form.controls.emailVerified.value,
-        firstName: this.form.controls.firstName.value,
-        lastName: this.form.controls.lastName.value,
-        username: this.form.controls.username.value,
+        firstname: this.form.controls.firstname.value,
+        lastname: this.form.controls.lastname.value,
         email: this.emailCtrl.value,
-        password: this.form.controls.password.value,
+        acronym: null,
+        roles: []
       };
       console.log('CREATE USER WITH', newUser);
       this.userService.createUser(newUser).subscribe(createdUser => {
@@ -92,7 +93,7 @@ export class CreateUserFormComponent implements OnInit, OnDestroy {
 
         if (this.resetFormAfterAccountCreated === true) {
           // Reset component
-          this.notificationService.notify(`Le compte '${createdUser.username}' a bien été créé`);
+          this.notificationService.notify(`Le compte '${createdUser.email}' a bien été créé`);
           this.creatingUser = false;
           this.userHasBeenCreated = null;
           this.form.reset();
@@ -117,6 +118,7 @@ export class CreateUserFormComponent implements OnInit, OnDestroy {
         console.log(er);
       });
     } else {
+      console.log('Form is not valid');
       // Form is not valid,
       // Form Validators show what's wrong
     }

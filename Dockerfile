@@ -37,13 +37,14 @@ ARG SSO_LOGIN_ENDPOINT
 ARG SSO_LOGOUT_ENDPOINT
 ARG SSO_REFRESH_ENDPOINT
 ARG SSO_REFRESH_INTERVAL
+ARG SSO_ROLE_ADMIN
 
-RUN echo $API_HOST
 # add app
 COPY . /client
 
 # add environments vars and bind HOST
 RUN envsubst < ./src/environments/environment.ts > /client/src/environments/environment.ts.tmp && mv /client/src/environments/environment.ts.tmp /client/src/environments/environment.ts
+
 # start app
 #CMD ng serve
 CMD ng serve --host 0.0.0.0 --port 4200 --disableHostCheck

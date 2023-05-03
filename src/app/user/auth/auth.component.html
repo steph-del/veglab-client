@@ -6,7 +6,7 @@
 </div>
 
 <div *ngIf="currentUser">
-    <button mat-button [matMenuTriggerFor]="menu"><mat-icon>account_circle</mat-icon> {{ getUserName() }}</button>
+    <button mat-button [matMenuTriggerFor]="menu"><mat-icon>account_circle</mat-icon> {{ userName }}</button>
     <mat-menu #menu="matMenu">
       <!--<button mat-menu-item *ngIf="isAdmin()" (click)="router.navigate(['/admin'])">Tableau de bord</button>-->
       <button mat-menu-item (click)="router.navigate(['/admin'])" *ngIf="isAdmin">Tableau de bord</button>

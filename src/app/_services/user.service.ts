@@ -19,7 +19,7 @@ import { map } from 'rxjs/internal/operators/map';
 export class UserService {
 
   public currentUser = new BehaviorSubject<UserModel>(null);  // current SSO user
-  public currentVlUser = new BehaviorSubject<VlUser>(null);   // curren API user
+  public currentVlUser = new BehaviorSubject<VlUser>(null);   // current API user
 
   lastToken: string = null;
 
@@ -34,6 +34,7 @@ export class UserService {
             // User was logged in
             this.lastToken = null;
             this.currentUser.next(null);
+            this.currentVlUser.next(null);
           } else {
             // User was not logged in
             // Still not logged
@@ -91,14 +92,12 @@ export class UserService {
   }
 
   getUserName(): string {
-    const cUser = this.currentUser.getValue();
+    const cUser = this.currentVlUser.getValue();
     if (cUser) {
-      if (cUser.preferred_username) {
-        return cUser.preferred_username;
-      } else if (cUser.name) {
-        return cUser.name;
-      } else if (cUser.given_name && cUser.family_name) {
-        return cUser.given_name + ' ' + cUser.family_name;
+      if (cUser.firstname && cUser.lastname) {
+        return cUser.firstname + ' ' + cUser.lastname;
+      } else {
+        return cUser.email;
       }
     } else {
       return null;
@@ -125,7 +124,7 @@ export class UserService {
    */
   hasCurrentUserRole(role: string): boolean {
     const cuRoles = this.getCurrentUserRoles();
-    return cuRoles && cuRoles.length > 0 && cuRoles.includes(role) ? true : false;
+    return cuRoles && cuRoles.length > 0 && cuRoles.includes(role);
   }
 
   isAdmin(): boolean {
@@ -133,9 +132,9 @@ export class UserService {
   }
 
   getCurrentUserRoles(): Array<string> {
-    const cu = this.currentUser.getValue();
-    if (cu && cu['resource_access'] && cu['resource_access'][environment.sso.clientId]) {
-      return cu['resource_access'][environment.sso.clientId].roles as Array<string>;
+    const cu = this.currentVlUser.getValue();
+    if (cu && cu.roles.length > 0) {
+      return cu.roles;
     }
     return [];
   }
@@ -155,7 +154,6 @@ export class UserService {
       `;
 
     headers.append('Content-Type', 'application/json');
-    console.log(`${environment.esBaseUrl}/vl_users/_search`);
     return this.http.post<VlUser>(`${environment.esBaseUrl}/vl_users/_search`, JSON.parse(query), {headers}).pipe(
       map(result => {
         if (result['hits']['total'] === 1) {
@@ -170,8 +168,6 @@ export class UserService {
 
   getVlUserBySsoId(ssoId: string): Observable<VlUser> {
     const headers = {'Content-Type': 'application/ld+json'};
-    return this.http.get(`${environment.apiBaseUrl}/users?id=${ssoId}`, {headers}).pipe(
-      map(metadataResponse => metadataResponse['hydra:member'][0]) // For a filtered query, API Platform returns a response with metadata values nesting the core response ('hydra:member')
-    );
+    return this.http.get<VlUser>(`${environment.apiBaseUrl}/users/${ssoId}`, {headers});
   }
 }
